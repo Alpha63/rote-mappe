@@ -1,4 +1,3 @@
-import React from 'react';
 import MDEditor, { commands } from '@uiw/react-md-editor';
 
 interface TextareaProps {

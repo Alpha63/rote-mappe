@@ -2,13 +2,23 @@ import i18n from '../../i18n';
 import { PdfBuilder } from './PdfBuilder';
 
 export const addPoaSection = async (builder: PdfBuilder) => {
-  if (builder.data.testamentLocation || builder.data.testamentDocument?.documentAction !== 'skip' || builder.data.patientenverfuegung?.documentAction !== 'skip' || builder.data.vorsorgevollmacht?.documentAction !== 'skip' || (builder.data.customPowersOfAttorney && builder.data.customPowersOfAttorney.length > 0) || builder.data.poaNotes) {
+  const defaultDocs = [
+    builder.data.patientenverfuegung || { id: 'patverf', name: i18n.t('wizardSteps.step7.docPatientenverfuegung') as string, documentAction: 'placeholder', fileData: null, fileType: null },
+    builder.data.vorsorgevollmacht || { id: 'vorsorge', name: i18n.t('wizardSteps.step7.docVorsorgevollmacht') as string, documentAction: 'placeholder', fileData: null, fileType: null },
+    builder.data.betreuungsverfuegung || { id: 'betreuung', name: i18n.t('wizardSteps.step7.docBetreuungsverfuegung') as string, documentAction: 'placeholder', fileData: null, fileType: null },
+    builder.data.bestattungsverfuegung || { id: 'bestattung', name: i18n.t('wizardSteps.step7.docBestattungsverfuegung') as string, documentAction: 'placeholder', fileData: null, fileType: null }
+  ];
+
+  const hasAnyDoc = defaultDocs.some(doc => doc.documentAction !== 'skip') || builder.data.testamentDocument?.documentAction !== 'skip';
+  const hasCustomDocs = builder.data.customPowersOfAttorney && builder.data.customPowersOfAttorney.length > 0;
+
+  if (builder.data.testamentLocation || hasAnyDoc || hasCustomDocs || builder.data.poaNotes) {
     builder.addChapterCover(
       i18n.t('pdf.poaSection.coverTitle'),
-      'Informationen zum Testament, Vorsorgevollmachten\nund Patientenverfügungen.'
+      i18n.t('pdf.poaSection.coverDesc')
     );
-    builder.drawWarning('Zwingend im Original: Testament und Vorsorgevollmacht! (Kopie ist rechtlich oft wirkungslos)');
-    builder.drawWarning('Patientenverfügung: Original am sichersten, Kopie wird im Notfall oft akzeptiert.');
+    builder.drawWarning(i18n.t('pdf.poaSection.warning'));
+    builder.drawWarning(i18n.t('pdf.poaSection.warning2'));
     builder.currentY -= 5;
 
     if (builder.data.testamentLocation) {
@@ -19,14 +29,12 @@ export const addPoaSection = async (builder: PdfBuilder) => {
   }
 
   // Vollmachten
-  const poaDocsToAppend = [
-    builder.data.patientenverfuegung,
-    builder.data.vorsorgevollmacht,
-    builder.data.betreuungsverfuegung,
-    builder.data.testamentDocument
-  ];
-  for (const doc of poaDocsToAppend) {
+  for (const doc of defaultDocs) {
     await builder.addDocumentPage(doc);
+  }
+  
+  if (builder.data.testamentDocument) {
+    await builder.addDocumentPage(builder.data.testamentDocument);
   }
   
   // Custom POAs
@@ -37,6 +45,6 @@ export const addPoaSection = async (builder: PdfBuilder) => {
   }
 
   if (builder.data.poaNotes) {
-    builder.addNotesPage(builder.data.poaNotes, 'Vollmachten & Verfügungen');
+    builder.addNotesPage(builder.data.poaNotes, i18n.t('pdf.poaSection.coverTitle'));
   }
 };

@@ -213,7 +213,17 @@ const resources = {
           willLocLabel: "Aufbewahrungsort des Testaments",
           willLocPlaceholder: "z.B. Hinterlegt beim Amtsgericht Berlin...",
           poaTitle: "Verfügungen & Vollmachten als Scan",
+          poaDownloadHintTitle: "Vorlagen vom Bundesministerium",
+          poaDownloadHintDesc: "Offizielle Formulare für die Vorsorgevollmacht und Betreuungsverfügung finden Sie kostenlos beim Bundesministerium der Justiz:",
+          poaPatientHintTitle: "Vorlage für die Patientenverfügung",
+          poaPatientHintDesc: "Eine interaktive Vorlage für die Patientenverfügung bietet die Verbraucherzentrale online an:",
+          poaFuneralHintTitle: "Vorlage für die Bestattungsverfügung",
+          poaFuneralHintDesc: "Eine hilfreiche Vorlage für die Bestattungsverfügung finden Sie z.B. beim Friedhofsverband Sauerland unter \"Ratgeber Vorsorge\":",
           otherPoaTitle: "Weitere Vollmachten als Scan",
+          docPatientenverfuegung: "Patientenverfügung",
+          docVorsorgevollmacht: "Vorsorgevollmacht",
+          docBetreuungsverfuegung: "Betreuungsverfügung",
+          docBestattungsverfuegung: "Bestattungsverfügung",
           addOtherPoa: "Weitere Vollmacht hinzufügen",
           notesLabel: "Weitere Hinweise, Anweisungen & Worte zu Vollmachten & Verfügungen",
           notesDesc: "Ergänzen Sie hier wichtige Details, bspw. zu Notaren oder Zeugen."
@@ -354,6 +364,7 @@ const resources = {
           coverTitle: "VOLLMACHTEN & VERFÜGUNGEN",
           coverDesc: "Wichtige rechtliche Dokumente, Testament und\nweitere Vollmachten.",
           warning: "WICHTIG: Testament und Vorsorgevollmacht müssen fast immer im Original vorliegen!",
+          warning2: "Patientenverfügung: Original am sichersten, Kopie wird im Notfall oft akzeptiert.",
           testamentLoc: "Aufbewahrungsort des Testaments:"
         },
         tocPage: {
@@ -573,7 +584,17 @@ const resources = {
           willLocLabel: "Storage location of the will",
           willLocPlaceholder: "e.g. Deposited at the Berlin district court...",
           poaTitle: "Directives & Powers of Attorney as Scan",
+          poaDownloadHintTitle: "Templates from the Federal Ministry",
+          poaDownloadHintDesc: "Official forms for the precautionary power of attorney and care directive can be found free of charge at the Federal Ministry of Justice:",
+          poaPatientHintTitle: "Template for Living Will",
+          poaPatientHintDesc: "An interactive template for the living will is offered online by the Verbraucherzentrale:",
+          poaFuneralHintTitle: "Template for Funeral Directive",
+          poaFuneralHintDesc: "A helpful template for the funeral directive can be found e.g. at the Friedhofsverband Sauerland under \"Ratgeber Vorsorge\":",
           otherPoaTitle: "Other Powers of Attorney as Scan",
+          docPatientenverfuegung: "Living Will",
+          docVorsorgevollmacht: "Precautionary Power of Attorney",
+          docBetreuungsverfuegung: "Care Directive",
+          docBestattungsverfuegung: "Funeral Directive",
           addOtherPoa: "Add another power of attorney",
           notesLabel: "Further notes, instructions & words regarding Powers of Attorney & Directives",
           notesDesc: "Add important details here, e.g. regarding notaries or witnesses."
@@ -714,6 +735,7 @@ const resources = {
           coverTitle: "POWERS OF ATTORNEY & DIRECTIVES",
           coverDesc: "Important legal documents, will and\nother powers of attorney.",
           warning: "IMPORTANT: Will and precautionary power of attorney must almost always be available in original!",
+          warning2: "Living Will: Original is safest, copy is often accepted in an emergency.",
           testamentLoc: "Storage location of the will:"
         },
         tocPage: {

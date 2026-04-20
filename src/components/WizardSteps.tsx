@@ -510,10 +510,35 @@ export function Step7Vollmachten() {
         </section>
         <section>
           <h3 className="text-lg font-medium text-slate-800 dark:text-slate-200 mb-4 border-b border-slate-100 dark:border-slate-800 pb-2">{t('wizardSteps.step7.poaTitle')}</h3>
+          <div className="bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-200 dark:border-indigo-900/50 rounded-xl p-4 mb-4 flex items-start gap-3 text-indigo-900 dark:text-indigo-200">
+            <Info className="shrink-0 mt-0.5 text-indigo-600 dark:text-indigo-400" size={20} />
+            <div className="text-sm">
+              <strong className="font-semibold block mb-1 text-indigo-800 dark:text-indigo-300">{t('wizardSteps.step7.poaDownloadHintTitle')}</strong>
+              {t('wizardSteps.step7.poaDownloadHintDesc')}<br/>
+              <a href="https://www.bmjv.de/DE/service/formulare/form_vorsorgevollmacht/form_vorsorgevollmacht_artikel.html?nn=17628" target="_blank" rel="noopener noreferrer" className="text-indigo-600 dark:text-indigo-400 underline hover:text-indigo-800 dark:hover:text-indigo-200 break-all">https://www.bmjv.de/DE/service/formulare/form_vorsorgevollmacht/form_vorsorgevollmacht_artikel.html?nn=17628</a>
+            </div>
+          </div>
+          <div className="bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-200 dark:border-indigo-900/50 rounded-xl p-4 mb-4 flex items-start gap-3 text-indigo-900 dark:text-indigo-200">
+            <Info className="shrink-0 mt-0.5 text-indigo-600 dark:text-indigo-400" size={20} />
+            <div className="text-sm">
+              <strong className="font-semibold block mb-1 text-indigo-800 dark:text-indigo-300">{t('wizardSteps.step7.poaPatientHintTitle')}</strong>
+              {t('wizardSteps.step7.poaPatientHintDesc')}<br/>
+              <a href="https://www.verbraucherzentrale.de/patientenverfuegung-online" target="_blank" rel="noopener noreferrer" className="text-indigo-600 dark:text-indigo-400 underline hover:text-indigo-800 dark:hover:text-indigo-200 break-all">https://www.verbraucherzentrale.de/patientenverfuegung-online</a>
+            </div>
+          </div>
+          <div className="bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-200 dark:border-indigo-900/50 rounded-xl p-4 mb-6 flex items-start gap-3 text-indigo-900 dark:text-indigo-200">
+            <Info className="shrink-0 mt-0.5 text-indigo-600 dark:text-indigo-400" size={20} />
+            <div className="text-sm">
+              <strong className="font-semibold block mb-1 text-indigo-800 dark:text-indigo-300">{t('wizardSteps.step7.poaFuneralHintTitle')}</strong>
+              {t('wizardSteps.step7.poaFuneralHintDesc')}<br/>
+              <a href="https://www.friedhofsverband-sauerland.de/info-center.html" target="_blank" rel="noopener noreferrer" className="text-indigo-600 dark:text-indigo-400 underline hover:text-indigo-800 dark:hover:text-indigo-200 break-all">https://www.friedhofsverband-sauerland.de/info-center.html</a>
+            </div>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {formData.patientenverfuegung && <DocumentUpload document={formData.patientenverfuegung} onChange={(doc) => updateField('patientenverfuegung', doc)} />}
-            {formData.vorsorgevollmacht && <DocumentUpload document={formData.vorsorgevollmacht} onChange={(doc) => updateField('vorsorgevollmacht', doc)} />}
-            {formData.betreuungsverfuegung && <DocumentUpload document={formData.betreuungsverfuegung} onChange={(doc) => updateField('betreuungsverfuegung', doc)} />}
+            <DocumentUpload document={formData.patientenverfuegung || { id: 'patverf', name: t('wizardSteps.step7.docPatientenverfuegung'), documentAction: 'placeholder', fileData: null, fileType: null }} onChange={(doc) => updateField('patientenverfuegung', doc)} />
+            <DocumentUpload document={formData.vorsorgevollmacht || { id: 'vorsorge', name: t('wizardSteps.step7.docVorsorgevollmacht'), documentAction: 'placeholder', fileData: null, fileType: null }} onChange={(doc) => updateField('vorsorgevollmacht', doc)} />
+            <DocumentUpload document={formData.betreuungsverfuegung || { id: 'betreuung', name: t('wizardSteps.step7.docBetreuungsverfuegung'), documentAction: 'placeholder', fileData: null, fileType: null }} onChange={(doc) => updateField('betreuungsverfuegung', doc)} />
+            <DocumentUpload document={formData.bestattungsverfuegung || { id: 'bestattung', name: t('wizardSteps.step7.docBestattungsverfuegung'), documentAction: 'placeholder', fileData: null, fileType: null }} onChange={(doc) => updateField('bestattungsverfuegung', doc)} />
           </div>
         </section>
         <section>

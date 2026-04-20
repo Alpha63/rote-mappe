@@ -132,6 +132,7 @@ export interface FormData {
   patientenverfuegung?: ScannedDocument;
   vorsorgevollmacht?: ScannedDocument;
   betreuungsverfuegung?: ScannedDocument;
+  bestattungsverfuegung?: ScannedDocument;
   testamentDocument?: ScannedDocument;
   certificates: Certificate[];
   keys: KeyEntry[];
