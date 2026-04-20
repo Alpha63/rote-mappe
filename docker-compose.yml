@@ -3,6 +3,4 @@ services:
   notfallakte-app:
     build: .
     container_name: notfallakte
-    ports:
-      - "8080:80"
     restart: unless-stopped
