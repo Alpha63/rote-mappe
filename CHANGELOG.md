@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.0] - 2026-04-22
+
+### Changed
+- **Automatisierte Versionierung:** Die Versionsnummer der App wird nun beim Build-Prozess direkt und automatisch aus der `package.json` ausgelesen und über die Vite-Konfiguration (`import.meta.env`) im Frontend bereitgestellt. Dadurch muss die Version bei einem neuen Release nicht mehr manuell im Code nachgezogen werden. Danke für diesen hilfreichen Beitrag an [@LucaNerlich]!
+- **Port-Konfiguration:** Der Standard-Port von Vite kann nun über die Umgebungsvariable `PORT` flexibel überschrieben werden und lauscht standardmäßig auf allen Netzwerk-Schnittstellen (`host: true`). Danke für diesen hilfreichen Beitrag an [@LucaNerlich]!
+- **Docker & Sicherheit:** Optimierung des Docker-Setups durch Hinzufügen einer `.dockerignore` und Dockerfile-Caching. Um die Ausführung als Root-Benutzer zu vermeiden, wurde auf das Image `nginxinc/nginx-unprivileged:stable-alpine` gewechselt. Zudem wurde ein Docker Healthcheck implementiert (Merge Request #2). Danke für diesen hilfreichen Beitrag an [@LucaNerlich]!
+
+
 ## [1.1.0] - 2026-04-20
 
 ### Added
