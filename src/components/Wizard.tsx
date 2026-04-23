@@ -107,9 +107,9 @@ function WizardContent() {
           </div>
           <div className="flex items-center gap-3">
             <ThemeToggle />
-            <button 
-              onClick={() => setIsSidebarOpen(true)} 
-              className="p-2 -mr-2 text-indigo-600 dark:text-indigo-400 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors"
+            <button
+              onClick={() => setIsSidebarOpen(true)}
+              className="p-2 -mr-2 text-indigo-600 dark:text-indigo-400 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors cursor-pointer"
             >
               <Menu size={24} />
             </button>
@@ -128,7 +128,7 @@ function WizardContent() {
                 onClick={() => handleNextClick(Math.max(1, step - 1))}
                 disabled={step === 1}
                 className={`flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-colors
-                  ${step === 1 ? 'text-slate-300 dark:text-slate-600 cursor-not-allowed' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-600'}`}
+                  ${step === 1 ? 'text-slate-300 dark:text-slate-600 cursor-not-allowed' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-600 cursor-pointer'}`}
               >
                 <ArrowLeft size={18} />
                 {t('wizard.back')}
@@ -137,7 +137,7 @@ function WizardContent() {
               {step < 10 ? (
                 <button
                   onClick={() => handleNextClick(Math.min(10, step + 1))}
-                  className="flex items-center gap-2 px-6 py-3 bg-indigo-600 text-white rounded-xl font-medium hover:bg-indigo-700 transition-colors shadow-md shadow-indigo-600/10 dark:shadow-none"
+                  className="flex items-center gap-2 px-6 py-3 bg-indigo-600 text-white rounded-xl font-medium hover:bg-indigo-700 transition-colors shadow-md shadow-indigo-600/10 dark:shadow-none cursor-pointer"
                 >
                   {t('wizard.next')}
                   <ArrowRight size={18} />
@@ -163,10 +163,10 @@ function WizardContent() {
                 {t('wizard.warningDesc')}
               </p>
               <div className="flex flex-col w-full gap-3">
-                <button onClick={() => setShowWarningModal(false)} className="w-full py-3.5 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 font-medium rounded-xl hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors">
+                <button onClick={() => setShowWarningModal(false)} className="w-full py-3.5 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 font-medium rounded-xl hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors cursor-pointer">
                   {t('wizard.checkInputs')}
                 </button>
-                <button onClick={() => { setShowWarningModal(false); setStep(nextStepTarget); }} className="w-full py-3.5 text-slate-500 dark:text-slate-400 font-medium hover:text-slate-700 dark:hover:text-slate-200 transition-colors">
+                <button onClick={() => { setShowWarningModal(false); setStep(nextStepTarget); }} className="w-full py-3.5 text-slate-500 dark:text-slate-400 font-medium hover:text-slate-700 dark:hover:text-slate-200 transition-colors cursor-pointer">
                   {t('wizard.continueAnyway')}
                 </button>
               </div>

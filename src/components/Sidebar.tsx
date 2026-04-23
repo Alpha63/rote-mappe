@@ -67,9 +67,9 @@ export function Sidebar({ currentStep, setStep, isOpen, onClose }: SidebarProps)
             <div className="hidden lg:block">
               <ThemeToggle />
             </div>
-            <button 
+            <button
               onClick={onClose}
-              className="lg:hidden text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"
+              className="lg:hidden text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 cursor-pointer"
             >
               <X size={24} />
             </button>
@@ -130,7 +130,7 @@ export function Sidebar({ currentStep, setStep, isOpen, onClose }: SidebarProps)
           <button 
             onClick={handleBackupClick}
             disabled={isDownloading || downloadSuccess}
-            className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 hover:border-indigo-600 dark:hover:border-indigo-500 text-slate-700 dark:text-slate-300 hover:text-indigo-700 dark:hover:text-indigo-400 rounded-xl transition-colors shadow-sm font-medium text-sm disabled:opacity-60 disabled:cursor-not-allowed"
+            className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 hover:border-indigo-600 dark:hover:border-indigo-500 text-slate-700 dark:text-slate-300 hover:text-indigo-700 dark:hover:text-indigo-400 rounded-xl transition-colors shadow-sm font-medium text-sm cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {isDownloading ? (
               <><Loader2 size={16} className="animate-spin" /> {t('sidebar.buttons.creatingBackup')}</>
@@ -143,15 +143,15 @@ export function Sidebar({ currentStep, setStep, isOpen, onClose }: SidebarProps)
           
           <div className="flex items-center justify-center gap-2 mt-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-1.5 px-3 rounded-lg mx-auto w-fit">
             <Globe size={14} className="text-slate-400 dark:text-slate-500" />
-            <button 
-              onClick={() => i18n.changeLanguage('de')} 
-              className={`text-xs font-medium px-2 py-1 rounded transition-colors ${i18n.language === 'de' || !i18n.language || i18n.language.startsWith('de') ? 'bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300' : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700'}`}
+            <button
+              onClick={() => i18n.changeLanguage('de')}
+              className={`text-xs font-medium px-2 py-1 rounded transition-colors cursor-pointer ${i18n.language === 'de' || !i18n.language || i18n.language.startsWith('de') ? 'bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300' : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700'}`}
             >
               DE
             </button>
-            <button 
-              onClick={() => i18n.changeLanguage('en')} 
-              className={`text-xs font-medium px-2 py-1 rounded transition-colors ${i18n.language === 'en' || i18n.language.startsWith('en') ? 'bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300' : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700'}`}
+            <button
+              onClick={() => i18n.changeLanguage('en')}
+              className={`text-xs font-medium px-2 py-1 rounded transition-colors cursor-pointer ${i18n.language === 'en' || i18n.language.startsWith('en') ? 'bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300' : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700'}`}
             >
               EN
             </button>

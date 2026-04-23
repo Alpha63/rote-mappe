@@ -78,20 +78,20 @@ export function Step1Basisdaten() {
             <div className={formData.maritalStatus === 'geschieden' ? 'md:col-span-2' : ''}>
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 dark:text-slate-500 mb-1">{t('wizardSteps.step1.childrenCount')}</label>
               <div className="flex items-center gap-2">
-                <button 
+                <button
                   type="button"
                   onClick={() => handleChildrenCountChange(String(Math.max(0, parseInt(formData.childrenCount || '0', 10) - 1)))}
-                  className="w-10 h-10 rounded-lg border border-slate-200 dark:border-slate-600 flex items-center justify-center bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400 dark:text-slate-500 transition-colors shadow-sm"
+                  className="w-10 h-10 rounded-lg border border-slate-200 dark:border-slate-600 flex items-center justify-center bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400 dark:text-slate-500 transition-colors shadow-sm cursor-pointer"
                 >
                   <Minus size={18} />
                 </button>
                 <div className="w-16 h-10 rounded-lg border border-slate-200 dark:border-slate-600 flex items-center justify-center bg-slate-50 dark:bg-slate-900 font-medium text-slate-800 dark:text-slate-200 shadow-inner">
                   {formData.childrenCount || '0'}
                 </div>
-                <button 
+                <button
                   type="button"
                   onClick={() => handleChildrenCountChange(String((parseInt(formData.childrenCount || '0', 10) || 0) + 1))}
-                  className="w-10 h-10 rounded-lg border border-slate-200 dark:border-slate-600 flex items-center justify-center bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400 dark:text-slate-500 transition-colors shadow-sm"
+                  className="w-10 h-10 rounded-lg border border-slate-200 dark:border-slate-600 flex items-center justify-center bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400 dark:text-slate-500 transition-colors shadow-sm cursor-pointer"
                 >
                   <Plus size={18} />
                 </button>
@@ -125,7 +125,7 @@ export function Step1Basisdaten() {
           <div className="space-y-4">
             {contacts.map((contact, index) => (
               <div key={contact.id} className="p-4 border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 relative group shadow-sm">
-                <button onClick={() => removeContact(contact.id)} className="absolute top-4 right-4 text-slate-300 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400"><Trash2 size={20} /></button>
+                <button onClick={() => removeContact(contact.id)} className="absolute top-4 right-4 text-slate-300 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400 cursor-pointer"><Trash2 size={20} /></button>
                 <h4 className="font-medium text-slate-800 dark:text-slate-200 mb-3">{t('wizardSteps.step1.contact')} {index + 1}</h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <Input label={t('wizardSteps.step1.contactRelation')} value={contact.type} onChange={(e) => updateContact(contact.id, 'type', e.target.value)} placeholder={t('wizardSteps.step1.contactRelationPlaceholder')} className="p-2.5" />
@@ -135,7 +135,7 @@ export function Step1Basisdaten() {
                 </div>
               </div>
             ))}
-            <button onClick={addContact} className="w-full py-3 border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl text-indigo-600 dark:text-indigo-400 font-medium flex items-center justify-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><Plus size={20} /> {t('wizardSteps.step1.addContact')}</button>
+            <button onClick={addContact} className="w-full py-3 border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl text-indigo-600 dark:text-indigo-400 font-medium flex items-center justify-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors cursor-pointer"><Plus size={20} /> {t('wizardSteps.step1.addContact')}</button>
           </div>
         </div>
       </div>
@@ -218,7 +218,7 @@ export function Step3Finanzen() {
           <div className="space-y-4">
             {bankAccounts.map((account, index) => (
               <div key={account.id} className="p-4 border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 shadow-sm relative group">
-                <button onClick={() => removeBankAccount(account.id)} className="absolute top-4 right-4 text-slate-300 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400"><Trash2 size={20} /></button>
+                <button onClick={() => removeBankAccount(account.id)} className="absolute top-4 right-4 text-slate-300 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400 cursor-pointer"><Trash2 size={20} /></button>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                   <div className="md:col-span-2"><Input label={t('wizardSteps.step3.bankName')} value={account.bankName} onChange={(e) => updateBankAccount(account.id, 'bankName', e.target.value)} className="p-2.5" /></div>
                   <div className="md:col-span-2"><Input label={t('wizardSteps.step3.bankAddress')} value={account.bankAddress || ''} onChange={(e) => updateBankAccount(account.id, 'bankAddress', e.target.value)} className="p-2.5" /></div>
@@ -252,7 +252,7 @@ export function Step3Finanzen() {
                                 } : acc)
                               }));
                               }}
-                              className="text-xs flex items-center gap-1.5 bg-white dark:bg-slate-800 border border-indigo-200 dark:border-indigo-800/50 text-indigo-700 dark:text-indigo-300 px-3 py-1.5 rounded-lg hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-colors shadow-sm"
+                              className="text-xs flex items-center gap-1.5 bg-white dark:bg-slate-800 border border-indigo-200 dark:border-indigo-800/50 text-indigo-700 dark:text-indigo-300 px-3 py-1.5 rounded-lg hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-colors shadow-sm cursor-pointer"
                             >
                               <Copy size={14} /> {t('wizardSteps.step3.copyFromFirst')}
                             </button>
@@ -273,7 +273,7 @@ export function Step3Finanzen() {
                 </div>
               </div>
             ))}
-            <button onClick={addBankAccount} className="w-full py-3 border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl text-indigo-600 dark:text-indigo-400 font-medium flex items-center justify-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-800/50"><Plus size={20} /> {t('wizardSteps.step3.addAccount')}</button>
+            <button onClick={addBankAccount} className="w-full py-3 border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl text-indigo-600 dark:text-indigo-400 font-medium flex items-center justify-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer"><Plus size={20} /> {t('wizardSteps.step3.addAccount')}</button>
           </div>
         </section>
         <section>
@@ -284,11 +284,11 @@ export function Step3Finanzen() {
                 {asset.isHeading ? (
                   <div className="flex items-center gap-4 pt-4 pb-2 border-b border-slate-200 dark:border-slate-700">
                     <input type="text" value={asset.title || asset.type} onChange={(e) => updateOtherAsset(asset.id, 'type', e.target.value)} placeholder={t('wizardSteps.step3.newHeading')} className="text-lg font-semibold text-slate-800 dark:text-slate-200 bg-transparent outline-none w-full placeholder-slate-400 dark:placeholder-slate-500" />
-                    <button onClick={() => removeOtherAsset(asset.id)} className="text-slate-300 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400"><Trash2 size={18} /></button>
+                    <button onClick={() => removeOtherAsset(asset.id)} className="text-slate-300 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400 cursor-pointer"><Trash2 size={18} /></button>
                   </div>
                 ) : (
                   <div className="p-4 border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 shadow-sm relative">
-                    <button onClick={() => removeOtherAsset(asset.id)} className="absolute top-4 right-4 text-slate-300 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400"><Trash2 size={20} /></button>
+                    <button onClick={() => removeOtherAsset(asset.id)} className="absolute top-4 right-4 text-slate-300 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400 cursor-pointer"><Trash2 size={20} /></button>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                       <Input label={t('wizardSteps.step3.assetType')} value={asset.type} onChange={(e) => updateOtherAsset(asset.id, 'type', e.target.value)} className="p-2.5" />
                       <Input label={t('wizardSteps.step3.assetDetails')} value={asset.description} onChange={(e) => updateOtherAsset(asset.id, 'description', e.target.value)} className="p-2.5" />
@@ -298,8 +298,8 @@ export function Step3Finanzen() {
               </div>
             ))}
             <div className="flex gap-4">
-              <button onClick={addOtherAsset} className="flex-1 py-3 border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl text-indigo-600 dark:text-indigo-400 font-medium flex items-center justify-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-800/50"><Plus size={20} /> {t('wizardSteps.step3.addAsset')}</button>
-              <button onClick={addOtherAssetHeading} className="flex-1 py-3 border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl text-indigo-600 dark:text-indigo-400 font-medium flex items-center justify-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-800/50"><Type size={20} /> {t('wizardSteps.step3.insertHeading')}</button>
+              <button onClick={addOtherAsset} className="flex-1 py-3 border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl text-indigo-600 dark:text-indigo-400 font-medium flex items-center justify-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer"><Plus size={20} /> {t('wizardSteps.step3.addAsset')}</button>
+              <button onClick={addOtherAssetHeading} className="flex-1 py-3 border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl text-indigo-600 dark:text-indigo-400 font-medium flex items-center justify-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer"><Type size={20} /> {t('wizardSteps.step3.insertHeading')}</button>
             </div>
           </div>
         </section>
@@ -308,7 +308,7 @@ export function Step3Finanzen() {
           <div className="space-y-4">
             {realEstates.map((estate) => (
               <div key={estate.id} className="p-4 border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 shadow-sm relative group">
-                <button onClick={() => removeRealEstate(estate.id)} className="absolute top-4 right-4 text-slate-300 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400"><Trash2 size={20} /></button>
+                <button onClick={() => removeRealEstate(estate.id)} className="absolute top-4 right-4 text-slate-300 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400 cursor-pointer"><Trash2 size={20} /></button>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                   <Input label={t('wizardSteps.step3.realEstateType')} value={estate.type} onChange={(e) => updateRealEstate(estate.id, 'type', e.target.value)} className="p-2.5" />
                   <Input label={t('wizardSteps.step3.country')} value={estate.country} onChange={(e) => updateRealEstate(estate.id, 'country', e.target.value)} className="p-2.5" />
@@ -316,7 +316,7 @@ export function Step3Finanzen() {
                 </div>
               </div>
             ))}
-            <button onClick={addRealEstate} className="w-full py-3 border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl text-indigo-600 dark:text-indigo-400 font-medium flex items-center justify-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-800/50"><Plus size={20} /> {t('wizardSteps.step3.addRealEstate')}</button>
+            <button onClick={addRealEstate} className="w-full py-3 border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl text-indigo-600 dark:text-indigo-400 font-medium flex items-center justify-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer"><Plus size={20} /> {t('wizardSteps.step3.addRealEstate')}</button>
           </div>
         </section>
         <div className="pt-6 border-t border-slate-100 dark:border-slate-800">
@@ -341,7 +341,7 @@ export function Step4Vertraege() {
       <div className="space-y-4">
         {contracts.map((contract) => (
           <div key={contract.id} className="p-4 border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 relative shadow-sm">
-            <button onClick={() => removeContract(contract.id)} className="absolute top-4 right-4 text-slate-300 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400"><Trash2 size={20} /></button>
+            <button onClick={() => removeContract(contract.id)} className="absolute top-4 right-4 text-slate-300 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400 cursor-pointer"><Trash2 size={20} /></button>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
               <Input label={t('wizardSteps.step4.contractType')} value={contract.type} onChange={(e) => updateContract(contract.id, 'type', e.target.value)} className="p-2.5" />
               <Input label={t('wizardSteps.step4.provider')} value={contract.provider} onChange={(e) => updateContract(contract.id, 'provider', e.target.value)} className="p-2.5" />
@@ -349,7 +349,7 @@ export function Step4Vertraege() {
             </div>
           </div>
         ))}
-        <button onClick={addContract} className="w-full py-3 border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl text-indigo-600 dark:text-indigo-400 font-medium flex items-center justify-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-800/50"><Plus size={20} /> {t('wizardSteps.step4.addContract')}</button>
+        <button onClick={addContract} className="w-full py-3 border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl text-indigo-600 dark:text-indigo-400 font-medium flex items-center justify-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer"><Plus size={20} /> {t('wizardSteps.step4.addContract')}</button>
         <div className="pt-6 border-t border-slate-100 dark:border-slate-800 mt-6">
           <Textarea label={t('wizardSteps.step4.notesLabel')} description={t('wizardSteps.step4.notesDesc')} value={formData.contractNotes || ''} onChange={(e) => updateField('contractNotes', e.target.value)} />
         </div>
@@ -379,7 +379,7 @@ export function Step5DigitaleIdentitaet() {
                 {entry.type === 'heading' ? (
                   <div className="flex items-center gap-4 pt-4 pb-2 border-b border-slate-200 dark:border-slate-700">
                     <input type="text" value={entry.title} onChange={(e) => updateDigitalIdentity(entry.id, 'title', e.target.value)} placeholder={t('wizardSteps.step3.newHeading')} className="text-lg font-semibold text-slate-800 dark:text-slate-200 bg-transparent outline-none w-full" />
-                    <button onClick={() => removeDigitalIdentity(entry.id)} className="text-slate-300 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400"><Trash2 size={18} /></button>
+                    <button onClick={() => removeDigitalIdentity(entry.id)} className="text-slate-300 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400 cursor-pointer"><Trash2 size={18} /></button>
                   </div>
                 ) : (
                   <div className="grid grid-cols-12 gap-2 bg-white dark:bg-slate-800 p-3 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm items-start">
@@ -387,14 +387,14 @@ export function Step5DigitaleIdentitaet() {
                     <div className="col-span-3"><label className="block text-[10px] uppercase text-slate-500 dark:text-slate-400 dark:text-slate-500 font-semibold mb-1">{t('wizardSteps.step5.username')}</label><input type="text" value={entry.username} onChange={(e) => updateDigitalIdentity(entry.id, 'username', e.target.value)} className="w-full text-sm bg-slate-50 dark:bg-slate-900 p-2 rounded border dark:border-slate-700 focus:border-indigo-600 dark:focus:border-indigo-500 outline-none text-slate-900 dark:text-slate-100" /></div>
                     <div className="col-span-3"><label className="block text-[10px] uppercase text-slate-500 dark:text-slate-400 dark:text-slate-500 font-semibold mb-1">{t('wizardSteps.step5.password')}</label><input type="text" value={entry.password} onChange={(e) => updateDigitalIdentity(entry.id, 'password', e.target.value)} className="w-full text-sm bg-slate-50 dark:bg-slate-900 p-2 rounded border dark:border-slate-700 focus:border-indigo-600 dark:focus:border-indigo-500 outline-none text-slate-900 dark:text-slate-100" /></div>
                     <div className="col-span-2"><label className="block text-[10px] uppercase text-slate-500 dark:text-slate-400 dark:text-slate-500 font-semibold mb-1">{t('wizardSteps.step5.link')}</label><input type="text" value={entry.url} onChange={(e) => updateDigitalIdentity(entry.id, 'url', e.target.value)} className="w-full text-sm bg-slate-50 dark:bg-slate-900 p-2 rounded border dark:border-slate-700 focus:border-indigo-600 dark:focus:border-indigo-500 outline-none text-slate-900 dark:text-slate-100" /></div>
-                    <div className="col-span-1 flex justify-end pt-5"><button onClick={() => removeDigitalIdentity(entry.id)} className="text-slate-300 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400 p-1"><Trash2 size={18} /></button></div>
+                    <div className="col-span-1 flex justify-end pt-5"><button onClick={() => removeDigitalIdentity(entry.id)} className="text-slate-300 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400 p-1 cursor-pointer"><Trash2 size={18} /></button></div>
                   </div>
                 )}
               </div>
             ))}
             <div className="flex gap-4">
-              <button onClick={addDigitalIdentity} className="flex-1 py-3 border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl text-indigo-600 dark:text-indigo-400 font-medium flex items-center justify-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-800/50"><Plus size={20} /> {t('wizardSteps.step5.addAccount')}</button>
-              <button onClick={addDigitalIdentityHeading} className="flex-1 py-3 border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl text-indigo-600 dark:text-indigo-400 font-medium flex items-center justify-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-800/50"><Type size={20} /> {t('wizardSteps.step3.insertHeading')}</button>
+              <button onClick={addDigitalIdentity} className="flex-1 py-3 border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl text-indigo-600 dark:text-indigo-400 font-medium flex items-center justify-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer"><Plus size={20} /> {t('wizardSteps.step5.addAccount')}</button>
+              <button onClick={addDigitalIdentityHeading} className="flex-1 py-3 border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl text-indigo-600 dark:text-indigo-400 font-medium flex items-center justify-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer"><Type size={20} /> {t('wizardSteps.step3.insertHeading')}</button>
             </div>
           </div>
         </section>
@@ -436,14 +436,14 @@ export function Step6Dokumente() {
           {(otherDocuments as ScannedDocument[]).map(doc => <DocumentUpload key={doc.id} document={doc} onChange={updateOtherDocument} onRemove={() => removeOtherDocument(doc.id)} isCustom />)}
         </div>
 
-        <button onClick={addOtherDocument} className="mt-6 w-full py-3 border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl text-indigo-600 dark:text-indigo-400 font-medium flex items-center justify-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-800/50"><Plus size={20} /> {t('wizardSteps.step6.addDoc')}</button>
+        <button onClick={addOtherDocument} className="mt-6 w-full py-3 border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl text-indigo-600 dark:text-indigo-400 font-medium flex items-center justify-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer"><Plus size={20} /> {t('wizardSteps.step6.addDoc')}</button>
         
         <div className="pt-10 mt-10 border-t border-slate-100 dark:border-slate-800">
           <h3 className="text-lg font-medium text-slate-800 dark:text-slate-200 mb-4 border-b border-slate-100 dark:border-slate-800 pb-2">{t('wizardSteps.step6.certsTitle')}</h3>
           <div className="space-y-6">
             {certificates.map((cert) => (
               <div key={cert.id} className="p-4 border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 relative shadow-sm">
-                <button onClick={() => removeCertificate(cert.id)} className="absolute top-4 right-4 text-slate-300 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400"><Trash2 size={20} /></button>
+                <button onClick={() => removeCertificate(cert.id)} className="absolute top-4 right-4 text-slate-300 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400 cursor-pointer"><Trash2 size={20} /></button>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2 mb-4">
                   <Input label={t('wizardSteps.step6.school')} value={cert.school} onChange={(e) => updateCertificate(cert.id, 'school', e.target.value)} className="p-2.5" />
                   <Input label={t('wizardSteps.step6.degree')} value={cert.degree} onChange={(e) => updateCertificate(cert.id, 'degree', e.target.value)} className="p-2.5" />
@@ -452,7 +452,7 @@ export function Step6Dokumente() {
                 <DocumentUpload document={cert.document} onChange={(doc) => updateCertificate(cert.id, 'document', doc)} />
               </div>
             ))}
-            <button onClick={addCertificate} className="w-full py-3 border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl text-indigo-600 dark:text-indigo-400 font-medium flex items-center justify-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-800/50"><Plus size={20} /> {t('wizardSteps.step6.addCert')}</button>
+            <button onClick={addCertificate} className="w-full py-3 border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl text-indigo-600 dark:text-indigo-400 font-medium flex items-center justify-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer"><Plus size={20} /> {t('wizardSteps.step6.addCert')}</button>
           </div>
         </div>
         <div className="pt-6 border-t border-slate-100 dark:border-slate-800 mt-6">
@@ -545,7 +545,7 @@ export function Step7Vollmachten() {
           <h3 className="text-lg font-medium text-slate-800 dark:text-slate-200 mb-4 border-b border-slate-100 dark:border-slate-800 pb-2">{t('wizardSteps.step7.otherPoaTitle')}</h3>
           <div className="space-y-4">
             {(customPowersOfAttorney as ScannedDocument[]).map((doc) => <DocumentUpload key={doc.id} document={doc} onChange={updateCustomPoa} onRemove={() => removeCustomPoa(doc.id)} isCustom />)}
-            <button onClick={addCustomPoa} className="w-full py-3 border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl text-indigo-600 dark:text-indigo-400 font-medium flex items-center justify-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-800/50"><Plus size={20} /> {t('wizardSteps.step7.addOtherPoa')}</button>
+            <button onClick={addCustomPoa} className="w-full py-3 border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl text-indigo-600 dark:text-indigo-400 font-medium flex items-center justify-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer"><Plus size={20} /> {t('wizardSteps.step7.addOtherPoa')}</button>
           </div>
         </section>
         <div className="pt-6 border-t border-slate-100 dark:border-slate-800 mt-6">
@@ -571,7 +571,7 @@ export function Step8Hinweise() {
         <div className="space-y-4 mb-10">
           {keys.map((key) => (
             <div key={key.id} className="p-4 border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 relative shadow-sm">
-              <button onClick={() => removeKey(key.id)} className="absolute top-4 right-4 text-slate-300 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400"><Trash2 size={20} /></button>
+              <button onClick={() => removeKey(key.id)} className="absolute top-4 right-4 text-slate-300 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400 cursor-pointer"><Trash2 size={20} /></button>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
                 <Input label={t('wizardSteps.step8.keyName')} value={key.name} onChange={(e) => updateKey(key.id, 'name', e.target.value)} className="p-2.5" />
                 <Input label={t('wizardSteps.step8.keyPurpose')} value={key.purpose} onChange={(e) => updateKey(key.id, 'purpose', e.target.value)} className="p-2.5" />
@@ -579,7 +579,7 @@ export function Step8Hinweise() {
               </div>
             </div>
           ))}
-          <button onClick={addKey} className="w-full py-3 border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl text-indigo-600 dark:text-indigo-400 font-medium flex items-center justify-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-800/50"><Plus size={20} /> {t('wizardSteps.step8.addKey')}</button>
+          <button onClick={addKey} className="w-full py-3 border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl text-indigo-600 dark:text-indigo-400 font-medium flex items-center justify-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer"><Plus size={20} /> {t('wizardSteps.step8.addKey')}</button>
         </div>
         <div className="pt-6 border-t border-slate-100 dark:border-slate-800 mt-6">
           <Textarea label={t('wizardSteps.step8.notesLabel')} description={t('wizardSteps.step8.notesDesc')} value={formData.generalNotes || ''} onChange={(e) => updateField('generalNotes', e.target.value)} />
@@ -601,12 +601,12 @@ export function Step9EigeneKapitel() {
       <div className="space-y-6">
         {customChapters.map((chapter) => (
           <div key={chapter.id} className="p-4 border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 relative shadow-sm">
-            <button onClick={() => removeChapter(chapter.id)} className="absolute top-4 right-4 text-slate-300 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400"><Trash2 size={20} /></button>
+            <button onClick={() => removeChapter(chapter.id)} className="absolute top-4 right-4 text-slate-300 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400 cursor-pointer"><Trash2 size={20} /></button>
             <div className="mb-4 pr-8"><Input label={t('wizardSteps.step9.chapterTitle')} value={chapter.title} onChange={(e) => updateChapter(chapter.id, 'title', e.target.value)} className="p-2.5 font-medium" /></div>
             <Textarea label={t('wizardSteps.step9.notesLabel')} value={chapter.content} onChange={(e) => updateChapter(chapter.id, 'content', e.target.value)} />
           </div>
         ))}
-        <button onClick={addChapter} className="w-full py-3 border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl text-indigo-600 dark:text-indigo-400 font-medium flex items-center justify-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-800/50"><Plus size={20} /> {t('wizardSteps.step9.addChapter')}</button>
+        <button onClick={addChapter} className="w-full py-3 border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl text-indigo-600 dark:text-indigo-400 font-medium flex items-center justify-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer"><Plus size={20} /> {t('wizardSteps.step9.addChapter')}</button>
       </div>
     </div>
   );
@@ -668,7 +668,7 @@ export function Step10Abschluss() {
             </label>
           </div>
         </div>
-        <button onClick={handleDownload} disabled={isDownloading || downloadSuccess} className={`w-full md:w-auto text-white px-8 py-3 rounded-xl font-semibold transition-all shadow-lg flex items-center justify-center gap-3 ${isDownloading ? 'bg-indigo-400 cursor-not-allowed' : downloadSuccess ? 'bg-emerald-500 hover:bg-emerald-600 cursor-default' : 'bg-indigo-600 hover:bg-indigo-700'}`}>
+        <button onClick={handleDownload} disabled={isDownloading || downloadSuccess} className={`w-full md:w-auto text-white px-8 py-3 rounded-xl font-semibold transition-all shadow-lg flex items-center justify-center gap-3 ${isDownloading ? 'bg-indigo-400 cursor-not-allowed' : downloadSuccess ? 'bg-emerald-500 hover:bg-emerald-600 cursor-default' : 'bg-indigo-600 hover:bg-indigo-700 cursor-pointer'}`}>
           {isDownloading ? (
             <><Loader2 size={20} className="animate-spin" /> {t('wizardSteps.step10.downloading')}</>
           ) : downloadSuccess ? (

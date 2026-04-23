@@ -30,9 +30,9 @@ export function DocumentUpload({ document, onChange, onRemove, isCustom }: Docum
   return (
     <div className="p-5 border border-slate-300 dark:border-slate-700 rounded-2xl bg-white dark:bg-slate-800 shadow-md relative group">
       {onRemove && (
-        <button 
+        <button
           onClick={onRemove}
-          className="absolute top-4 right-4 text-slate-400 hover:text-red-600 dark:hover:text-red-500 transition-colors"
+          className="absolute top-4 right-4 text-slate-400 hover:text-red-600 dark:hover:text-red-500 transition-colors cursor-pointer"
           title={t('docUpload.remove')}
         >
           <Trash2 size={20} />
@@ -104,9 +104,9 @@ export function DocumentUpload({ document, onChange, onRemove, isCustom }: Docum
             {document.fileData && (
               <div className="mt-3 flex items-center justify-between bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 px-4 py-2 rounded-lg text-sm border dark:border-indigo-800/50">
                 <span>{t('docUpload.success')}</span>
-                <button 
+                <button
                   onClick={() => onChange({ ...document, fileData: null, fileType: null })}
-                  className="text-indigo-700 dark:text-indigo-300 hover:text-indigo-900 dark:hover:text-indigo-100 underline"
+                  className="text-indigo-700 dark:text-indigo-300 hover:text-indigo-900 dark:hover:text-indigo-100 underline cursor-pointer"
                 >
                   {t('docUpload.removeLink')}
                 </button>
