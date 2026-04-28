@@ -73,12 +73,12 @@ export function Step1Basisdaten() {
             {formData.maritalStatus !== 'ledig' && <Input label={t('wizardSteps.step1.marriageDate')} type="date" value={formData.marriageDate} onChange={(e) => updateField('marriageDate', e.target.value)} />}
             {formData.maritalStatus === 'geschieden' && <Input label={t('wizardSteps.step1.divorceDate')} type="date" value={formData.divorceDate} onChange={(e) => updateField('divorceDate', e.target.value)} />}
             <div className={formData.maritalStatus === 'geschieden' ? 'md:col-span-2' : ''}>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-400 dark:text-slate-500 mb-1">{t('wizardSteps.step1.childrenCount')}</label>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-400 mb-1">{t('wizardSteps.step1.childrenCount')}</label>
               <div className="flex items-center gap-2">
                 <button
                   type="button"
                   onClick={() => handleChildrenCountChange(String(Math.max(0, parseInt(formData.childrenCount || '0', 10) - 1)))}
-                  className="w-10 h-10 rounded-lg border border-slate-200 dark:border-slate-600 flex items-center justify-center bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400 dark:text-slate-500 transition-colors shadow-sm"
+                  className="w-10 h-10 rounded-lg border border-slate-200 dark:border-slate-600 flex items-center justify-center bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400 transition-colors shadow-sm"
                 >
                   <Minus size={18} />
                 </button>
@@ -88,7 +88,7 @@ export function Step1Basisdaten() {
                 <button
                   type="button"
                   onClick={() => handleChildrenCountChange(String((parseInt(formData.childrenCount || '0', 10) || 0) + 1))}
-                  className="w-10 h-10 rounded-lg border border-slate-200 dark:border-slate-600 flex items-center justify-center bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400 dark:text-slate-500 transition-colors shadow-sm"
+                  className="w-10 h-10 rounded-lg border border-slate-200 dark:border-slate-600 flex items-center justify-center bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400 transition-colors shadow-sm"
                 >
                   <Plus size={18} />
                 </button>
@@ -118,11 +118,11 @@ export function Step1Basisdaten() {
         </div>
         <div className="pt-6 border-t border-slate-100 dark:border-slate-800">
           <h3 className="text-lg font-medium text-slate-800 dark:text-slate-200 mb-4">{t('wizardSteps.step1.contactsTitle')}</h3>
-          <p className="text-sm text-slate-500 dark:text-slate-400 dark:text-slate-500 mb-4">{t('wizardSteps.step1.contactsDesc')}</p>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">{t('wizardSteps.step1.contactsDesc')}</p>
           <div className="space-y-4">
             {contacts.map((contact, index) => (
               <div key={contact.id} className="p-4 border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 relative group shadow-sm">
-                <button onClick={() => removeContact(contact.id)} className="absolute top-4 right-4 text-slate-300 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400"><Trash2 size={20} /></button>
+                <button onClick={() => removeContact(contact.id)} className="absolute top-4 right-4 text-slate-300 dark:text-slate-400 hover:text-red-500 dark:hover:text-red-400"><Trash2 size={20} /></button>
                 <h4 className="font-medium text-slate-800 dark:text-slate-200 mb-3">{t('wizardSteps.step1.contact')} {index + 1}</h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <Input label={t('wizardSteps.step1.contactRelation')} value={contact.type} onChange={(e) => updateContact(contact.id, 'type', e.target.value)} placeholder={t('wizardSteps.step1.contactRelationPlaceholder')} className="p-2.5" />

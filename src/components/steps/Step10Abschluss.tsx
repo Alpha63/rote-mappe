@@ -45,16 +45,16 @@ export function Step10Abschluss() {
       <div className="mb-8 flex flex-col md:flex-row md:justify-between md:items-end gap-6">
         <div>
           <h2 className="text-3xl font-serif text-slate-900 dark:text-slate-100 mb-3">{t('wizardSteps.step10.title')}</h2>
-          <p className="text-slate-600 dark:text-slate-400 dark:text-slate-500 flex items-center gap-2"><ShieldCheck size={18} className="text-indigo-600 dark:text-indigo-400" /> {t('wizardSteps.step10.desc')}</p>
+          <p className="text-slate-600 dark:text-slate-400 flex items-center gap-2"><ShieldCheck size={18} className="text-indigo-600 dark:text-indigo-400" /> {t('wizardSteps.step10.desc')}</p>
         </div>
         <div className="w-full md:w-auto flex flex-col gap-3">
           <Select label={t('wizardSteps.step10.templateLabel')} value={pdfTemplate} onChange={(e) => setPdfTemplate(e.target.value)} options={[{ value: 'default', label: t('wizardSteps.step10.templateDefault') }, { value: 'rot', label: t('wizardSteps.step10.templateClassic') }, { value: 'modern', label: t('wizardSteps.step10.templateModern') }]} className="md:w-64 bg-white dark:bg-slate-800" />
           <div className="flex flex-col gap-2">
-            <label className="flex items-center gap-2 cursor-pointer text-sm text-slate-700 dark:text-slate-300 dark:text-slate-500">
+            <label className="flex items-center gap-2 cursor-pointer text-sm text-slate-700 dark:text-slate-300">
               <input type="checkbox" checked={includePlaceholders} onChange={(e) => setIncludePlaceholders(e.target.checked)} className="w-4 h-4 rounded border-slate-300 dark:border-slate-600 text-indigo-600 dark:text-indigo-500 focus:ring-indigo-600 dark:focus:ring-indigo-500 dark:bg-slate-800" />
               {t('wizardSteps.step10.includePlaceholders')}
             </label>
-            <label className="flex items-center gap-2 cursor-pointer text-sm text-slate-700 dark:text-slate-300 dark:text-slate-500">
+            <label className="flex items-center gap-2 cursor-pointer text-sm text-slate-700 dark:text-slate-300">
               <input type="checkbox" checked={includeWarnings} onChange={(e) => setIncludeWarnings(e.target.checked)} className="w-4 h-4 rounded border-slate-300 dark:border-slate-600 text-indigo-600 dark:text-indigo-500 focus:ring-indigo-600 dark:focus:ring-indigo-500 dark:bg-slate-800" />
               {t('wizardSteps.step10.includeWarnings')}
             </label>
@@ -83,7 +83,7 @@ export function Step10Abschluss() {
         {pdfPreviewUrl ? (
           <iframe src={pdfPreviewUrl} className="w-full h-full absolute inset-0" title={t('wizardSteps.step10.previewTitle')} />
         ) : (
-          <div className="text-slate-500 dark:text-slate-400 dark:text-slate-500 flex flex-col items-center p-10 text-center">
+          <div className="text-slate-500 dark:text-slate-400 flex flex-col items-center p-10 text-center">
              <div className="w-10 h-10 border-4 border-slate-200 dark:border-slate-700 border-t-indigo-600 dark:border-t-indigo-500 rounded-full animate-spin mb-4" />
              <p className="font-medium text-lg">{t('wizardSteps.step10.previewGenerating')}</p>
              <p className="text-sm mt-2 opacity-75">{t('wizardSteps.step10.previewWait')}</p>

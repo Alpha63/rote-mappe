@@ -17,7 +17,7 @@ export function Step7Vollmachten() {
     <div className="animate-in fade-in zoom-in-95 duration-500">
       <div className="mb-8">
         <h2 className="text-3xl font-serif text-slate-900 dark:text-slate-100 mb-3">{t('wizardSteps.step7.title')}</h2>
-        <p className="text-slate-600 dark:text-slate-400 dark:text-slate-500 flex items-center gap-2">
+        <p className="text-slate-600 dark:text-slate-400 flex items-center gap-2">
           <Info size={18} className="text-indigo-600 dark:text-indigo-400" />
           {t('wizardSteps.step7.desc')}
         </p>
@@ -30,7 +30,7 @@ export function Step7Vollmachten() {
             {t('wizardSteps.step7.importantDesc1')}
           </div>
         </div>
-        <div className="flex items-start gap-3 mt-2 pt-2 border-t border-red-200 dark:border-red-900/50/50 dark:border-red-900/50">
+        <div className="flex items-start gap-3 mt-2 pt-2 border-t border-red-200 dark:border-red-900/50">
           <Info className="shrink-0 mt-0.5" size={20} />
           <div className="text-sm">
             <strong className="font-semibold block mb-1">{t('wizardSteps.step7.importantTitle2')}</strong>

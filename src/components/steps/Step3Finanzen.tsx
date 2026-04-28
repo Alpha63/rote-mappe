@@ -17,7 +17,7 @@ export function Step3Finanzen() {
     <div className="animate-in fade-in zoom-in-95 duration-500">
       <div className="mb-8">
         <h2 className="text-3xl font-serif text-slate-900 dark:text-slate-100 mb-3">{t('wizardSteps.step3.title')}</h2>
-        <p className="text-slate-600 dark:text-slate-400 dark:text-slate-500 flex items-center gap-2"><Info size={18} className="text-indigo-600 dark:text-indigo-400" /> {t('wizardSteps.step3.desc')}</p>
+        <p className="text-slate-600 dark:text-slate-400 flex items-center gap-2"><Info size={18} className="text-indigo-600 dark:text-indigo-400" /> {t('wizardSteps.step3.desc')}</p>
       </div>
       <div className="bg-rose-50 dark:bg-rose-900/20 border border-red-200 dark:border-red-900/50 rounded-xl p-4 mb-8 flex flex-col gap-2 text-red-800 dark:text-red-300">
         <div className="flex items-start gap-3">
@@ -27,7 +27,7 @@ export function Step3Finanzen() {
             {t('wizardSteps.step3.importantDesc')}
           </div>
         </div>
-        <div className="flex items-start gap-3 pt-2 border-t border-red-200 dark:border-red-900/50/50 dark:border-red-900/50">
+        <div className="flex items-start gap-3 pt-2 border-t border-red-200 dark:border-red-900/50">
           <Info className="shrink-0 mt-0.5 text-red-700 dark:text-red-400" size={20} />
           <div className="text-sm text-red-700 dark:text-red-300">
             <strong className="font-semibold block mb-1">{t('wizardSteps.step3.poaHintTitle')}</strong>
@@ -42,14 +42,14 @@ export function Step3Finanzen() {
           <div className="space-y-4">
             {bankAccounts.map((account, index) => (
               <div key={account.id} className="p-4 border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 shadow-sm relative group">
-                <button onClick={() => removeBankAccount(account.id)} className="absolute top-4 right-4 text-slate-300 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400"><Trash2 size={20} /></button>
+                <button onClick={() => removeBankAccount(account.id)} className="absolute top-4 right-4 text-slate-300 dark:text-slate-400 hover:text-red-500 dark:hover:text-red-400"><Trash2 size={20} /></button>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                   <div className="md:col-span-2"><Input label={t('wizardSteps.step3.bankName')} value={account.bankName} onChange={(e) => updateBankAccount(account.id, 'bankName', e.target.value)} className="p-2.5" /></div>
                   <div className="md:col-span-2"><Input label={t('wizardSteps.step3.bankAddress')} value={account.bankAddress || ''} onChange={(e) => updateBankAccount(account.id, 'bankAddress', e.target.value)} className="p-2.5" /></div>
                   <div className="md:col-span-2"><Input label={t('wizardSteps.step3.accountHolder')} value={account.accountHolder || ''} onChange={(e) => updateBankAccount(account.id, 'accountHolder', e.target.value)} className="p-2.5" /></div>
                   <Input label={t('wizardSteps.step3.iban')} value={account.iban} onChange={(e) => updateBankAccount(account.id, 'iban', e.target.value)} className="p-2.5 font-mono" />
                   <Input label={t('wizardSteps.step3.bic')} value={account.bic} onChange={(e) => updateBankAccount(account.id, 'bic', e.target.value)} className="p-2.5 font-mono" />
-                  <div className="md:col-span-2 mt-2 p-4 bg-indigo-50 dark:bg-indigo-900/20/50 dark:bg-indigo-900/20 rounded-xl border border-indigo-100 dark:border-indigo-900/50">
+                  <div className="md:col-span-2 mt-2 p-4 bg-indigo-50 dark:bg-indigo-900/20 rounded-xl border border-indigo-100 dark:border-indigo-900/50">
                     <label className="flex items-center gap-3 cursor-pointer mb-3">
                       <input type="checkbox" checked={account.hasPowerOfAttorney || false} onChange={(e) => updateBankAccount(account.id, 'hasPowerOfAttorney', e.target.checked)} className="w-5 h-5 rounded border-slate-300 dark:border-slate-600 text-indigo-600 dark:text-indigo-500 focus:ring-indigo-600 dark:focus:ring-indigo-500 dark:bg-slate-800" />
                       <span className="text-sm font-medium text-indigo-900 dark:text-indigo-200">{t('wizardSteps.step3.createPoa')}</span>
@@ -108,11 +108,11 @@ export function Step3Finanzen() {
                 {asset.isHeading ? (
                   <div className="flex items-center gap-4 pt-4 pb-2 border-b border-slate-200 dark:border-slate-700">
                     <input type="text" value={asset.title || asset.type} onChange={(e) => updateOtherAsset(asset.id, 'type', e.target.value)} placeholder={t('wizardSteps.step3.newHeading')} className="text-lg font-semibold text-slate-800 dark:text-slate-200 bg-transparent outline-none w-full placeholder-slate-400 dark:placeholder-slate-500" />
-                    <button onClick={() => removeOtherAsset(asset.id)} className="text-slate-300 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400"><Trash2 size={18} /></button>
+                    <button onClick={() => removeOtherAsset(asset.id)} className="text-slate-300 dark:text-slate-400 hover:text-red-500 dark:hover:text-red-400"><Trash2 size={18} /></button>
                   </div>
                 ) : (
                   <div className="p-4 border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 shadow-sm relative">
-                    <button onClick={() => removeOtherAsset(asset.id)} className="absolute top-4 right-4 text-slate-300 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400"><Trash2 size={20} /></button>
+                    <button onClick={() => removeOtherAsset(asset.id)} className="absolute top-4 right-4 text-slate-300 dark:text-slate-400 hover:text-red-500 dark:hover:text-red-400"><Trash2 size={20} /></button>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                       <Input label={t('wizardSteps.step3.assetType')} value={asset.type} onChange={(e) => updateOtherAsset(asset.id, 'type', e.target.value)} className="p-2.5" />
                       <Input label={t('wizardSteps.step3.assetDetails')} value={asset.description} onChange={(e) => updateOtherAsset(asset.id, 'description', e.target.value)} className="p-2.5" />
@@ -132,7 +132,7 @@ export function Step3Finanzen() {
           <div className="space-y-4">
             {realEstates.map((estate) => (
               <div key={estate.id} className="p-4 border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 shadow-sm relative group">
-                <button onClick={() => removeRealEstate(estate.id)} className="absolute top-4 right-4 text-slate-300 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400"><Trash2 size={20} /></button>
+                <button onClick={() => removeRealEstate(estate.id)} className="absolute top-4 right-4 text-slate-300 dark:text-slate-400 hover:text-red-500 dark:hover:text-red-400"><Trash2 size={20} /></button>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                   <Input label={t('wizardSteps.step3.realEstateType')} value={estate.type} onChange={(e) => updateRealEstate(estate.id, 'type', e.target.value)} className="p-2.5" />
                   <Input label={t('wizardSteps.step3.country')} value={estate.country} onChange={(e) => updateRealEstate(estate.id, 'country', e.target.value)} className="p-2.5" />

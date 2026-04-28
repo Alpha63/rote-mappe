@@ -20,7 +20,7 @@ export function Step8Hinweise() {
         <div className="space-y-4 mb-10">
           {keys.map((key) => (
             <div key={key.id} className="p-4 border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 relative shadow-sm">
-              <button onClick={() => removeKey(key.id)} className="absolute top-4 right-4 text-slate-300 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400"><Trash2 size={20} /></button>
+              <button onClick={() => removeKey(key.id)} className="absolute top-4 right-4 text-slate-300 dark:text-slate-400 hover:text-red-500 dark:hover:text-red-400"><Trash2 size={20} /></button>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
                 <Input label={t('wizardSteps.step8.keyName')} value={key.name} onChange={(e) => updateKey(key.id, 'name', e.target.value)} className="p-2.5" />
                 <Input label={t('wizardSteps.step8.keyPurpose')} value={key.purpose} onChange={(e) => updateKey(key.id, 'purpose', e.target.value)} className="p-2.5" />
