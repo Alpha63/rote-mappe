@@ -116,7 +116,7 @@ export function Sidebar({ currentStep, setStep, isOpen, onClose }: SidebarProps)
                     <div className={`font-medium ${isCurrent || isCompleted ? 'text-slate-900 dark:text-slate-100' : 'text-slate-600 dark:text-slate-400'}`}>
                       {step.title}
                     </div>
-                    <div className="text-sm text-slate-500 dark:text-slate-500 mt-0.5">
+                    <div className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
                       {step.description}
                     </div>
                   </div>

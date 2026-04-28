@@ -117,7 +117,7 @@ export function Welcome({ onStart }: WelcomeProps) {
               </div>
               <div>
                 <h3 className="font-semibold text-slate-800 dark:text-slate-200 text-lg mb-1">{t('welcome.feature1.title')}</h3>
-                <p className="text-slate-700 dark:text-slate-400 text-sm leading-relaxed">{t('welcome.feature1.desc')}</p>
+                <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">{t('welcome.feature1.desc')}</p>
               </div>
             </div>
 
@@ -127,7 +127,7 @@ export function Welcome({ onStart }: WelcomeProps) {
               </div>
               <div>
                 <h3 className="font-semibold text-slate-800 dark:text-slate-200 text-lg mb-1">{t('welcome.feature2.title')}</h3>
-                <p className="text-slate-700 dark:text-slate-400 text-sm leading-relaxed">
+                <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
                   {t('welcome.feature2.desc')}
                 </p>
               </div>
@@ -139,7 +139,7 @@ export function Welcome({ onStart }: WelcomeProps) {
               </div>
               <div>
                 <h3 className="font-semibold text-slate-800 dark:text-slate-200 text-lg mb-1">{t('welcome.feature3.title')}</h3>
-                <p className="text-slate-700 dark:text-slate-400 text-sm leading-relaxed">{t('welcome.feature3.desc')}</p>
+                <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">{t('welcome.feature3.desc')}</p>
               </div>
             </div>
           </div>
@@ -154,7 +154,7 @@ export function Welcome({ onStart }: WelcomeProps) {
             </svg>
           </button>
 
-          <label className="group mt-4 w-full bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 py-4 px-6 rounded-2xl font-medium text-lg hover:bg-slate-50 dark:hover:bg-slate-700 hover:border-slate-300 dark:hover:border-slate-600 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer">
+          <label className="group mt-4 w-full bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 py-4 px-6 rounded-2xl font-medium text-lg hover:bg-slate-50 dark:hover:bg-slate-700 hover:border-slate-300 dark:hover:border-slate-600 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer">
             <Upload className="w-5 h-5 text-slate-400 dark:text-slate-500 group-hover:text-indigo-500 transition-colors" />
             {t('welcome.loadBackup')}
             <input
