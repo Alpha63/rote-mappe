@@ -73,7 +73,7 @@ export function Step1Basisdaten() {
             {formData.maritalStatus !== 'ledig' && <Input label={t('wizardSteps.step1.marriageDate')} type="date" value={formData.marriageDate} onChange={(e) => updateField('marriageDate', e.target.value)} />}
             {formData.maritalStatus === 'geschieden' && <Input label={t('wizardSteps.step1.divorceDate')} type="date" value={formData.divorceDate} onChange={(e) => updateField('divorceDate', e.target.value)} />}
             <div className={formData.maritalStatus === 'geschieden' ? 'md:col-span-2' : ''}>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-400 mb-1">{t('wizardSteps.step1.childrenCount')}</label>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('wizardSteps.step1.childrenCount')}</label>
               <div className="flex items-center gap-2">
                 <button
                   type="button"

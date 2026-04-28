@@ -51,11 +51,11 @@ export function Step10Abschluss() {
           <Select label={t('wizardSteps.step10.templateLabel')} value={pdfTemplate} onChange={(e) => setPdfTemplate(e.target.value)} options={[{ value: 'default', label: t('wizardSteps.step10.templateDefault') }, { value: 'rot', label: t('wizardSteps.step10.templateClassic') }, { value: 'modern', label: t('wizardSteps.step10.templateModern') }]} className="md:w-64 bg-white dark:bg-slate-800" />
           <div className="flex flex-col gap-2">
             <label className="flex items-center gap-2 cursor-pointer text-sm text-slate-700 dark:text-slate-300">
-              <input type="checkbox" checked={includePlaceholders} onChange={(e) => setIncludePlaceholders(e.target.checked)} className="w-4 h-4 rounded border-slate-300 dark:border-slate-600 text-indigo-600 dark:text-indigo-500 focus:ring-indigo-600 dark:focus:ring-indigo-500 dark:bg-slate-800" />
+              <input type="checkbox" checked={includePlaceholders} onChange={(e) => setIncludePlaceholders(e.target.checked)} className="w-4 h-4 rounded border-slate-300 dark:border-slate-600 text-indigo-600 dark:text-indigo-400 focus:ring-indigo-600 dark:focus:ring-indigo-400 dark:bg-slate-800" />
               {t('wizardSteps.step10.includePlaceholders')}
             </label>
             <label className="flex items-center gap-2 cursor-pointer text-sm text-slate-700 dark:text-slate-300">
-              <input type="checkbox" checked={includeWarnings} onChange={(e) => setIncludeWarnings(e.target.checked)} className="w-4 h-4 rounded border-slate-300 dark:border-slate-600 text-indigo-600 dark:text-indigo-500 focus:ring-indigo-600 dark:focus:ring-indigo-500 dark:bg-slate-800" />
+              <input type="checkbox" checked={includeWarnings} onChange={(e) => setIncludeWarnings(e.target.checked)} className="w-4 h-4 rounded border-slate-300 dark:border-slate-600 text-indigo-600 dark:text-indigo-400 focus:ring-indigo-600 dark:focus:ring-indigo-400 dark:bg-slate-800" />
               {t('wizardSteps.step10.includeWarnings')}
             </label>
           </div>

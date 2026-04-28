@@ -29,7 +29,7 @@ export function Step3Finanzen() {
         </div>
         <div className="flex items-start gap-3 pt-2 border-t border-red-200 dark:border-red-900/50">
           <Info className="shrink-0 mt-0.5 text-red-700 dark:text-red-400" size={20} />
-          <div className="text-sm text-red-700 dark:text-red-300">
+          <div className="text-sm text-red-700 dark:text-red-400">
             <strong className="font-semibold block mb-1">{t('wizardSteps.step3.poaHintTitle')}</strong>
             {t('wizardSteps.step3.poaHintDesc')}<br/>
             <a href="https://www.bmjv.de/DE/service/formulare/form_vorsorgevollmacht/form_vorsorgevollmacht_artikel.html?nn=17628" target="_blank" rel="noopener noreferrer" className="underline hover:text-red-900 dark:hover:text-red-100 break-all">https://www.bmjv.de/DE/service/formulare/form_vorsorgevollmacht/form_vorsorgevollmacht_artikel.html?nn=17628</a>
@@ -51,7 +51,7 @@ export function Step3Finanzen() {
                   <Input label={t('wizardSteps.step3.bic')} value={account.bic} onChange={(e) => updateBankAccount(account.id, 'bic', e.target.value)} className="p-2.5 font-mono" />
                   <div className="md:col-span-2 mt-2 p-4 bg-indigo-50 dark:bg-indigo-900/20 rounded-xl border border-indigo-100 dark:border-indigo-900/50">
                     <label className="flex items-center gap-3 cursor-pointer mb-3">
-                      <input type="checkbox" checked={account.hasPowerOfAttorney || false} onChange={(e) => updateBankAccount(account.id, 'hasPowerOfAttorney', e.target.checked)} className="w-5 h-5 rounded border-slate-300 dark:border-slate-600 text-indigo-600 dark:text-indigo-500 focus:ring-indigo-600 dark:focus:ring-indigo-500 dark:bg-slate-800" />
+                      <input type="checkbox" checked={account.hasPowerOfAttorney || false} onChange={(e) => updateBankAccount(account.id, 'hasPowerOfAttorney', e.target.checked)} className="w-5 h-5 rounded border-slate-300 dark:border-slate-600 text-indigo-600 dark:text-indigo-400 focus:ring-indigo-600 dark:focus:ring-indigo-400 dark:bg-slate-800" />
                       <span className="text-sm font-medium text-indigo-900 dark:text-indigo-200">{t('wizardSteps.step3.createPoa')}</span>
                     </label>
 

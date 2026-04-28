@@ -24,7 +24,7 @@ export function Step2MedizinischeDaten() {
           {formData.medicalData.organDonor === false && (
             <div className="md:col-span-2 mt-4 p-4 bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-900/50 rounded-xl">
               <label className="flex items-start gap-3 cursor-pointer">
-                <input type="checkbox" checked={formData.medicalData.explicitOrganDonationContradiction} onChange={(e) => updateMedicalField('explicitOrganDonationContradiction', e.target.checked)} className="mt-1 w-5 h-5 text-red-600 dark:text-red-500 rounded border-red-300 dark:border-red-700 focus:ring-red-600 dark:focus:ring-red-500 dark:bg-slate-800" />
+                <input type="checkbox" checked={formData.medicalData.explicitOrganDonationContradiction} onChange={(e) => updateMedicalField('explicitOrganDonationContradiction', e.target.checked)} className="mt-1 w-5 h-5 text-red-600 dark:text-red-400 rounded border-red-300 dark:border-red-700 focus:ring-red-600 dark:focus:ring-red-400 dark:bg-slate-800" />
                 <span className="text-sm text-red-800 dark:text-red-300"><strong className="block mb-1">{t('wizardSteps.step2.contradictionTitle')}</strong> {t('wizardSteps.step2.contradictionDesc')}</span>
               </label>
             </div>

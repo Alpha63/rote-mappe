@@ -60,7 +60,7 @@ export function DocumentUpload({ document, onChange, onRemove, isCustom }: Docum
                 name={`upload-${document.id}`}
                 checked={document.documentAction === 'upload'}
                 onChange={() => onChange({ ...document, documentAction: 'upload' })}
-                className="w-4 h-4 text-indigo-600 dark:text-indigo-500 focus:ring-indigo-600 dark:focus:ring-indigo-500 border-slate-400 dark:border-slate-500 dark:bg-slate-700"
+                className="w-4 h-4 text-indigo-600 dark:text-indigo-400 focus:ring-indigo-600 dark:focus:ring-indigo-400 border-slate-400 dark:border-slate-500 dark:bg-slate-700"
               />
               <span className="text-sm font-medium text-slate-800 dark:text-slate-200">{t('docUpload.actionUpload')}</span>
             </label>
@@ -70,7 +70,7 @@ export function DocumentUpload({ document, onChange, onRemove, isCustom }: Docum
                 name={`upload-${document.id}`}
                 checked={document.documentAction === 'placeholder'}
                 onChange={() => onChange({ ...document, documentAction: 'placeholder', fileData: null, fileType: null })}
-                className="w-4 h-4 text-indigo-600 dark:text-indigo-500 focus:ring-indigo-600 dark:focus:ring-indigo-500 border-slate-400 dark:border-slate-500 dark:bg-slate-700"
+                className="w-4 h-4 text-indigo-600 dark:text-indigo-400 focus:ring-indigo-600 dark:focus:ring-indigo-400 border-slate-400 dark:border-slate-500 dark:bg-slate-700"
               />
               <span className="text-sm font-medium text-slate-800 dark:text-slate-200">{t('docUpload.actionPlaceholder')}</span>
             </label>
@@ -80,7 +80,7 @@ export function DocumentUpload({ document, onChange, onRemove, isCustom }: Docum
                 name={`upload-${document.id}`}
                 checked={document.documentAction === 'skip'}
                 onChange={() => onChange({ ...document, documentAction: 'skip', fileData: null, fileType: null })}
-                className="w-4 h-4 text-indigo-600 dark:text-indigo-500 focus:ring-indigo-600 dark:focus:ring-indigo-500 border-slate-400 dark:border-slate-500 dark:bg-slate-700"
+                className="w-4 h-4 text-indigo-600 dark:text-indigo-400 focus:ring-indigo-600 dark:focus:ring-indigo-400 border-slate-400 dark:border-slate-500 dark:bg-slate-700"
               />
               <span className="text-sm font-medium text-slate-800 dark:text-slate-200">{t('docUpload.actionSkip')}</span>
             </label>
