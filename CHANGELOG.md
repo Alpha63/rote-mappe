@@ -11,6 +11,9 @@ All notable changes to this project will be documented in this file.
 - **PDF-Export:** Die exportierte PDF-Datei enthält nun auch die neu erfassten Daten zu Arbeit/Beschäftigung, nicht zu benachrichtigenden Personen und behandelnden Ärzten.
 - **Lokalisierung:** Vollständige deutsche und englische Übersetzungen für alle neuen Formularfelder und PDF-Bereiche.
 
+### Fixed
+- **Backup & Export:** Es wurden fehlende Formularfelder zur `.json`-Backupdatei hinzugefügt (z.B. neuere Dokumenten-Uploads wie die Bestattungsverfügung sowie bisher nicht inkludierte optionale Notizfelder), sodass beim Export nun alle eingegebenen Daten gesichert werden.
+
 ### Changed
 - **Dependencies:** Aktualisierung diverser npm-Abhängigkeiten im `package-lock.json` (z.B. Vite, Rollup, Babel, ESLint).
 

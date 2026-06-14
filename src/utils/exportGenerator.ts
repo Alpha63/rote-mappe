@@ -50,7 +50,7 @@ export const generateAndDownloadZip = async (data: FormData, templateName: strin
     { 
       folder: 'Vollmachten_Verfuegungen', 
       docs: [
-        data.patientenverfuegung, data.vorsorgevollmacht, data.betreuungsverfuegung,
+        data.patientenverfuegung, data.vorsorgevollmacht, data.betreuungsverfuegung, data.bestattungsverfuegung,
         data.testamentDocument, ...(data.customPowersOfAttorney || [])
       ]
     }
