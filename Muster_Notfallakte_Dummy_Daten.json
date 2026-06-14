@@ -46,18 +46,19 @@
       "email": "erika.mustermann@example.com"
     },
     {
-      "id": "cont2",
-      "type": "Hausarzt",
-      "name": "Dr. med. Johannes Heiler",
-      "phone": "01234-56789",
-      "email": "praxis@heiler-musterstadt.de"
-    },
-    {
       "id": "cont3",
       "type": "Bester Freund",
       "name": "Thomas Müller",
       "phone": "0170-1122334",
       "email": "thomas.mueller@beispiel.de"
+    }
+  ],
+  "doNotNotifyContacts": [
+    {
+      "id": "dnn1",
+      "name": "Tante Erna Mustermann",
+      "phone": "0160-1234567",
+      "email": ""
     }
   ],
   "medicalData": {
@@ -66,7 +67,25 @@
     "explicitOrganDonationContradiction": true,
     "conditions": "Leichtes Asthma, Heuschnupfen im Frühjahr.",
     "medications": "Salbutamol Spray (bei Bedarf)\nCetirizin (täglich im April/Mai)",
-    "allergies": "Penicillin"
+    "allergies": "Penicillin",
+    "doctors": [
+      {
+        "id": "doc1",
+        "type": "Hausarzt",
+        "name": "Dr. med. Johannes Heiler",
+        "phone": "01234-56789",
+        "website": "www.praxis-heiler-musterstadt.de",
+        "address": "Gesundheitsweg 1, 12345 Musterstadt"
+      },
+      {
+        "id": "doc2",
+        "type": "Zahnarzt",
+        "name": "Dr. med. dent. Kariesfrei",
+        "phone": "01234-98765",
+        "website": "www.kariesfrei-musterstadt.de",
+        "address": "Zahnstraße 2, 12345 Musterstadt"
+      }
+    ]
   },
   "medicalNotes": "Blutdruck ist meistens eher niedrig.",
   "bankAccounts": [
@@ -228,27 +247,6 @@
     "fileData": null,
     "fileType": null
   },
-  "birthCert": {
-    "id": "birthcert",
-    "name": "Geburtsurkunde",
-    "documentAction": "placeholder",
-    "fileData": null,
-    "fileType": null
-  },
-  "marriageCert": {
-    "id": "marriagecert",
-    "name": "Heiratsurkunde",
-    "documentAction": "placeholder",
-    "fileData": null,
-    "fileType": null
-  },
-  "divorceCert": {
-    "id": "divorcecert",
-    "name": "Scheidungsurkunde",
-    "documentAction": "skip",
-    "fileData": null,
-    "fileType": null
-  },
   "patientenverfuegung": {
     "id": "patientenverfuegung",
     "name": "Patientenverfügung",
@@ -380,5 +378,44 @@
       "title": "Vereine & Ehrenamt",
       "content": "Ich bin Kassenwart im örtlichen Tennisverein. Der Zugang zur Vereinskasse und alle Dokumente müssen an den 1. Vorsitzenden (Klaus Meier, 0155-1122334) übergeben werden. Die Unterlagen liegen in der roten Mappe auf meinem Schreibtisch."
     }
-  ]
+  ],
+  "employment": {
+    "status": "Angestellter",
+    "companyName": "Muster GmbH",
+    "street": "Gewerbestraße 5",
+    "zipCode": "12345",
+    "city": "Musterstadt",
+    "position": "Abteilungsleiter IT",
+    "employeeId": "ID-98765",
+    "workEmail": "max.mustermann@muster-gmbh.de",
+    "emergencyContacts": [
+      {
+        "id": "em_cont1",
+        "name": "Personalabteilung (Frau Schmidt)",
+        "phone": "01234-56789-10",
+        "email": "hr@muster-gmbh.de"
+      }
+    ]
+  },
+  "birthCertificate": {
+    "id": "birthcert",
+    "name": "Geburtsurkunde",
+    "documentAction": "placeholder",
+    "fileData": null,
+    "fileType": null
+  },
+  "marriageCertificate": {
+    "id": "marriagecert",
+    "name": "Heiratsurkunde",
+    "documentAction": "placeholder",
+    "fileData": null,
+    "fileType": null
+  },
+  "divorceCertificate": {
+    "id": "divorcecert",
+    "name": "Scheidungsurkunde",
+    "documentAction": "skip",
+    "fileData": null,
+    "fileType": null
+  }
 }

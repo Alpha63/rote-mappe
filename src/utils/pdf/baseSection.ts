@@ -45,5 +45,39 @@ export const addBaseSection = (builder: PdfBuilder) => {
     const headers = (i18n.t('pdf.baseSection.contactsHeaders', { returnObjects: true }) as string[]);
     const rows = builder.data.contacts.map(c => [c.type, c.name, c.phone, c.email]);
     builder.drawTable(headers, rows);
+    builder.currentY -= 10;
+  }
+
+  if (builder.data.employment?.status) {
+    builder.drawLineText(i18n.t('pdf.baseSection.employmentTitle'), true, 12);
+    builder.drawKeyValue(i18n.t('pdf.baseSection.employmentStatus'), builder.data.employment.status);
+    if (builder.data.employment.companyName) builder.drawKeyValue(i18n.t('pdf.baseSection.employerName'), builder.data.employment.companyName);
+    
+    let addressParts = [];
+    if (builder.data.employment.street) addressParts.push(builder.data.employment.street);
+    if (builder.data.employment.zipCode || builder.data.employment.city) {
+      addressParts.push(`${builder.data.employment.zipCode} ${builder.data.employment.city}`.trim());
+    }
+    if (addressParts.length > 0) builder.drawKeyValue(i18n.t('pdf.baseSection.employerAddress'), addressParts.join(', '));
+    
+    if (builder.data.employment.position) builder.drawKeyValue(i18n.t('pdf.baseSection.employmentPosition'), builder.data.employment.position);
+    if (builder.data.employment.employeeId) builder.drawKeyValue(i18n.t('pdf.baseSection.employeeId'), builder.data.employment.employeeId);
+    if (builder.data.employment.workEmail) builder.drawKeyValue(i18n.t('pdf.baseSection.workEmail'), builder.data.employment.workEmail);
+    builder.currentY -= 5;
+    
+    if (builder.data.employment.emergencyContacts && builder.data.employment.emergencyContacts.length > 0) {
+      builder.drawLineText(i18n.t('pdf.baseSection.emergencyContactsTitle'), true, 10);
+      const headers = (i18n.t('pdf.baseSection.contactsHeaders', { returnObjects: true }) as string[]);
+      const rows = builder.data.employment.emergencyContacts.map(c => [c.type, c.name, c.phone, c.email]);
+      builder.drawTable(headers, rows);
+    }
+    builder.currentY -= 10;
+  }
+
+  if (builder.data.doNotNotifyContacts && builder.data.doNotNotifyContacts.length > 0) {
+    builder.drawLineText(i18n.t('pdf.baseSection.doNotNotifyTitle'), true, 12);
+    const headers = (i18n.t('pdf.baseSection.contactsHeaders', { returnObjects: true }) as string[]);
+    const rows = builder.data.doNotNotifyContacts.map(c => [c.type, c.name, c.phone, c.email]);
+    builder.drawTable(headers, rows);
   }
 };

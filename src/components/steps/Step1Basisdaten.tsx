@@ -30,6 +30,60 @@ export function Step1Basisdaten() {
     { type: t('wizardSteps.step1.contactDefaultType'), name: '', phone: '', email: '' }
   );
 
+  const { items: doNotNotifyContacts, addItem: addDoNotNotifyContact, updateItem: updateDoNotNotifyContact, removeItem: removeDoNotNotifyContact } = useArrayField<'doNotNotifyContacts'>(
+    'doNotNotifyContacts',
+    { type: '', name: '', phone: '', email: '' }
+  );
+
+  const handleEmploymentChange = (field: string, value: any) => {
+    setFormData(prev => ({
+      ...prev,
+      employment: {
+        ...(prev.employment || { status: '', companyName: '', street: '', zipCode: '', city: '', position: '', employeeId: '', workEmail: '', emergencyContacts: [] } as any),
+        [field]: value
+      }
+    }));
+  };
+
+  const addEmploymentEmergencyContact = () => {
+    setFormData(prev => {
+      const currentEmployment = prev.employment || { status: '', companyName: '', street: '', zipCode: '', city: '', position: '', employeeId: '', workEmail: '', emergencyContacts: [] } as any;
+      return {
+        ...prev,
+        employment: {
+          ...currentEmployment,
+          emergencyContacts: [...(currentEmployment.emergencyContacts || []), { id: crypto.randomUUID(), type: '', name: '', phone: '', email: '' }]
+        }
+      };
+    });
+  };
+
+  const updateEmploymentEmergencyContact = (id: string, field: string, value: string) => {
+    setFormData(prev => {
+      if (!prev.employment) return prev;
+      return {
+        ...prev,
+        employment: {
+          ...prev.employment,
+          emergencyContacts: prev.employment.emergencyContacts.map(c => c.id === id ? { ...c, [field]: value } : c)
+        }
+      };
+    });
+  };
+
+  const removeEmploymentEmergencyContact = (id: string) => {
+    setFormData(prev => {
+      if (!prev.employment) return prev;
+      return {
+        ...prev,
+        employment: {
+          ...prev.employment,
+          emergencyContacts: prev.employment.emergencyContacts.filter(c => c.id !== id)
+        }
+      };
+    });
+  };
+
   return (
     <div className="animate-in fade-in zoom-in-95 duration-500">
       <div className="mb-8">
@@ -117,6 +171,57 @@ export function Step1Basisdaten() {
           )}
         </div>
         <div className="pt-6 border-t border-slate-100 dark:border-slate-800">
+          <h3 className="text-lg font-medium text-slate-800 dark:text-slate-200 mb-4">{t('wizardSteps.step1.employmentTitle')}</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <Select
+              label={t('wizardSteps.step1.employmentStatus')}
+              value={formData.employment?.status || ''}
+              onChange={(e) => handleEmploymentChange('status', e.target.value)}
+              options={[
+                { value: '', label: t('common.select') },
+                { value: 'Angestellter', label: t('wizardSteps.step1.statusEmployee') },
+                { value: 'Selbstständiger', label: t('wizardSteps.step1.statusSelfEmployed') }
+              ]}
+            />
+            {formData.employment?.status && (
+              <>
+                <Input label={t('wizardSteps.step1.position')} value={formData.employment?.position || ''} onChange={(e) => handleEmploymentChange('position', e.target.value)} />
+                <Input label={t('wizardSteps.step1.employeeId')} value={formData.employment?.employeeId || ''} onChange={(e) => handleEmploymentChange('employeeId', e.target.value)} />
+                <Input label={t('wizardSteps.step1.workEmail')} type="email" value={formData.employment?.workEmail || ''} onChange={(e) => handleEmploymentChange('workEmail', e.target.value)} />
+              </>
+            )}
+          </div>
+          {formData.employment?.status && (
+            <>
+              <div className="grid grid-cols-4 gap-6 mb-6">
+                <div className="col-span-4"><Input label={t('wizardSteps.step1.employerName')} value={formData.employment?.companyName || ''} onChange={(e) => handleEmploymentChange('companyName', e.target.value)} /></div>
+                <div className="col-span-4"><Input label={t('wizardSteps.step1.employerAddress')} value={formData.employment?.street || ''} onChange={(e) => handleEmploymentChange('street', e.target.value)} placeholder={`${t('wizardSteps.step1.street')} & ${t('wizardSteps.step1.houseNumber')}`} /></div>
+                <div className="col-span-4 md:col-span-1"><Input label={t('wizardSteps.step1.zipCode')} value={formData.employment?.zipCode || ''} onChange={(e) => handleEmploymentChange('zipCode', e.target.value)} /></div>
+                <div className="col-span-4 md:col-span-3"><Input label={t('wizardSteps.step1.city')} value={formData.employment?.city || ''} onChange={(e) => handleEmploymentChange('city', e.target.value)} /></div>
+              </div>
+
+              <div className="mb-6">
+                <h4 className="font-medium text-slate-800 dark:text-slate-200 mb-3">{t('wizardSteps.step1.emergencyContactTitle')}</h4>
+                <div className="space-y-4">
+                  {(formData.employment?.emergencyContacts || []).map((contact, index) => (
+                    <div key={contact.id} className="p-4 border border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-800/50 relative group shadow-sm">
+                      <button onClick={() => removeEmploymentEmergencyContact(contact.id)} className="absolute top-4 right-4 text-slate-300 dark:text-slate-400 hover:text-red-500 dark:hover:text-red-400"><Trash2 size={20} /></button>
+                      <h5 className="font-medium text-slate-800 dark:text-slate-200 mb-3">{t('wizardSteps.step1.contact')} {index + 1}</h5>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <Input label={t('wizardSteps.step1.contactRelation')} value={contact.type} onChange={(e) => updateEmploymentEmergencyContact(contact.id, 'type', e.target.value)} className="p-2.5 bg-white dark:bg-slate-800" />
+                        <Input label={t('wizardSteps.step1.contactName')} value={contact.name} onChange={(e) => updateEmploymentEmergencyContact(contact.id, 'name', e.target.value)} className="p-2.5 bg-white dark:bg-slate-800" />
+                        <Input label={t('wizardSteps.step1.contactPhone')} value={contact.phone} onChange={(e) => updateEmploymentEmergencyContact(contact.id, 'phone', e.target.value)} className="p-2.5 bg-white dark:bg-slate-800" />
+                        <Input label={t('wizardSteps.step1.contactEmail')} type="email" value={contact.email} onChange={(e) => updateEmploymentEmergencyContact(contact.id, 'email', e.target.value)} className="p-2.5 bg-white dark:bg-slate-800" />
+                      </div>
+                    </div>
+                  ))}
+                  <button onClick={addEmploymentEmergencyContact} className="w-full py-2 border border-dashed border-slate-300 dark:border-slate-600 rounded-lg text-indigo-600 dark:text-indigo-400 font-medium flex items-center justify-center gap-2 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors"><Plus size={18} /> {t('wizardSteps.step1.addEmergencyContact')}</button>
+                </div>
+              </div>
+            </>
+          )}
+        </div>
+        <div className="pt-6 border-t border-slate-100 dark:border-slate-800">
           <h3 className="text-lg font-medium text-slate-800 dark:text-slate-200 mb-4">{t('wizardSteps.step1.contactsTitle')}</h3>
           <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">{t('wizardSteps.step1.contactsDesc')}</p>
           <div className="space-y-4">
@@ -133,6 +238,25 @@ export function Step1Basisdaten() {
               </div>
             ))}
             <button onClick={addContact} className="w-full py-3 border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl text-indigo-600 dark:text-indigo-400 font-medium flex items-center justify-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><Plus size={20} /> {t('wizardSteps.step1.addContact')}</button>
+          </div>
+        </div>
+        <div className="pt-6 border-t border-slate-100 dark:border-slate-800">
+          <h3 className="text-lg font-medium text-slate-800 dark:text-slate-200 mb-4">{t('wizardSteps.step1.doNotNotifyTitle')}</h3>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">{t('wizardSteps.step1.doNotNotifyDesc')}</p>
+          <div className="space-y-4">
+            {doNotNotifyContacts.map((contact, index) => (
+              <div key={contact.id} className="p-4 border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 relative group shadow-sm">
+                <button onClick={() => removeDoNotNotifyContact(contact.id)} className="absolute top-4 right-4 text-slate-300 dark:text-slate-400 hover:text-red-500 dark:hover:text-red-400"><Trash2 size={20} /></button>
+                <h4 className="font-medium text-slate-800 dark:text-slate-200 mb-3">{t('wizardSteps.step1.contact')} {index + 1}</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <Input label={t('wizardSteps.step1.contactRelation')} value={contact.type} onChange={(e) => updateDoNotNotifyContact(contact.id, 'type', e.target.value)} placeholder={t('wizardSteps.step1.contactRelationPlaceholder')} className="p-2.5" />
+                  <Input label={t('wizardSteps.step1.contactName')} value={contact.name} onChange={(e) => updateDoNotNotifyContact(contact.id, 'name', e.target.value)} className="p-2.5" />
+                  <Input label={t('wizardSteps.step1.contactPhone')} value={contact.phone} onChange={(e) => updateDoNotNotifyContact(contact.id, 'phone', e.target.value)} className="p-2.5" />
+                  <Input label={t('wizardSteps.step1.contactEmail')} type="email" value={contact.email} onChange={(e) => updateDoNotNotifyContact(contact.id, 'email', e.target.value)} className="p-2.5" />
+                </div>
+              </div>
+            ))}
+            <button onClick={addDoNotNotifyContact} className="w-full py-3 border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl text-indigo-600 dark:text-indigo-400 font-medium flex items-center justify-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><Plus size={20} /> {t('wizardSteps.step1.addDoNotNotifyContact')}</button>
           </div>
         </div>
       </div>

@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Added
+- **Basisdaten:** Neue Sektion "Arbeit / Beschäftigung" zur Erfassung von Arbeitgeberdetails und betrieblichen Notfallkontakten (Schritt 1).
+- **Basisdaten:** Neue Liste zur Erfassung von "Nicht zu benachrichtigenden Personen" im Notfall (Schritt 1).
+- **Medizinische Daten:** Neue Sektion zur Erfassung der "Behandelnden Ärzte" wie Hausarzt, Zahnarzt oder Fachärzte (Schritt 2).
+- **PDF-Export:** Die exportierte PDF-Datei enthält nun auch die neu erfassten Daten zu Arbeit/Beschäftigung, nicht zu benachrichtigenden Personen und behandelnden Ärzten.
+- **Lokalisierung:** Vollständige deutsche und englische Übersetzungen für alle neuen Formularfelder und PDF-Bereiche.
+
+### Changed
+- **Dependencies:** Aktualisierung diverser npm-Abhängigkeiten im `package-lock.json` (z.B. Vite, Rollup, Babel, ESLint).
+
 ## [1.3.1] - 2026-05-10
 
 ### Changed

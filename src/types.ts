@@ -117,6 +117,20 @@ export interface FormData {
 
   // Kontakte
   contacts: Contact[];
+  doNotNotifyContacts: Contact[];
+
+  // Arbeit
+  employment?: {
+    status: 'Angestellter' | 'Selbstständiger' | '';
+    companyName: string;
+    street: string;
+    zipCode: string;
+    city: string;
+    position: string;
+    employeeId: string;
+    workEmail: string;
+    emergencyContacts: Contact[];
+  };
 
   digitalIdentities: DigitalIdentityEntry[];
   devicePINs?: string;
@@ -151,6 +165,14 @@ export interface FormData {
     conditions: string;
     medications: string;
     allergies: string;
+    doctors: {
+      id: string;
+      type: string;
+      name: string;
+      phone: string;
+      website: string;
+      address: string;
+    }[];
   };
   otherAssets: OtherAsset[];
   realEstates: RealEstate[];
@@ -181,6 +203,18 @@ export const initialFormData: FormData = {
   children: [],
   bankAccounts: [],
   contacts: [],
+  doNotNotifyContacts: [],
+  employment: {
+    status: '',
+    companyName: '',
+    street: '',
+    zipCode: '',
+    city: '',
+    position: '',
+    employeeId: '',
+    workEmail: '',
+    emergencyContacts: []
+  },
   financeNotes: '',
   digitalIdentities: [],
   idCard: { id: 'idcard', name: 'Personalausweis', documentAction: 'placeholder', fileData: null, fileType: null },
@@ -197,7 +231,8 @@ export const initialFormData: FormData = {
     explicitOrganDonationContradiction: false,
     conditions: '',
     medications: '',
-    allergies: ''
+    allergies: '',
+    doctors: []
   },
   otherAssets: [],
   realEstates: [],

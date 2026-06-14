@@ -12,6 +12,14 @@ export const addMedicalSection = async (builder: PdfBuilder) => {
   const donor = builder.data.medicalData.organDonor;
   builder.drawKeyValue(i18n.t('pdf.medicalSection.organDonor'), donor === true ? i18n.t('pdf.medicalSection.yes') : donor === false ? i18n.t('pdf.medicalSection.no') : i18n.t('pdf.medicalSection.noAnswer'));
   
+  if (builder.data.medicalData.doctors && builder.data.medicalData.doctors.length > 0) {
+    builder.currentY -= 10;
+    builder.drawLineText(i18n.t('pdf.medicalSection.doctorsTitle'), true, 11);
+    const headers = (i18n.t('pdf.medicalSection.doctorHeaders', { returnObjects: true }) as string[]);
+    const rows = builder.data.medicalData.doctors.map(d => [d.type, d.name, d.phone, d.website, d.address]);
+    builder.drawTable(headers, rows);
+  }
+
   if (builder.data.medicalData.conditions) {
     builder.currentY -= 5;
     builder.drawLineText(i18n.t('pdf.medicalSection.conditions'), true, 11);
