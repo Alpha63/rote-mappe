@@ -28,7 +28,7 @@ const addFileToZip = (zip: JSZip, folderName: string, doc: ScannedDocument | und
   }
 };
 
-export const generateAndDownloadZip = async (data: FormData, templateName: string = 'default', includePlaceholders: boolean = true, includeWarnings: boolean = true) => {
+export const generateAndDownloadZip = async (data: FormData, templateName: string = 'default', includePlaceholders: boolean = true, includeWarnings: boolean = true, password?: string) => {
   const zip = new JSZip();
 
   // 1. PDF-Datei generieren und ins Hauptverzeichnis legen
@@ -62,7 +62,14 @@ export const generateAndDownloadZip = async (data: FormData, templateName: strin
 
   // 3. JSON-Backup-Datei für den späteren Import hinzufügen
   const backupJson = JSON.stringify(data, null, 2);
-  zip.file('Notfallakte_Backup.json', backupJson);
+  
+  if (password) {
+    const { encryptBackup } = await import('./crypto');
+    const encryptedData = await encryptBackup(backupJson, password);
+    zip.file('Notfallakte_Backup.enc', encryptedData);
+  } else {
+    zip.file('Notfallakte_Backup.json', backupJson);
+  }
 
   // 4. ZIP-Datei erstellen und Download auslösen
   const zipBlob = await zip.generateAsync({ type: 'blob' });

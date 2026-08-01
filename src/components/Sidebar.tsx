@@ -3,6 +3,7 @@ import { Check, X, ShieldCheck, Download, Loader2, Globe } from 'lucide-react';
 import { useFormContext } from '../FormContext';
 import { useTranslation } from 'react-i18next';
 import { ThemeToggle } from './ThemeToggle';
+import { Lock } from 'lucide-react';
 
 interface SidebarProps {
   currentStep: number;
@@ -16,10 +17,38 @@ export function Sidebar({ currentStep, setStep, isOpen, onClose }: SidebarProps)
   const [downloadSuccess, setDownloadSuccess] = useState(false);
   const { t, i18n } = useTranslation();
 
-  const handleBackupClick = async () => {
+  const [showBackupModal, setShowBackupModal] = useState(false);
+  const [useEncryption, setUseEncryption] = useState<boolean | null>(null);
+  const [pwd1, setPwd1] = useState('');
+  const [pwd2, setPwd2] = useState('');
+  const [error, setError] = useState('');
+
+  const handleBackupClick = () => {
     if (isDownloading) return;
     setDownloadSuccess(false);
-    const success = await downloadBackup('rot');
+    setUseEncryption(null);
+    setPwd1('');
+    setPwd2('');
+    setError('');
+    setShowBackupModal(true);
+  };
+
+  const handleBackupConfirm = async () => {
+    let finalPwd = undefined;
+    if (useEncryption) {
+      if (!pwd1) {
+        setError(t('sidebar.backup.enterPassword', { defaultValue: 'Bitte vergib ein Passwort.' }));
+        return;
+      }
+      if (pwd1 !== pwd2) {
+        setError(t('sidebar.backup.passwordMismatch', { defaultValue: 'Die Passwörter stimmen nicht überein.' }));
+        return;
+      }
+      finalPwd = pwd1;
+    }
+    
+    setShowBackupModal(false);
+    const success = await downloadBackup('rot', true, true, finalPwd);
     if (success) {
       setDownloadSuccess(true);
       setTimeout(() => setDownloadSuccess(false), 3000);
@@ -172,6 +201,71 @@ export function Sidebar({ currentStep, setStep, isOpen, onClose }: SidebarProps)
           </a>
         </div>
       </div>
+      
+      {showBackupModal && (
+        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in">
+          <div className="bg-white dark:bg-slate-800 rounded-3xl p-8 max-w-md w-full shadow-2xl border border-indigo-100 dark:border-indigo-900/50 animate-in zoom-in-95">
+            <div className="flex flex-col items-center text-center">
+              <div className="w-16 h-16 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-full flex items-center justify-center mb-6">
+                <Lock size={32} />
+              </div>
+              <h3 className="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-3">{t('sidebar.backup.modalTitle', { defaultValue: 'Backup Sicherheit' })}</h3>
+              <p className="text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">
+                {t('sidebar.backup.wantsEncryption', { defaultValue: 'Möchtest du das Backup mit einem Passwort verschlüsseln? (Empfohlen bei Speicherung in der Cloud oder auf USB-Sticks)' })}
+              </p>
+
+              {useEncryption === null && (
+                <div className="flex flex-col w-full gap-3">
+                  <button onClick={() => setUseEncryption(true)} className="w-full py-3.5 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-400 font-medium rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-900/40 transition-colors cursor-pointer">
+                    {t('sidebar.backup.yesEncrypt', { defaultValue: 'Ja, verschlüsseln' })}
+                  </button>
+                  <button onClick={() => { setUseEncryption(false); handleBackupConfirm(); }} className="w-full py-3.5 text-slate-500 dark:text-slate-400 font-medium hover:text-slate-700 dark:hover:text-slate-200 transition-colors cursor-pointer">
+                    {t('sidebar.backup.noEncrypt', { defaultValue: 'Nein, direkt herunterladen' })}
+                  </button>
+                  <button onClick={() => setShowBackupModal(false)} className="w-full py-2 text-sm text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors cursor-pointer">
+                    {t('common.cancel', { defaultValue: 'Abbrechen' })}
+                  </button>
+                </div>
+              )}
+
+              {useEncryption && (
+                <div className="flex flex-col w-full gap-4">
+                  <div>
+                    <input
+                      type="password"
+                      placeholder={t('sidebar.backup.enterPasswordLabel', { defaultValue: 'Passwort' })}
+                      value={pwd1}
+                      onChange={(e) => setPwd1(e.target.value)}
+                      className="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                      autoFocus
+                    />
+                  </div>
+                  <div>
+                    <input
+                      type="password"
+                      placeholder={t('sidebar.backup.confirmPasswordLabel', { defaultValue: 'Passwort wiederholen' })}
+                      value={pwd2}
+                      onChange={(e) => setPwd2(e.target.value)}
+                      className="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                      onKeyDown={(e) => e.key === 'Enter' && handleBackupConfirm()}
+                    />
+                  </div>
+                  {error && <p className="text-red-500 text-sm text-left">{error}</p>}
+                  
+                  <div className="flex flex-col w-full gap-2 mt-2">
+                    <button onClick={() => handleBackupConfirm()} className="w-full py-3.5 bg-indigo-600 text-white font-medium rounded-xl hover:bg-indigo-700 shadow-md shadow-indigo-600/20 transition-all cursor-pointer">
+                      {t('sidebar.backup.startDownload', { defaultValue: 'Download starten' })}
+                    </button>
+                    <button onClick={() => setShowBackupModal(false)} className="w-full py-2 text-sm text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors cursor-pointer">
+                      {t('common.cancel', { defaultValue: 'Abbrechen' })}
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }

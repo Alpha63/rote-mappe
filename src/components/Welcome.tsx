@@ -3,6 +3,7 @@ import { ShieldCheck, FileText, Download, Lock, Upload, Globe } from 'lucide-rea
 import { useTranslation } from 'react-i18next';
 import { ThemeToggle } from './ThemeToggle';
 import { version } from '../../package.json';
+import { KeyRound } from 'lucide-react';
 
 interface BeforeInstallPromptEvent extends Event {
   readonly platforms: string[];
@@ -20,6 +21,10 @@ interface WelcomeProps {
 export function Welcome({ onStart }: WelcomeProps) {
   const { t, i18n } = useTranslation();
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [pendingFile, setPendingFile] = useState<File | null>(null);
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
   useEffect(() => {
     const handleBeforeInstallPrompt = (e: Event) => {
@@ -43,21 +48,54 @@ export function Welcome({ onStart }: WelcomeProps) {
     }
   };
 
-  const handleImport = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    const isEncrypted = file.name.endsWith('.enc');
+    if (isEncrypted) {
+      setPendingFile(file);
+      setPassword('');
+      setError('');
+      setShowPasswordModal(true);
+      e.target.value = ''; // reset file input
+      return;
+    }
+
+    await processFile(file);
+    e.target.value = ''; // reset file input
+  };
+
+  const processFile = async (file: File, password?: string) => {
     const reader = new FileReader();
-    reader.onload = (event) => {
+    reader.onload = async (event) => {
       try {
-        const data = JSON.parse(event.target?.result as string);
+        let rawData = event.target?.result as string;
+        if (password) {
+          const { decryptBackup } = await import('../utils/crypto');
+          rawData = await decryptBackup(rawData, password);
+        }
+        const data = JSON.parse(rawData);
         sessionStorage.setItem('notfallakte_data', JSON.stringify(data));
         onStart();
-      } catch {
+      } catch (err) {
+        console.error(err);
         alert(t('welcome.backupError'));
       }
     };
     reader.readAsText(file);
+  };
+
+  const handlePasswordConfirm = async () => {
+    if (!password) {
+      setError(t('welcome.enterPassword', { defaultValue: 'Bitte gib das Passwort ein.' }));
+      return;
+    }
+    setShowPasswordModal(false);
+    if (pendingFile) {
+      await processFile(pendingFile, password);
+      setPendingFile(null);
+    }
   };
 
   return (
@@ -159,7 +197,7 @@ export function Welcome({ onStart }: WelcomeProps) {
             {t('welcome.loadBackup')}
             <input
               type="file"
-              accept=".json"
+              accept=".json, .enc"
               className="hidden"
               onChange={handleImport}
             />
@@ -191,6 +229,46 @@ export function Welcome({ onStart }: WelcomeProps) {
           v{version}
         </a>
       </div>
+
+      {showPasswordModal && (
+        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in">
+          <div className="bg-white dark:bg-slate-800 rounded-3xl p-8 max-w-md w-full shadow-2xl border border-indigo-100 dark:border-indigo-900/50 animate-in zoom-in-95">
+            <div className="flex flex-col items-center text-center">
+              <div className="w-16 h-16 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-full flex items-center justify-center mb-6">
+                <KeyRound size={32} />
+              </div>
+              <h3 className="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-3">{t('welcome.decryptTitle', { defaultValue: 'Backup entschlüsseln' })}</h3>
+              <p className="text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">
+                {t('welcome.enterPasswordDesc', { defaultValue: 'Dieses Backup ist verschlüsselt. Bitte gib das Passwort ein, um die Daten zu laden.' })}
+              </p>
+
+              <div className="flex flex-col w-full gap-4">
+                <div>
+                  <input
+                    type="password"
+                    placeholder={t('welcome.passwordLabel', { defaultValue: 'Passwort' })}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                    autoFocus
+                    onKeyDown={(e) => e.key === 'Enter' && handlePasswordConfirm()}
+                  />
+                  {error && <p className="text-red-500 text-sm text-left mt-2">{error}</p>}
+                </div>
+                
+                <div className="flex flex-col w-full gap-2 mt-2">
+                  <button onClick={() => handlePasswordConfirm()} className="w-full py-3.5 bg-indigo-600 text-white font-medium rounded-xl hover:bg-indigo-700 shadow-md shadow-indigo-600/20 transition-all cursor-pointer">
+                    {t('welcome.decryptBtn', { defaultValue: 'Entschlüsseln' })}
+                  </button>
+                  <button onClick={() => { setShowPasswordModal(false); setPendingFile(null); }} className="w-full py-2 text-sm text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors cursor-pointer">
+                    {t('common.cancel', { defaultValue: 'Abbrechen' })}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

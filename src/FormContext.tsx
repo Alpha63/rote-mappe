@@ -8,7 +8,7 @@ interface FormContextType {
   updateField: <K extends keyof FormData>(field: K, value: FormData[K]) => void;
   errors: Record<string, string>;
   setErrors: React.Dispatch<React.SetStateAction<Record<string, string>>>;
-  downloadBackup: (template?: string, includePlaceholders?: boolean, includeWarnings?: boolean) => Promise<boolean>;
+  downloadBackup: (template?: string, includePlaceholders?: boolean, includeWarnings?: boolean, password?: string) => Promise<boolean>;
   isDownloading: boolean;
 }
 
@@ -42,12 +42,12 @@ export function FormProvider({ children }: { children: React.ReactNode }) {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-  const downloadBackup = async (template: string = 'rot', includePlaceholders: boolean = true, includeWarnings: boolean = true) => {
+  const downloadBackup = async (template: string = 'rot', includePlaceholders: boolean = true, includeWarnings: boolean = true, password?: string) => {
     if (isDownloading) return false;
     setIsDownloading(true);
     try {
       const { generateAndDownloadZip } = await import('./utils/exportGenerator');
-      await generateAndDownloadZip(formData, template, includePlaceholders, includeWarnings);
+      await generateAndDownloadZip(formData, template, includePlaceholders, includeWarnings, password);
       return true;
     } catch (error) {
       console.error('Error generating Export:', error);

@@ -2,9 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-## [1.4.0] - 2026-08-01
+## [2.0.0] - 2026-08-01
 
 ### Added
+- **Sicherheit (Backup):** Optionale AES-256 Verschlüsselung für Backup-Dateien. Backups können nun mit einem Passwort direkt im Browser ver- und entschlüsselt werden.
 - **Basisdaten:** Neue Sektion "Arbeit / Beschäftigung" zur Erfassung von Arbeitgeberdetails und betrieblichen Notfallkontakten (Schritt 1).
 - **Basisdaten:** Neue Liste zur Erfassung von "Nicht zu benachrichtigenden Personen" im Notfall (Schritt 1).
 - **Medizinische Daten:** Neue Sektion zur Erfassung der "Behandelnden Ärzte" wie Hausarzt, Zahnarzt oder Fachärzte (Schritt 2).
