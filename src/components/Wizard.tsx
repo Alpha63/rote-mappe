@@ -1,13 +1,18 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense, lazy } from 'react';
 import { Sidebar } from './Sidebar';
 import { ArrowRight, ArrowLeft, AlertTriangle, Menu, ShieldCheck } from 'lucide-react';
 import { FormProvider, useFormContext } from '../FormContext';
 import { useTranslation } from 'react-i18next';
-import {
-  Step1Basisdaten, Step2MedizinischeDaten, Step3Finanzen, Step4Vertraege,
-  Step5DigitaleIdentitaet, Step6Dokumente, Step7Vollmachten, Step8Hinweise,
-  Step9EigeneKapitel, Step10Abschluss
-} from './WizardSteps';
+const Step1Basisdaten = lazy(() => import('./steps/Step1Basisdaten').then(m => ({ default: m.Step1Basisdaten })));
+const Step2MedizinischeDaten = lazy(() => import('./steps/Step2MedizinischeDaten').then(m => ({ default: m.Step2MedizinischeDaten })));
+const Step3Finanzen = lazy(() => import('./steps/Step3Finanzen').then(m => ({ default: m.Step3Finanzen })));
+const Step4Vertraege = lazy(() => import('./steps/Step4Vertraege').then(m => ({ default: m.Step4Vertraege })));
+const Step5DigitaleIdentitaet = lazy(() => import('./steps/Step5DigitaleIdentitaet').then(m => ({ default: m.Step5DigitaleIdentitaet })));
+const Step6Dokumente = lazy(() => import('./steps/Step6Dokumente').then(m => ({ default: m.Step6Dokumente })));
+const Step7Vollmachten = lazy(() => import('./steps/Step7Vollmachten').then(m => ({ default: m.Step7Vollmachten })));
+const Step8Hinweise = lazy(() => import('./steps/Step8Hinweise').then(m => ({ default: m.Step8Hinweise })));
+const Step9EigeneKapitel = lazy(() => import('./steps/Step9EigeneKapitel').then(m => ({ default: m.Step9EigeneKapitel })));
+const Step10Abschluss = lazy(() => import('./steps/Step10Abschluss').then(m => ({ default: m.Step10Abschluss })));
 import { ThemeToggle } from './ThemeToggle';
 
 export function Wizard() {
@@ -120,7 +125,9 @@ function WizardContent() {
           <div className="bg-white dark:bg-slate-800 rounded-3xl p-5 md:p-8 shadow-sm border border-slate-200 dark:border-slate-700 min-h-[calc(100vh-8rem)] flex flex-col">
 
             <div className="flex-1">
-              {renderStep()}
+              <Suspense fallback={<div className="flex justify-center items-center h-full p-12 text-slate-500">{t('wizard.loading') || 'Lade Schritt...'}</div>}>
+                {renderStep()}
+              </Suspense>
             </div>
 
             <div className="mt-10 pt-6 border-t border-slate-100 dark:border-slate-700 flex justify-between items-center">

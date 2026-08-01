@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [1.4.0] - 2026-08-01
 
 ### Added
 - **Basisdaten:** Neue Sektion "Arbeit / Beschäftigung" zur Erfassung von Arbeitgeberdetails und betrieblichen Notfallkontakten (Schritt 1).
@@ -15,7 +15,12 @@ All notable changes to this project will be documented in this file.
 - **Backup & Export:** Es wurden fehlende Formularfelder zur `.json`-Backupdatei hinzugefügt (z.B. neuere Dokumenten-Uploads wie die Bestattungsverfügung sowie bisher nicht inkludierte optionale Notizfelder), sodass beim Export nun alle eingegebenen Daten gesichert werden.
 
 ### Changed
-- **Dependencies:** Aktualisierung diverser npm-Abhängigkeiten im `package-lock.json` (z.B. Vite, Rollup, Babel, ESLint).
+- **Performance:** Die 10 Wizard-Schritte werden nun dynamisch über `React.lazy()` nachgeladen (Code Splitting), was die initiale Ladezeit der App erheblich reduziert.
+- **State Management:** Schreibvorgänge des Formular-Zustands in den `sessionStorage` wurden zur Performance-Optimierung gedebounced (Verzögerung von 500ms).
+- **Architektur:** Die veraltete Legacy-Migrationslogik im `FormContext.tsx` wurde in eine saubere Helferfunktion (`utils/migrateData.ts`) ausgelagert.
+- **i18n:** Die Übersetzungen für Deutsch und Englisch wurden aus der Hauptdatei in separate Dateien im `src/locales/` Ordner ausgelagert, um den Code übersichtlicher zu halten.
+- **Konfiguration:** Entfernung des irreführenden `packageManager`-Felds in der `package.json`.
+- **Dependencies:** Aktualisierung diverser npm-Abhängigkeiten (Minor/Patch-Updates für z.B. Vite, React, Tailwind, ESLint).
 
 ## [1.3.1] - 2026-05-10
 
