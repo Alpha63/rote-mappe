@@ -44,6 +44,13 @@ export function Step5DigitaleIdentitaet() {
             </div>
           </div>
         </section>
+        <section>
+          <h3 className="text-lg font-medium text-slate-800 dark:text-slate-200 mb-4 border-b border-slate-100 dark:border-slate-800 pb-2">{t('wizardSteps.step5.legacyTitle')}</h3>
+          <div className="space-y-4">
+            <Textarea label={t('wizardSteps.step5.socialMedia')} value={formData.digitalLegacySocialMedia || ''} onChange={(e) => updateField('digitalLegacySocialMedia', e.target.value)} />
+            <Textarea label={t('wizardSteps.step5.cloud')} value={formData.digitalLegacyCloud || ''} onChange={(e) => updateField('digitalLegacyCloud', e.target.value)} />
+          </div>
+        </section>
         <div className="pt-6 border-t border-slate-100 dark:border-slate-800 mt-6">
           <Textarea label={t('wizardSteps.step5.notesLabel')} description={t('wizardSteps.step5.notesDesc')} value={formData.devicePINs || ''} onChange={(e) => updateField('devicePINs', e.target.value)} />
         </div>

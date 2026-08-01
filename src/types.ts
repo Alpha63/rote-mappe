@@ -94,6 +94,39 @@ export interface CustomChapter {
   content: string;
 }
 
+export interface Vehicle {
+  id: string;
+  type: string;
+  licensePlate: string;
+  insurance: string;
+  financing: string;
+  documentLocation: string;
+}
+
+export interface Pet {
+  id: string;
+  name: string;
+  species: string;
+  caregiver: string;
+  vetInfo: string;
+  chipId: string;
+  notes: string;
+}
+
+export interface Subscription {
+  id: string;
+  provider: string;
+  customerNumber: string;
+  cancellationNotice: string;
+}
+
+export interface ServiceProvider {
+  id: string;
+  role: string;
+  name: string;
+  contact: string;
+}
+
 export interface FormData {
   documentTitle?: string;
   // Basisdaten
@@ -184,6 +217,16 @@ export interface FormData {
   documentNotes?: string;
   poaNotes?: string;
   customChapters: CustomChapter[];
+
+  // Neu
+  vehicles: Vehicle[];
+  automotiveClubs?: string;
+  pets: Pet[];
+  subscriptions: Subscription[];
+  digitalLegacySocialMedia?: string;
+  digitalLegacyCloud?: string;
+  serviceProviders: ServiceProvider[];
+  meterNumbers?: string;
 }
 
 export const initialFormData: FormData = {
@@ -258,4 +301,12 @@ export const initialFormData: FormData = {
   poaNotes: '',
   contractNotes: '',
   customChapters: [],
+  vehicles: [],
+  automotiveClubs: '',
+  pets: [],
+  subscriptions: [],
+  digitalLegacySocialMedia: '',
+  digitalLegacyCloud: '',
+  serviceProviders: [],
+  meterNumbers: '',
 };

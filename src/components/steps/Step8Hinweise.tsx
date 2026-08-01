@@ -30,6 +30,54 @@ export function Step8Hinweise() {
           ))}
           <button onClick={addKey} className="w-full py-3 border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl text-indigo-600 dark:text-indigo-400 font-medium flex items-center justify-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-800/50"><Plus size={20} /> {t('wizardSteps.step8.addKey')}</button>
         </div>
+
+        <h3 className="text-lg font-medium text-slate-800 dark:text-slate-200 mb-4 border-b border-slate-100 dark:border-slate-800 pb-2">{t('wizardSteps.step8.petsTitle')}</h3>
+        <p className="text-slate-600 dark:text-slate-400 mb-4 text-sm">{t('wizardSteps.step8.petsDesc')}</p>
+        <div className="space-y-4 mb-10">
+          {(formData.pets || []).map((pet, index) => (
+            <div key={pet.id} className="p-4 border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 relative shadow-sm">
+              <button onClick={() => {
+                const newPets = formData.pets.filter(p => p.id !== pet.id);
+                updateField('pets', newPets);
+              }} className="absolute top-4 right-4 text-slate-300 dark:text-slate-400 hover:text-red-500 dark:hover:text-red-400"><Trash2 size={20} /></button>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                <Input label={t('wizardSteps.step8.petName')} value={pet.name} onChange={(e) => {
+                  const newPets = [...(formData.pets || [])];
+                  newPets[index] = { ...pet, name: e.target.value };
+                  updateField('pets', newPets);
+                }} className="p-2.5" />
+                <Input label={t('wizardSteps.step8.petSpecies')} value={pet.species} onChange={(e) => {
+                  const newPets = [...(formData.pets || [])];
+                  newPets[index] = { ...pet, species: e.target.value };
+                  updateField('pets', newPets);
+                }} className="p-2.5" />
+                <Input label={t('wizardSteps.step8.petCaregiver')} value={pet.caregiver} onChange={(e) => {
+                  const newPets = [...(formData.pets || [])];
+                  newPets[index] = { ...pet, caregiver: e.target.value };
+                  updateField('pets', newPets);
+                }} className="p-2.5" />
+                <Input label={t('wizardSteps.step8.petVet')} value={pet.vetInfo} onChange={(e) => {
+                  const newPets = [...(formData.pets || [])];
+                  newPets[index] = { ...pet, vetInfo: e.target.value };
+                  updateField('pets', newPets);
+                }} className="p-2.5" />
+                <Input label={t('wizardSteps.step8.petChipId')} value={pet.chipId} onChange={(e) => {
+                  const newPets = [...(formData.pets || [])];
+                  newPets[index] = { ...pet, chipId: e.target.value };
+                  updateField('pets', newPets);
+                }} className="p-2.5" />
+                <div className="md:col-span-2">
+                  <Input label={t('wizardSteps.step8.petNotes')} value={pet.notes} onChange={(e) => {
+                    const newPets = [...(formData.pets || [])];
+                    newPets[index] = { ...pet, notes: e.target.value };
+                    updateField('pets', newPets);
+                  }} className="p-2.5" />
+                </div>
+              </div>
+            </div>
+          ))}
+          <button onClick={() => updateField('pets', [...(formData.pets || []), { id: Math.random().toString(36).substring(2, 9), name: '', species: '', caregiver: '', vetInfo: '', chipId: '', notes: '' }])} className="w-full py-3 border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl text-indigo-600 dark:text-indigo-400 font-medium flex items-center justify-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-800/50"><Plus size={20} /> {t('wizardSteps.step8.addPet')}</button>
+        </div>
         <div className="pt-6 border-t border-slate-100 dark:border-slate-800 mt-6">
           <Textarea label={t('wizardSteps.step8.notesLabel')} description={t('wizardSteps.step8.notesDesc')} value={formData.generalNotes || ''} onChange={(e) => updateField('generalNotes', e.target.value)} />
         </div>

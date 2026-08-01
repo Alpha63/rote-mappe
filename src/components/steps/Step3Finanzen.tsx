@@ -143,6 +143,50 @@ export function Step3Finanzen() {
             <button onClick={addRealEstate} className="w-full py-3 border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl text-indigo-600 dark:text-indigo-400 font-medium flex items-center justify-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-800/50"><Plus size={20} /> {t('wizardSteps.step3.addRealEstate')}</button>
           </div>
         </section>
+        <section>
+          <h3 className="text-lg font-medium text-slate-800 dark:text-slate-200 mb-4 border-b border-slate-100 dark:border-slate-800 pb-2">{t('wizardSteps.step3.vehiclesTitle')}</h3>
+          <p className="text-slate-600 dark:text-slate-400 mb-4 text-sm">{t('wizardSteps.step3.vehiclesDesc')}</p>
+          <div className="space-y-4">
+            {(formData.vehicles || []).map((vehicle, index) => (
+              <div key={vehicle.id} className="p-4 border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 shadow-sm relative group">
+                <button onClick={() => setFormData(prev => ({ ...prev, vehicles: prev.vehicles.filter(v => v.id !== vehicle.id) }))} className="absolute top-4 right-4 text-slate-300 dark:text-slate-400 hover:text-red-500 dark:hover:text-red-400"><Trash2 size={20} /></button>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                  <Input label={t('wizardSteps.step3.vehicleType')} value={vehicle.type} onChange={(e) => {
+                    const newVehicles = [...(formData.vehicles || [])];
+                    newVehicles[index] = { ...vehicle, type: e.target.value };
+                    updateField('vehicles', newVehicles);
+                  }} className="p-2.5" />
+                  <Input label={t('wizardSteps.step3.licensePlate')} value={vehicle.licensePlate} onChange={(e) => {
+                    const newVehicles = [...(formData.vehicles || [])];
+                    newVehicles[index] = { ...vehicle, licensePlate: e.target.value };
+                    updateField('vehicles', newVehicles);
+                  }} className="p-2.5" />
+                  <Input label={t('wizardSteps.step3.vehicleInsurance')} value={vehicle.insurance} onChange={(e) => {
+                    const newVehicles = [...(formData.vehicles || [])];
+                    newVehicles[index] = { ...vehicle, insurance: e.target.value };
+                    updateField('vehicles', newVehicles);
+                  }} className="p-2.5" />
+                  <Input label={t('wizardSteps.step3.financing')} value={vehicle.financing} onChange={(e) => {
+                    const newVehicles = [...(formData.vehicles || [])];
+                    newVehicles[index] = { ...vehicle, financing: e.target.value };
+                    updateField('vehicles', newVehicles);
+                  }} className="p-2.5" />
+                  <div className="md:col-span-2">
+                    <Input label={t('wizardSteps.step3.documentLocation')} value={vehicle.documentLocation} onChange={(e) => {
+                      const newVehicles = [...(formData.vehicles || [])];
+                      newVehicles[index] = { ...vehicle, documentLocation: e.target.value };
+                      updateField('vehicles', newVehicles);
+                    }} className="p-2.5" />
+                  </div>
+                </div>
+              </div>
+            ))}
+            <button onClick={() => updateField('vehicles', [...(formData.vehicles || []), { id: Math.random().toString(36).substring(2, 9), type: '', licensePlate: '', insurance: '', financing: '', documentLocation: '' }])} className="w-full py-3 border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl text-indigo-600 dark:text-indigo-400 font-medium flex items-center justify-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-800/50"><Plus size={20} /> {t('wizardSteps.step3.addVehicle')}</button>
+          </div>
+          <div className="mt-4">
+            <Input label={t('wizardSteps.step3.automotiveClubs')} value={formData.automotiveClubs || ''} onChange={(e) => updateField('automotiveClubs', e.target.value)} className="p-2.5" />
+          </div>
+        </section>
         <div className="pt-6 border-t border-slate-100 dark:border-slate-800">
           <Textarea label={t('wizardSteps.step3.notesLabel')} description={t('wizardSteps.step3.notesDesc')} value={formData.financeNotes || ''} onChange={(e) => updateField('financeNotes', e.target.value)} />
         </div>

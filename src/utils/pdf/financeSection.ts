@@ -7,6 +7,8 @@ export const addFinanceSection = async (builder: PdfBuilder) => {
   const hasFinanzen = (builder.data.bankAccounts && builder.data.bankAccounts.length > 0) || 
                       (builder.data.otherAssets && builder.data.otherAssets.length > 0) || 
                       (builder.data.realEstates && builder.data.realEstates.length > 0) || 
+                      (builder.data.vehicles && builder.data.vehicles.length > 0) || 
+                      builder.data.automotiveClubs || 
                       builder.data.financeNotes;
                       
   if (!hasFinanzen) return;
@@ -62,6 +64,18 @@ export const addFinanceSection = async (builder: PdfBuilder) => {
     const headers = (i18n.t('pdf.financeSection.realEstateHeaders', { returnObjects: true }) as string[]);
     const rows = builder.data.realEstates.filter(r => r.type || r.address).map(r => [r.type || '', r.country || '', r.address || '']);
     builder.drawTable(headers, rows);
+  }
+
+  if (builder.data.vehicles && builder.data.vehicles.length > 0 && builder.data.vehicles.some(v => v.type || v.licensePlate)) {
+    builder.drawLineText(i18n.t('wizardSteps.step3.vehiclesTitle'), true, 12);
+    const headers = [i18n.t('wizardSteps.step3.vehicleType'), i18n.t('wizardSteps.step3.licensePlate'), i18n.t('wizardSteps.step3.vehicleInsurance'), i18n.t('wizardSteps.step3.financing'), i18n.t('wizardSteps.step3.documentLocation')];
+    const rows = builder.data.vehicles.filter(v => v.type || v.licensePlate).map(v => [v.type || '', v.licensePlate || '', v.insurance || '', v.financing || '', v.documentLocation || '']);
+    builder.drawTable(headers, rows);
+  }
+
+  if (builder.data.automotiveClubs) {
+    builder.drawLineText(`${i18n.t('wizardSteps.step3.automotiveClubs')}: ${builder.data.automotiveClubs}`, false, 11);
+    builder.currentY -= 5;
   }
 
   // BMJV Vollmachten (after overview in Finanzen)

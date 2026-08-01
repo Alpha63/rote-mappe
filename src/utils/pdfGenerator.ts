@@ -13,6 +13,7 @@ import { addDocumentsSection } from './pdf/documentsSection';
 import { addPoaSection } from './pdf/poaSection';
 import { addKeysSection } from './pdf/keysSection';
 import { addCustomSections } from './pdf/customSection';
+import { addEmergencyChecklistSection } from './pdf/emergencyChecklistSection';
 
 export { formatDate, splitTextToLines } from './pdf/helpers';
 
@@ -39,6 +40,7 @@ export async function generatePDFBlob(data: FormData, templateName: string = 'de
   builder.currentY = builder.PAGE_HEIGHT - 80;
 
   // --- SECTIONS ---
+  addEmergencyChecklistSection(builder);
   addBaseSection(builder);
   await addMedicalSection(builder);
   await addFinanceSection(builder);
