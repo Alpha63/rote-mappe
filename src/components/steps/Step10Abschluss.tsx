@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useFormContext as useAppFormContext } from '../../FormContext';
 import { Select } from '../../Select';
@@ -8,9 +8,8 @@ import { FormSchemaType } from '../../schema';
 
 export function Step10Abschluss() {
   const { t } = useTranslation();
-  const { watch } = useFormContext<FormSchemaType>();
+  const { watch, getValues } = useFormContext<FormSchemaType>();
   const { downloadBackup, isDownloading } = useAppFormContext();
-  const formData = watch();
 
   const [pdfPreviewUrl, setPdfPreviewUrl] = useState<string | null>(null);
   const [pdfTemplate, setPdfTemplate] = useState('rot');
@@ -20,8 +19,9 @@ export function Step10Abschluss() {
 
   const handleGeneratePreview = useCallback(async () => {
     try {
+      const currentData = getValues();
       const { generatePDFAsync } = await import('../../utils/pdfWorkerWrapper');
-      const blob = await generatePDFAsync(formData as unknown as import('../../types').FormData, pdfTemplate, includePlaceholders, includeWarnings);
+      const blob = await generatePDFAsync(currentData as unknown as import('../../types').FormData, pdfTemplate, includePlaceholders, includeWarnings);
       const url = URL.createObjectURL(blob);
       setPdfPreviewUrl(prevUrl => {
         if (prevUrl) URL.revokeObjectURL(prevUrl);
@@ -30,11 +30,25 @@ export function Step10Abschluss() {
     } catch (error) {
       console.error('Error generating PDF preview:', error);
     }
-  }, [formData, pdfTemplate, includePlaceholders, includeWarnings]);
+  }, [getValues, pdfTemplate, includePlaceholders, includeWarnings]);
 
+  // Generate preview on mount and when PDF settings change
   useEffect(() => {
     handleGeneratePreview();
   }, [handleGeneratePreview]);
+
+  // Debounced regeneration when form data changes
+  const debounceRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+  useEffect(() => {
+    const subscription = watch(() => {
+      clearTimeout(debounceRef.current);
+      debounceRef.current = setTimeout(handleGeneratePreview, 1000);
+    });
+    return () => {
+      subscription.unsubscribe();
+      clearTimeout(debounceRef.current);
+    };
+  }, [watch, handleGeneratePreview]);
 
   const [showBackupModal, setShowBackupModal] = useState(false);
   const [pwd1, setPwd1] = useState('');
