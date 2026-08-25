@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { ThemeToggle } from './ThemeToggle';
 import { version } from '../../package.json';
 import { KeyRound } from 'lucide-react';
+import JSZip from 'jszip';
 
 interface BeforeInstallPromptEvent extends Event {
   readonly platforms: string[];
@@ -51,6 +52,39 @@ export function Welcome({ onStart }: WelcomeProps) {
   const handleImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+
+    if (file.name.endsWith('.zip')) {
+      try {
+        const zip = new JSZip();
+        const loadedZip = await zip.loadAsync(file);
+        const encFile = loadedZip.file('Notfallakte_Backup.enc');
+        const jsonFile = loadedZip.file('Notfallakte_Backup.json');
+
+        if (encFile) {
+          const content = await encFile.async('text');
+          const mockFile = new File([content], 'Notfallakte_Backup.enc', { type: 'text/plain' });
+          setPendingFile(mockFile);
+          setPassword('');
+          setError('');
+          setShowPasswordModal(true);
+          e.target.value = '';
+          return;
+        } else if (jsonFile) {
+          const content = await jsonFile.async('text');
+          const mockFile = new File([content], 'Notfallakte_Backup.json', { type: 'application/json' });
+          await processFile(mockFile);
+          e.target.value = '';
+          return;
+        } else {
+          alert(t('welcome.backupError', { defaultValue: 'Kein Backup in der ZIP-Datei gefunden.' }));
+        }
+      } catch (err) {
+        console.error(err);
+        alert(t('welcome.backupError', { defaultValue: 'Fehler beim Lesen der ZIP-Datei.' }));
+      }
+      e.target.value = '';
+      return;
+    }
 
     const isEncrypted = file.name.endsWith('.enc');
     if (isEncrypted) {
@@ -197,7 +231,7 @@ export function Welcome({ onStart }: WelcomeProps) {
             {t('welcome.loadBackup')}
             <input
               type="file"
-              accept=".json, .enc"
+              accept=".json, .enc, .zip"
               className="hidden"
               onChange={handleImport}
             />

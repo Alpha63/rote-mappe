@@ -1,17 +1,52 @@
-import { useFormContext } from '../../FormContext';
+import { useFormContext, useFieldArray } from 'react-hook-form';
 import { Input } from '../../Input';
 import { Textarea } from '../../Textarea';
 import { DocumentUpload } from '../DocumentUpload';
 import { Info, AlertCircle, Plus } from 'lucide-react';
-import { ScannedDocument } from '../../types';
-import { useArrayField } from '../../utils/useArrayField';
 import { useTranslation } from 'react-i18next';
+import { FormSchemaType } from '../../schema';
 
 export function Step7Vollmachten() {
+  const { register, control, watch, setValue, formState: { errors } } = useFormContext<FormSchemaType>();
   const { t } = useTranslation();
-  const { formData, setFormData, updateField } = useFormContext();
-  const { items: customPowersOfAttorney, addItem: addCustomPoa, removeItem: removeCustomPoa } = useArrayField('customPowersOfAttorney', { name: '', documentAction: 'upload', fileData: null, fileType: null });
-  const updateCustomPoa = (doc: ScannedDocument) => setFormData(prev => ({ ...prev, customPowersOfAttorney: (prev.customPowersOfAttorney || []).map(d => d.id === doc.id ? doc : d) }));
+
+  const { fields: customPoaFields, append: appendCustomPoa, remove: removeCustomPoa } = useFieldArray({
+    control,
+    name: 'customPowersOfAttorney'
+  });
+
+  const testamentDocument = watch('testamentDocument');
+  const patientenverfuegung = watch('patientenverfuegung') || {
+    id: 'patverf',
+    name: t('wizardSteps.step7.docPatientenverfuegung'),
+    documentAction: 'placeholder',
+    fileData: null,
+    fileType: null
+  };
+  const vorsorgevollmacht = watch('vorsorgevollmacht') || {
+    id: 'vorsorge',
+    name: t('wizardSteps.step7.docVorsorgevollmacht'),
+    documentAction: 'placeholder',
+    fileData: null,
+    fileType: null
+  };
+  const betreuungsverfuegung = watch('betreuungsverfuegung') || {
+    id: 'betreuung',
+    name: t('wizardSteps.step7.docBetreuungsverfuegung'),
+    documentAction: 'placeholder',
+    fileData: null,
+    fileType: null
+  };
+  const bestattungsverfuegung = watch('bestattungsverfuegung') || {
+    id: 'bestattung',
+    name: t('wizardSteps.step7.docBestattungsverfuegung'),
+    documentAction: 'placeholder',
+    fileData: null,
+    fileType: null
+  };
+
+  const watchedCustomPoa = watch('customPowersOfAttorney');
+  const poaNotes = watch('poaNotes');
 
   return (
     <div className="animate-in fade-in zoom-in-95 duration-500">
@@ -49,8 +84,20 @@ export function Step7Vollmachten() {
               {t('wizardSteps.step7.willHintLinkDesc')} <a href="https://www.muster-generator.de/testament" target="_blank" rel="noopener noreferrer" className="text-indigo-600 dark:text-indigo-400 underline hover:text-indigo-800 dark:hover:text-indigo-200">www.muster-generator.de/testament</a>
             </div>
           </div>
-          <Input label={t('wizardSteps.step7.willLocLabel')} value={formData.testamentLocation} onChange={(e) => updateField('testamentLocation', e.target.value)} placeholder={t('wizardSteps.step7.willLocPlaceholder')} />
-          {formData.testamentDocument && <div className="mt-4"><DocumentUpload document={formData.testamentDocument} onChange={(doc) => updateField('testamentDocument', doc)} /></div>}
+          <Input
+            label={t('wizardSteps.step7.willLocLabel')}
+            {...register('testamentLocation')}
+            error={errors.testamentLocation?.message}
+            placeholder={t('wizardSteps.step7.willLocPlaceholder')}
+          />
+          {testamentDocument && (
+            <div className="mt-4">
+              <DocumentUpload
+                document={testamentDocument}
+                onChange={(doc) => setValue('testamentDocument', doc, { shouldValidate: true, shouldDirty: true })}
+              />
+            </div>
+          )}
         </section>
         <section>
           <h3 className="text-lg font-medium text-slate-800 dark:text-slate-200 mb-4 border-b border-slate-100 dark:border-slate-800 pb-2">{t('wizardSteps.step7.poaTitle')}</h3>
@@ -79,21 +126,61 @@ export function Step7Vollmachten() {
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <DocumentUpload document={formData.patientenverfuegung || { id: 'patverf', name: t('wizardSteps.step7.docPatientenverfuegung'), documentAction: 'placeholder', fileData: null, fileType: null }} onChange={(doc) => updateField('patientenverfuegung', doc)} />
-            <DocumentUpload document={formData.vorsorgevollmacht || { id: 'vorsorge', name: t('wizardSteps.step7.docVorsorgevollmacht'), documentAction: 'placeholder', fileData: null, fileType: null }} onChange={(doc) => updateField('vorsorgevollmacht', doc)} />
-            <DocumentUpload document={formData.betreuungsverfuegung || { id: 'betreuung', name: t('wizardSteps.step7.docBetreuungsverfuegung'), documentAction: 'placeholder', fileData: null, fileType: null }} onChange={(doc) => updateField('betreuungsverfuegung', doc)} />
-            <DocumentUpload document={formData.bestattungsverfuegung || { id: 'bestattung', name: t('wizardSteps.step7.docBestattungsverfuegung'), documentAction: 'placeholder', fileData: null, fileType: null }} onChange={(doc) => updateField('bestattungsverfuegung', doc)} />
+            <DocumentUpload
+              document={patientenverfuegung}
+              onChange={(doc) => setValue('patientenverfuegung', doc, { shouldValidate: true, shouldDirty: true })}
+            />
+            <DocumentUpload
+              document={vorsorgevollmacht}
+              onChange={(doc) => setValue('vorsorgevollmacht', doc, { shouldValidate: true, shouldDirty: true })}
+            />
+            <DocumentUpload
+              document={betreuungsverfuegung}
+              onChange={(doc) => setValue('betreuungsverfuegung', doc, { shouldValidate: true, shouldDirty: true })}
+            />
+            <DocumentUpload
+              document={bestattungsverfuegung}
+              onChange={(doc) => setValue('bestattungsverfuegung', doc, { shouldValidate: true, shouldDirty: true })}
+            />
           </div>
         </section>
         <section>
           <h3 className="text-lg font-medium text-slate-800 dark:text-slate-200 mb-4 border-b border-slate-100 dark:border-slate-800 pb-2">{t('wizardSteps.step7.otherPoaTitle')}</h3>
           <div className="space-y-4">
-            {(customPowersOfAttorney as ScannedDocument[]).map((doc) => <DocumentUpload key={doc.id} document={doc} onChange={updateCustomPoa} onRemove={() => removeCustomPoa(doc.id)} isCustom />)}
-            <button onClick={addCustomPoa} className="w-full py-3 border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl text-indigo-600 dark:text-indigo-400 font-medium flex items-center justify-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-800/50"><Plus size={20} /> {t('wizardSteps.step7.addOtherPoa')}</button>
+            {customPoaFields.map((field, index) => {
+              const doc = watchedCustomPoa?.[index] || field;
+              return (
+                <DocumentUpload
+                  key={field.id}
+                  document={doc}
+                  onChange={(newDoc) => setValue(`customPowersOfAttorney.${index}`, newDoc, { shouldValidate: true, shouldDirty: true })}
+                  onRemove={() => removeCustomPoa(index)}
+                  isCustom
+                />
+              );
+            })}
+            <button
+              type="button"
+              onClick={() => appendCustomPoa({
+                id: crypto.randomUUID(),
+                name: '',
+                documentAction: 'upload',
+                fileData: null,
+                fileType: null
+              })}
+              className="w-full py-3 border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl text-indigo-600 dark:text-indigo-400 font-medium flex items-center justify-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-800/50"
+            >
+              <Plus size={20} /> {t('wizardSteps.step7.addOtherPoa')}
+            </button>
           </div>
         </section>
         <div className="pt-6 border-t border-slate-100 dark:border-slate-800 mt-6">
-          <Textarea label={t('wizardSteps.step7.notesLabel')} description={t('wizardSteps.step7.notesDesc')} value={formData.poaNotes || ''} onChange={(e) => updateField('poaNotes', e.target.value)} />
+          <Textarea
+            label={t('wizardSteps.step7.notesLabel')}
+            description={t('wizardSteps.step7.notesDesc')}
+            value={poaNotes || ''}
+            onChange={(e) => setValue('poaNotes', e.target.value, { shouldValidate: true, shouldDirty: true })}
+          />
         </div>
       </div>
     </div>

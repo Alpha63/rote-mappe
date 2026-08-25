@@ -1,5 +1,6 @@
 import { FormData, initialFormData } from '../types';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function migrateData(parsed: any): FormData {
   const merged = { ...initialFormData, ...parsed };
 

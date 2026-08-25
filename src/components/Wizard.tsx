@@ -26,53 +26,40 @@ export function Wizard() {
 function WizardContent() {
   const { t } = useTranslation();
   const [step, setStep] = useState(1);
-  const { formData, setErrors } = useFormContext();
+  const { methods } = useFormContext();
   const [showWarningModal, setShowWarningModal] = useState(false);
   const [nextStepTarget, setNextStepTarget] = useState(1);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
-    validateCurrentStep(step);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formData, step]);
-
-  useEffect(() => {
     window.scrollTo(0, 0);
   }, [step]);
 
-  const validateCurrentStep = (currentStep: number) => {
-    const errs: Record<string, string> = {};
-    const isAlpha = (val: string) => /^[a-zA-ZäöüÄÖÜß\s-]*$/.test(val);
-    const isNumeric = (val: string) => /^\d*$/.test(val);
-
-    if (currentStep === 1) {
-      if (!formData.firstName) {
-        errs.firstName = 'Vorname ist ein Pflichtfeld.';
-      } else if (!isAlpha(formData.firstName)) {
-        errs.firstName = 'Darf nur Buchstaben enthalten.';
-      }
-      if (!formData.lastName) {
-        errs.lastName = 'Nachname ist ein Pflichtfeld.';
-      } else if (!isAlpha(formData.lastName)) {
-        errs.lastName = 'Darf nur Buchstaben enthalten.';
-      }
-      if (formData.middleName && !isAlpha(formData.middleName)) errs.middleName = 'Darf nur Buchstaben enthalten.';
-      if (formData.zipCode && !isNumeric(formData.zipCode)) errs.zipCode = 'Darf nur Zahlen enthalten.';
-      if (formData.childrenCount && !isNumeric(formData.childrenCount)) errs.childrenCount = 'Darf nur Zahlen enthalten.';
+  const getFieldsForStep = (stepNumber: number): string[] => {
+    switch (stepNumber) {
+      case 1:
+        return ['salutation', 'firstName', 'middleName', 'lastName', 'street', 'houseNumber', 'zipCode', 'city', 'maritalStatus', 'marriageDate', 'divorceDate', 'childrenCount', 'children'];
+      // Define other steps as needed, for now just validate what's requested
+      default:
+        return [];
     }
-
-    setErrors(errs);
-    return errs;
   };
 
-  const handleNextClick = (targetStep: number) => {
-    const currentErrs = validateCurrentStep(step);
-    if (Object.keys(currentErrs).length > 0 && targetStep > step) {
-      setNextStepTarget(targetStep);
-      setShowWarningModal(true);
-    } else {
-      setStep(targetStep);
+  const handleNextClick = async (targetStep: number) => {
+    if (targetStep > step) {
+      const fieldsToValidate = getFieldsForStep(step);
+      let isValid = true;
+      if (fieldsToValidate.length > 0) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        isValid = await methods.trigger(fieldsToValidate as any);
+      }
+      if (!isValid) {
+        setNextStepTarget(targetStep);
+        setShowWarningModal(true);
+        return;
+      }
     }
+    setStep(targetStep);
   };
 
   const renderStep = () => {

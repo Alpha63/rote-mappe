@@ -53,7 +53,7 @@ export const addBaseSection = (builder: PdfBuilder) => {
     builder.drawKeyValue(i18n.t('pdf.baseSection.employmentStatus'), builder.data.employment.status);
     if (builder.data.employment.companyName) builder.drawKeyValue(i18n.t('pdf.baseSection.employerName'), builder.data.employment.companyName);
     
-    let addressParts = [];
+    const addressParts = [];
     if (builder.data.employment.street) addressParts.push(builder.data.employment.street);
     if (builder.data.employment.zipCode || builder.data.employment.city) {
       addressParts.push(`${builder.data.employment.zipCode} ${builder.data.employment.city}`.trim());

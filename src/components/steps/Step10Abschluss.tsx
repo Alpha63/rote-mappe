@@ -1,12 +1,17 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useFormContext } from '../../FormContext';
+import { useFormContext } from 'react-hook-form';
+import { useFormContext as useAppFormContext } from '../../FormContext';
 import { Select } from '../../Select';
 import { Info, ShieldCheck, Download, Loader2, CheckCircle, Lock } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { FormSchemaType } from '../../schema';
 
 export function Step10Abschluss() {
   const { t } = useTranslation();
-  const { formData, downloadBackup, isDownloading } = useFormContext();
+  const { watch } = useFormContext<FormSchemaType>();
+  const { downloadBackup, isDownloading } = useAppFormContext();
+  const formData = watch();
+
   const [pdfPreviewUrl, setPdfPreviewUrl] = useState<string | null>(null);
   const [pdfTemplate, setPdfTemplate] = useState('rot');
   const [includePlaceholders, setIncludePlaceholders] = useState(true);
@@ -16,7 +21,7 @@ export function Step10Abschluss() {
   const handleGeneratePreview = useCallback(async () => {
     try {
       const { generatePDFAsync } = await import('../../utils/pdfWorkerWrapper');
-      const blob = await generatePDFAsync(formData, pdfTemplate, includePlaceholders, includeWarnings);
+      const blob = await generatePDFAsync(formData as unknown as import('../../types').FormData, pdfTemplate, includePlaceholders, includeWarnings);
       const url = URL.createObjectURL(blob);
       setPdfPreviewUrl(prevUrl => {
         if (prevUrl) URL.revokeObjectURL(prevUrl);
@@ -32,14 +37,12 @@ export function Step10Abschluss() {
   }, [handleGeneratePreview]);
 
   const [showBackupModal, setShowBackupModal] = useState(false);
-  const [useEncryption, setUseEncryption] = useState<boolean | null>(null);
   const [pwd1, setPwd1] = useState('');
   const [pwd2, setPwd2] = useState('');
   const [error, setError] = useState('');
 
   const handleDownloadClick = () => {
     setDownloadSuccess(false);
-    setUseEncryption(null);
     setPwd1('');
     setPwd2('');
     setError('');
@@ -47,18 +50,15 @@ export function Step10Abschluss() {
   };
 
   const handleBackupConfirm = async () => {
-    let finalPwd = undefined;
-    if (useEncryption) {
-      if (!pwd1) {
-        setError(t('sidebar.backup.enterPassword', { defaultValue: 'Bitte vergib ein Passwort.' }));
-        return;
-      }
-      if (pwd1 !== pwd2) {
-        setError(t('sidebar.backup.passwordMismatch', { defaultValue: 'Die Passwörter stimmen nicht überein.' }));
-        return;
-      }
-      finalPwd = pwd1;
+    if (!pwd1) {
+      setError(t('sidebar.backup.enterPassword', { defaultValue: 'Bitte vergib ein Passwort.' }));
+      return;
     }
+    if (pwd1 !== pwd2) {
+      setError(t('sidebar.backup.passwordMismatch', { defaultValue: 'Die Passwörter stimmen nicht überein.' }));
+      return;
+    }
+    const finalPwd = pwd1;
 
     setShowBackupModal(false);
     const success = await downloadBackup(pdfTemplate, includePlaceholders, includeWarnings, finalPwd);
@@ -128,25 +128,10 @@ export function Step10Abschluss() {
               </div>
               <h3 className="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-3">{t('sidebar.backup.modalTitle', { defaultValue: 'Backup Sicherheit' })}</h3>
               <p className="text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">
-                {t('sidebar.backup.wantsEncryption', { defaultValue: 'Möchtest du das Backup mit einem Passwort verschlüsseln? (Empfohlen bei Speicherung in der Cloud oder auf USB-Sticks)' })}
+                {t('sidebar.backup.requireEncryption', { defaultValue: 'Bitte vergib ein Passwort, um dein Backup (die JSON-Datei) zu verschlüsseln. Dies wird dringend empfohlen.' })}
               </p>
 
-              {useEncryption === null && (
-                <div className="flex flex-col w-full gap-3">
-                  <button onClick={() => setUseEncryption(true)} className="w-full py-3.5 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-400 font-medium rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-900/40 transition-colors cursor-pointer">
-                    {t('sidebar.backup.yesEncrypt', { defaultValue: 'Ja, verschlüsseln' })}
-                  </button>
-                  <button onClick={() => { setUseEncryption(false); handleBackupConfirm(); }} className="w-full py-3.5 text-slate-500 dark:text-slate-400 font-medium hover:text-slate-700 dark:hover:text-slate-200 transition-colors cursor-pointer">
-                    {t('sidebar.backup.noEncrypt', { defaultValue: 'Nein, direkt herunterladen' })}
-                  </button>
-                  <button onClick={() => setShowBackupModal(false)} className="w-full py-2 text-sm text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors cursor-pointer">
-                    {t('common.cancel', { defaultValue: 'Abbrechen' })}
-                  </button>
-                </div>
-              )}
-
-              {useEncryption && (
-                <div className="flex flex-col w-full gap-4">
+              <div className="flex flex-col w-full gap-4">
                   <div>
                     <input
                       type="password"
@@ -177,8 +162,7 @@ export function Step10Abschluss() {
                       {t('common.cancel', { defaultValue: 'Abbrechen' })}
                     </button>
                   </div>
-                </div>
-              )}
+              </div>
             </div>
           </div>
         </div>
