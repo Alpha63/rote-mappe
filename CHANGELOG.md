@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.0] - 2026-08-25
+
+### Changed
+- **Architektur (Steps 8–10):** Die Wizard-Schritte 8 (Hinweise), 9 (Eigene Kapitel) und 10 (Abschluss) wurden auf `react-hook-form` mit `useFormContext` und `useFieldArray` migriert. Damit nutzen nun alle 10 Schritte einheitlich `react-hook-form` und `zod` für Formular-State und Validierung.
+- **Architektur (Step 8):** Die Legacy-Hilfsfunktion `useArrayField` wurde durch das native `useFieldArray` von `react-hook-form` ersetzt. Felder für Schlüssel und Haustiere verwenden nun `register()` statt manueller `value`/`onChange`-Bindings.
+- **Architektur (Step 9):** Eigene Kapitel nutzen nun `useFieldArray` statt der benutzerdefinierten `useArrayField`-Abstraktion.
+- **Architektur (Step 10):** Formular-Daten werden nun über `useFormContext` aus `react-hook-form` bezogen statt über den benutzerdefinierten `FormContext`. Der App-spezifische `FormContext` wird nur noch für die Download-Funktionalität verwendet.
+
+### Fixed
+- **PDF-Vorschau (Step 10):** Ein kritischer Performance-Bug wurde behoben, bei dem die PDF-Vorschau in einer Endlosschleife ständig neu generiert wurde. Ursache war, dass `watch()` bei jedem Render ein neues Objekt zurückgab und dadurch `useCallback` → `useEffect` → Re-Render in einer Schleife feuerten. Die Lösung verwendet nun `getValues()` innerhalb des Callbacks (stabile Referenz) und eine debounced `watch()`-Subscription (1 Sekunde Verzögerung) für Formular-Änderungen.
+
 ## [2.0.0] - 2026-08-01
 
 ### Added
