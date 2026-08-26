@@ -4,14 +4,23 @@ All notable changes to this project will be documented in this file.
 
 ## [2.1.0] - 2026-08-25
 
+### Added
+- **Testing:** Umfassende Test-Infrastruktur mit Vitest und React Testing Library eingeführt. 6 Test-Suiten mit 53 Tests sichern nun Barrierefreiheit, View Transitions, Stabilität und den kompletten E2E-Workflow ab.
+- **View Transitions:** Native View Transitions API im Wizard integriert. Ein Wechsel der Schritte löst nun eine flüssige Slide-Animation (vor/zurück) aus, die sich via `prefers-reduced-motion` bei Bewegungsempfindlichkeit abschaltet.
+- **UX (Toasts):** Neues, responsives Toast-Notification-System für Erfolgs- und Fehlermeldungen (z.B. bei Backup-Fehlern) hinzugefügt, um blockierende Browser-Alerts zu ersetzen.
+
 ### Changed
 - **Architektur (Steps 8–10):** Die Wizard-Schritte 8 (Hinweise), 9 (Eigene Kapitel) und 10 (Abschluss) wurden auf `react-hook-form` mit `useFormContext` und `useFieldArray` migriert. Damit nutzen nun alle 10 Schritte einheitlich `react-hook-form` und `zod` für Formular-State und Validierung.
-- **Architektur (Step 8):** Die Legacy-Hilfsfunktion `useArrayField` wurde durch das native `useFieldArray` von `react-hook-form` ersetzt. Felder für Schlüssel und Haustiere verwenden nun `register()` statt manueller `value`/`onChange`-Bindings.
-- **Architektur (Step 9):** Eigene Kapitel nutzen nun `useFieldArray` statt der benutzerdefinierten `useArrayField`-Abstraktion.
-- **Architektur (Step 10):** Formular-Daten werden nun über `useFormContext` aus `react-hook-form` bezogen statt über den benutzerdefinierten `FormContext`. Der App-spezifische `FormContext` wird nur noch für die Download-Funktionalität verwendet.
+- **Architektur (Step 8 & 9):** Die Legacy-Hilfsfunktion `useArrayField` wurde durch das native `useFieldArray` von `react-hook-form` ersetzt.
+- **Architektur (Step 10):** Formular-Daten werden nun über `useFormContext` bezogen. Der App-spezifische `FormContext` steuert nur noch den Download.
+- **Barrierefreiheit (Formulare):** Sämtliche Eingabefelder (`Input`, `Select`, `Textarea`, `DocumentUpload`) wurden vollständig semantisch und zugänglich aufgebaut (z.B. eindeutige `id`/`htmlFor` über `useId()`, `aria-describedby`, `<fieldset>`/`<legend>` für Radio-Groups, Wrapper-`<form>`).
+- **Barrierefreiheit (Sprache):** Das `<html lang="de">`-Attribut wird nun dynamisch bei einem Sprachwechsel mit `i18next` aktualisiert, um WCAG 3.1.1 (Sprache der Seite) zu erfüllen.
+- **Lokale Assets:** Alle externen CDN- und Font-Aufrufe wurden entfernt. Die App nutzt zu 100% lokale Assets, einen System-Font-Stack sowie PDF-14 Standardfonts für maximale Privatsphäre und Offline-Fähigkeit.
+- **Code-Bereinigung:** Toter Code (`App.css`, `split_i18n.py`, Vite-Boilerplate-Logos) und unbenutzte Abhängigkeiten aus der `package.json` wurden entfernt. Die `vite.config.ts` nutzt nun native ECMAScript Import Attributes (`with { type: 'json' }`).
 
 ### Fixed
-- **PDF-Vorschau (Step 10):** Ein kritischer Performance-Bug wurde behoben, bei dem die PDF-Vorschau in einer Endlosschleife ständig neu generiert wurde. Ursache war, dass `watch()` bei jedem Render ein neues Objekt zurückgab und dadurch `useCallback` → `useEffect` → Re-Render in einer Schleife feuerten. Die Lösung verwendet nun `getValues()` innerhalb des Callbacks (stabile Referenz) und eine debounced `watch()`-Subscription (1 Sekunde Verzögerung) für Formular-Änderungen.
+- **PDF-Vorschau (Step 10):** Ein kritischer Performance-Bug wurde behoben, bei dem die PDF-Vorschau in einer Endlosschleife ständig neu generiert wurde.
+- **UX:** Störende und UI-blockierende native `alert()`-Aufrufe beim Import und PDF-Export wurden entfernt und durch integrierte Toast-Meldungen ersetzt.
 
 ## [2.0.0] - 2026-08-01
 
