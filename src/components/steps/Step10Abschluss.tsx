@@ -57,25 +57,30 @@ export function Step10Abschluss() {
   const [pwd1, setPwd1] = useState('');
   const [pwd2, setPwd2] = useState('');
   const [error, setError] = useState('');
+  const [noPassword, setNoPassword] = useState(false);
 
   const handleDownloadClick = () => {
     setDownloadSuccess(false);
     setPwd1('');
     setPwd2('');
     setError('');
+    setNoPassword(false);
     setShowBackupModal(true);
   };
 
   const handleBackupConfirm = async () => {
-    if (!pwd1) {
-      setError(t('sidebar.backup.enterPassword', { defaultValue: 'Bitte vergib ein Passwort.' }));
-      return;
+    let finalPwd = undefined;
+    if (!noPassword) {
+      if (!pwd1) {
+        setError(t('sidebar.backup.enterPassword', { defaultValue: 'Bitte vergib ein Passwort.' }));
+        return;
+      }
+      if (pwd1 !== pwd2) {
+        setError(t('sidebar.backup.passwordMismatch', { defaultValue: 'Die Passwörter stimmen nicht überein.' }));
+        return;
+      }
+      finalPwd = pwd1;
     }
-    if (pwd1 !== pwd2) {
-      setError(t('sidebar.backup.passwordMismatch', { defaultValue: 'Die Passwörter stimmen nicht überein.' }));
-      return;
-    }
-    const finalPwd = pwd1;
 
     setShowBackupModal(false);
     const success = await downloadBackup(pdfTemplate, includePlaceholders, includeWarnings, finalPwd);
@@ -152,27 +157,51 @@ export function Step10Abschluss() {
               </p>
 
               <div className="flex flex-col w-full gap-4">
-                  <div>
+                  <label className="flex items-center justify-start gap-3 p-3 border border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-800/50 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
                     <input
-                      type="password"
-                      placeholder={t('sidebar.backup.enterPasswordLabel', { defaultValue: 'Passwort' })}
-                      value={pwd1}
-                      onChange={(e) => setPwd1(e.target.value)}
-                      className="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
-                      autoFocus
+                      type="checkbox"
+                      checked={noPassword}
+                      onChange={(e) => {
+                        setNoPassword(e.target.checked);
+                        if (e.target.checked) {
+                          setPwd1('');
+                          setPwd2('');
+                          setError('');
+                        }
+                      }}
+                      className="w-5 h-5 text-indigo-600 rounded border-slate-300 focus:ring-indigo-500 cursor-pointer"
                     />
-                  </div>
-                  <div>
-                    <input
-                      type="password"
-                      placeholder={t('sidebar.backup.confirmPasswordLabel', { defaultValue: 'Passwort wiederholen' })}
-                      value={pwd2}
-                      onChange={(e) => setPwd2(e.target.value)}
-                      className="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
-                      onKeyDown={(e) => e.key === 'Enter' && handleBackupConfirm()}
-                    />
-                  </div>
-                  {error && <p className="text-red-500 text-sm text-left">{error}</p>}
+                    <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                      {t('sidebar.backup.noPassword', { defaultValue: 'Ohne Passwort fortfahren (Unsicher)' })}
+                    </span>
+                  </label>
+
+                  {!noPassword && (
+                    <div className="flex flex-col gap-4 animate-in slide-in-from-top-2 duration-300">
+                      <div>
+                        <input
+                          type="password"
+                          placeholder={t('sidebar.backup.enterPasswordLabel', { defaultValue: 'Passwort' })}
+                          value={pwd1}
+                          onChange={(e) => setPwd1(e.target.value)}
+                          className="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                          autoFocus
+                        />
+                      </div>
+                      <div>
+                        <input
+                          type="password"
+                          placeholder={t('sidebar.backup.confirmPasswordLabel', { defaultValue: 'Passwort wiederholen' })}
+                          value={pwd2}
+                          onChange={(e) => setPwd2(e.target.value)}
+                          className="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                          onKeyDown={(e) => e.key === 'Enter' && handleBackupConfirm()}
+                        />
+                      </div>
+                    </div>
+                  )}
+                  
+                  {error && !noPassword && <p className="text-red-500 text-sm text-left">{error}</p>}
                   
                   <div className="flex flex-col w-full gap-2 mt-2">
                     <button onClick={() => handleBackupConfirm()} className="w-full py-3.5 bg-indigo-600 text-white font-medium rounded-xl hover:bg-indigo-700 shadow-md shadow-indigo-600/20 transition-all cursor-pointer">
