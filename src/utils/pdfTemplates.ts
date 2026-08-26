@@ -75,18 +75,18 @@ export const templates: Record<string, TemplateConfig> = {
   'modern': {
     name: 'Modern & Edel',
     colors: {
-      primary: rgb(0.07, 0.08, 0.1),
+      primary: rgb(0.13, 0.15, 0.18), // Deep elegant charcoal
       primaryText: rgb(1, 1, 1),
-      secondaryText: rgb(0.45, 0.47, 0.5),
-      accent: rgb(0.15, 0.6, 0.55), 
-      text: rgb(0.15, 0.15, 0.15),
-      lightText: rgb(0.35, 0.35, 0.4),
-      tableHeaderBg: rgb(0.95, 0.96, 0.97),
-      tableHeaderText: rgb(0.07, 0.08, 0.1),
+      secondaryText: rgb(0.55, 0.55, 0.6),
+      accent: rgb(0.72, 0.55, 0.35), // Elegant bronze/gold accent
+      text: rgb(0.2, 0.2, 0.22),
+      lightText: rgb(0.45, 0.45, 0.48),
+      tableHeaderBg: rgb(0.96, 0.96, 0.97),
+      tableHeaderText: rgb(0.13, 0.15, 0.18),
       tableEvenRowBg: rgb(0.98, 0.98, 0.99),
-      chapterCoverBg: rgb(0.93, 0.94, 0.95),
-      chapterCoverText: rgb(0.07, 0.08, 0.1),
-      warning: rgb(0.85, 0.2, 0.2),
+      chapterCoverBg: rgb(0.97, 0.97, 0.98),
+      chapterCoverText: rgb(0.13, 0.15, 0.18),
+      warning: rgb(0.85, 0.25, 0.25),
     },
     fonts: { 
       regular: StandardFonts.Helvetica, 
