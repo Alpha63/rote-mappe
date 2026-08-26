@@ -89,7 +89,6 @@ export function FormProvider({ children }: { children: React.ReactNode }) {
       return true;
     } catch (error) {
       console.error('Error generating Export:', error);
-      alert('Fehler bei der Erstellung der ZIP-Datei.');
       return false;
     } finally {
       setIsDownloading(false);

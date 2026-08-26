@@ -38,8 +38,40 @@ function WizardContent() {
   const getFieldsForStep = (stepNumber: number): string[] => {
     switch (stepNumber) {
       case 1:
-        return ['salutation', 'firstName', 'middleName', 'lastName', 'street', 'houseNumber', 'zipCode', 'city', 'maritalStatus', 'marriageDate', 'divorceDate', 'childrenCount', 'children'];
-      // Define other steps as needed, for now just validate what's requested
+        return [
+          'salutation', 'firstName', 'middleName', 'lastName',
+          'street', 'houseNumber', 'zipCode', 'city',
+          'maritalStatus', 'marriageDate', 'divorceDate',
+          'childrenCount', 'children',
+          'birthDate', 'birthPlace', 'birthCountry',
+          'taxId', 'socialSecurityNumber',
+          'employment', 'contacts', 'doNotNotifyContacts',
+          'documentTitle'
+        ];
+      case 2:
+        return ['medicalData', 'medicalNotes', 'organDonorDocument'];
+      case 3:
+        return ['bankAccounts', 'financeNotes', 'otherAssets', 'realEstates', 'vehicles', 'automotiveClubs'];
+      case 4:
+        return ['contracts', 'subscriptions', 'serviceProviders', 'meterNumbers', 'contractNotes'];
+      case 5:
+        return ['digitalIdentities', 'devicePINs', 'digitalLegacySocialMedia', 'digitalLegacyCloud'];
+      case 6:
+        return [
+          'idCard', 'passport', 'driversLicense', 'birthCertificate',
+          'marriageCertificate', 'divorceCertificate', 'certificates',
+          'otherDocuments', 'documentNotes'
+        ];
+      case 7:
+        return [
+          'testamentLocation', 'testamentDocument', 'patientenverfuegung',
+          'vorsorgevollmacht', 'betreuungsverfuegung', 'bestattungsverfuegung',
+          'customPowersOfAttorney', 'poaNotes'
+        ];
+      case 8:
+        return ['keys', 'pets', 'generalNotes'];
+      case 9:
+        return ['customChapters'];
       default:
         return [];
     }
@@ -59,7 +91,28 @@ function WizardContent() {
         return;
       }
     }
-    setStep(targetStep);
+    const direction = targetStep >= step ? 'forward' : 'backward';
+    if (document.startViewTransition && !window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches) {
+      document.documentElement.dataset.transitionDirection = direction;
+      try {
+        const t = document.startViewTransition(() => {
+          setStep(targetStep);
+          window.scrollTo(0, 0);
+        });
+        if (t && t.finished) {
+          t.finished.finally(() => {
+            delete document.documentElement.dataset.transitionDirection;
+          });
+        }
+      } catch {
+        setStep(targetStep);
+        window.scrollTo(0, 0);
+        delete document.documentElement.dataset.transitionDirection;
+      }
+    } else {
+      setStep(targetStep);
+      window.scrollTo(0, 0);
+    }
   };
 
   const renderStep = () => {
@@ -109,39 +162,50 @@ function WizardContent() {
         </header>
 
         <main className="p-4 md:p-8 lg:p-12 max-w-360 mx-auto w-full h-full flex-1">
-          <div className="bg-white dark:bg-slate-800 rounded-3xl p-5 md:p-8 shadow-sm border border-slate-200 dark:border-slate-700 min-h-[calc(100vh-8rem)] flex flex-col">
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleNextClick(Math.min(10, step + 1));
+            }}
+            noValidate
+            className="wizard-step-container"
+          >
+            <div className="bg-white dark:bg-slate-800 rounded-3xl p-5 md:p-8 shadow-sm border border-slate-200 dark:border-slate-700 min-h-[calc(100vh-8rem)] flex flex-col">
 
-            <div className="flex-1">
-              <Suspense fallback={<div className="flex justify-center items-center h-full p-12 text-slate-500">{t('wizard.loading') || 'Lade Schritt...'}</div>}>
-                {renderStep()}
-              </Suspense>
-            </div>
+              <div className="flex-1">
+                <Suspense fallback={<div className="flex justify-center items-center h-full p-12 text-slate-500">{t('wizard.loading') || 'Lade Schritt...'}</div>}>
+                  {renderStep()}
+                </Suspense>
+              </div>
 
-            <div className="mt-10 pt-6 border-t border-slate-100 dark:border-slate-700 flex justify-between items-center">
-              <button
-                onClick={() => handleNextClick(Math.max(1, step - 1))}
-                disabled={step === 1}
-                className={`flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-colors
-                  ${step === 1 ? 'text-slate-300 dark:text-slate-600 cursor-not-allowed' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-600 cursor-pointer'}`}
-              >
-                <ArrowLeft size={18} />
-                {t('wizard.back')}
-              </button>
-
-              {step < 10 ? (
+              <div className="mt-10 pt-6 border-t border-slate-100 dark:border-slate-700 flex justify-between items-center">
                 <button
-                  onClick={() => handleNextClick(Math.min(10, step + 1))}
-                  className="flex items-center gap-2 px-6 py-3 bg-indigo-600 text-white rounded-xl font-medium hover:bg-indigo-700 transition-colors shadow-md shadow-indigo-600/10 dark:shadow-none cursor-pointer"
+                  type="button"
+                  onClick={() => handleNextClick(Math.max(1, step - 1))}
+                  disabled={step === 1}
+                  className={`flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-colors
+                    ${step === 1 ? 'text-slate-300 dark:text-slate-600 cursor-not-allowed' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-600 cursor-pointer'}`}
                 >
-                  {t('wizard.next')}
-                  <ArrowRight size={18} />
+                  <ArrowLeft size={18} />
+                  {t('wizard.back')}
                 </button>
-              ) : (
-                <div />
-              )}
-            </div>
 
-          </div>
+                {step < 10 ? (
+                  <button
+                    type="button"
+                    onClick={() => handleNextClick(Math.min(10, step + 1))}
+                    className="flex items-center gap-2 px-6 py-3 bg-indigo-600 text-white rounded-xl font-medium hover:bg-indigo-700 transition-colors shadow-md shadow-indigo-600/10 dark:shadow-none cursor-pointer"
+                  >
+                    {t('wizard.next')}
+                    <ArrowRight size={18} />
+                  </button>
+                ) : (
+                  <div />
+                )}
+              </div>
+
+            </div>
+          </form>
         </main>
       </div>
 

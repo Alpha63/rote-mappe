@@ -14,3 +14,84 @@ body {
     @apply bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-100;
   }
 }
+
+.wizard-step-container {
+  view-transition-name: wizard-step;
+}
+
+@keyframes wizard-slide-to-left {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(-30%);
+    opacity: 0;
+  }
+}
+
+@keyframes wizard-slide-from-right {
+  from {
+    transform: translateX(30%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes wizard-slide-to-right {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(30%);
+    opacity: 0;
+  }
+}
+
+@keyframes wizard-slide-from-left {
+  from {
+    transform: translateX(-30%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+::view-transition-group(wizard-step) {
+  animation-duration: 280ms;
+  animation-timing-function: cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+html:active-view-transition-type(forward)::view-transition-old(wizard-step),
+html[data-transition-direction="forward"]::view-transition-old(wizard-step) {
+  animation-name: wizard-slide-to-left;
+}
+
+html:active-view-transition-type(forward)::view-transition-new(wizard-step),
+html[data-transition-direction="forward"]::view-transition-new(wizard-step) {
+  animation-name: wizard-slide-from-right;
+}
+
+html:active-view-transition-type(backward)::view-transition-old(wizard-step),
+html[data-transition-direction="backward"]::view-transition-old(wizard-step) {
+  animation-name: wizard-slide-to-right;
+}
+
+html:active-view-transition-type(backward)::view-transition-new(wizard-step),
+html[data-transition-direction="backward"]::view-transition-new(wizard-step) {
+  animation-name: wizard-slide-from-left;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(wizard-step),
+  ::view-transition-old(wizard-step),
+  ::view-transition-new(wizard-step) {
+    animation: none !important;
+  }
+}

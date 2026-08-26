@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import { ShieldCheck, FileText, Download, Lock, Upload, Globe } from 'lucide-react';
+import { ShieldCheck, FileText, Download, Lock, Upload, Globe, KeyRound } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { ThemeToggle } from './ThemeToggle';
 import { version } from '../../package.json';
-import { KeyRound } from 'lucide-react';
 import JSZip from 'jszip';
+import { ToastContainer } from './Toast';
+import { useToast } from '../hooks/useToast';
 
 interface BeforeInstallPromptEvent extends Event {
   readonly platforms: string[];
@@ -21,6 +22,7 @@ interface WelcomeProps {
 
 export function Welcome({ onStart }: WelcomeProps) {
   const { t, i18n } = useTranslation();
+  const { toasts, addToast, dismissToast } = useToast();
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [pendingFile, setPendingFile] = useState<File | null>(null);
@@ -76,11 +78,11 @@ export function Welcome({ onStart }: WelcomeProps) {
           e.target.value = '';
           return;
         } else {
-          alert(t('welcome.backupError', { defaultValue: 'Kein Backup in der ZIP-Datei gefunden.' }));
+          addToast(t('welcome.backupError', { defaultValue: 'Kein Backup in der ZIP-Datei gefunden.' }));
         }
       } catch (err) {
         console.error(err);
-        alert(t('welcome.backupError', { defaultValue: 'Fehler beim Lesen der ZIP-Datei.' }));
+        addToast(t('welcome.backupError', { defaultValue: 'Fehler beim Lesen der ZIP-Datei.' }));
       }
       e.target.value = '';
       return;
@@ -114,7 +116,7 @@ export function Welcome({ onStart }: WelcomeProps) {
         onStart();
       } catch (err) {
         console.error(err);
-        alert(t('welcome.backupError'));
+        addToast(t('welcome.backupError', { defaultValue: 'Fehler beim Laden des Backups. Bitte prüfe das Passwort.' }));
       }
     };
     reader.readAsText(file);
@@ -133,7 +135,9 @@ export function Welcome({ onStart }: WelcomeProps) {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex flex-col items-center justify-center p-6 text-slate-800 dark:text-slate-200 relative">
+    <>
+      <ToastContainer toasts={toasts} onDismiss={dismissToast} />
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex flex-col items-center justify-center p-6 text-slate-800 dark:text-slate-200 relative">
       <div className="max-w-4xl w-full bg-white dark:bg-slate-800 rounded-3xl shadow-xl overflow-hidden flex flex-col md:flex-row border border-slate-200 dark:border-slate-700">
 
         {/* Left Side: Illustration / Mood */}
@@ -304,5 +308,6 @@ export function Welcome({ onStart }: WelcomeProps) {
         </div>
       )}
     </div>
+    </>
   );
 }

@@ -57,15 +57,16 @@ Um die Anwendung schnell und unverbindlich zu testen, liegt dem Projekt die Date
 ## ✨ Features
 
 - **🛡️ 100% Lokal & Zero-Knowledge-Architektur:** Alle sensiblen Daten werden **ausschließlich** lokal in Ihrem Browser verarbeitet. Es findet **keine** Kommunikation mit externen Servern statt. Ihre Daten bleiben immer bei Ihnen.
+- **♿ Barrierefreiheit (a11y):** Die Anwendung ist vollständig semantisch aufgebaut, unterstützt Screenreader (via WAI-ARIA), dynamische HTML-Spracherkennung und strebt nach WCAG-Konformität.
 - **🌍 Mehrsprachigkeit (i18n):** Die Anwendung ist vollständig auf Deutsch und Englisch verfügbar.
 - **📱 PWA & Offline-Fähigkeit:** Die App lässt sich direkt als Desktop- oder Mobile-App installieren und funktioniert ohne aktive Internetverbindung.
+- **✨ Moderne & flüssige UX:** Nutzung der nativen View Transitions API für nahtlose Seitenwechsel im Wizard sowie unaufdringliche Toast-Notifications statt störender Browser-Alerts.
 - **🌗 Dark Mode:** Elegantes, augenschonendes Design, das sich an Ihre Systemeinstellungen anpasst oder manuell umgeschaltet werden kann.
 - **✏️ Rich-Text & Markdown:** Formatieren Sie Ihre Notizen und eigenen Kapitel ganz einfach mit dem integrierten Editor. Die Formatierungen (Fett, Kursiv) und Hyperlinks werden originalgetreu und klickbar in das PDF übernommen.
 - **📝 Intelligente & asynchrone PDF-Generierung:** Automatische Erstellung eines Inhaltsverzeichnisses, tabellarischer Übersichten und Einbettung hochgeladener Scans direkt in das PDF. Dies geschieht blockierungsfrei im Hintergrund (via Web Worker), sodass die App stets flüssig bleibt.
 - **🎨 Anpassbares Design:** Wählen Sie zwischen verschiedenen professionellen Layout-Vorlagen für Ihr fertiges PDF-Dokument (z.B. "Klassisch Rot", "Modern & Edel", "Standard Blau").
 - **💾 Lokales Backup & Restore:** Exportieren Sie Ihre eingegebenen Daten zusammen mit dem PDF als verschlüsseltes ZIP-Archiv. Die enthaltene `.json`-Backupdatei können Sie jederzeit wieder in die App laden, um Ihre Notfallakte in der Zukunft einfach zu aktualisieren.
 - **🔄 Session-Schutz:** Automatischer Schutz vor Datenverlust beim versehentlichen Neuladen der Seite durch Zwischenspeicherung im temporären `sessionStorage` des Browsers. Nach dem Schließen des Tabs sind alle Daten unwiderruflich gelöscht.
-- **📱 Modernes & Responsives UI:** Übersichtliche und kompakte Nutzeroberfläche, optimiert für Desktop- und Laptop-Bildschirme.
 
 ## 🔒 Datenschutz & Sicherheit
 
@@ -101,6 +102,7 @@ Dieses Projekt nutzt modernste Webtechnologien für maximale Performance und Sic
 - **TypeScript** – Für eine typsichere und robuste Codebasis
 - **Vite** – Extrem schnelles Build-Tool und Entwicklungsumgebung
 - **Tailwind CSS 4** – Utility-first CSS-Framework für das Design
+- **Vitest & React Testing Library** – Umfassende Test-Infrastruktur für hohe Code-Qualität
 - **pdf-lib** – Komplexe PDF-Generierung direkt im Browser
 - **@uiw/react-md-editor** – Leichtgewichtiger WYSIWYG-Editor für formatierbare Texte
 - **JSZip** – Lokale Erstellung von ZIP-Archiven für das Backup
@@ -147,6 +149,13 @@ Wenn Sie aktiv am Code arbeiten möchten oder die App ohne Docker lokal starten 
    npm run build
    ```
    Die optimierten, statischen Dateien befinden sich anschließend im `dist/`-Verzeichnis und können von jedem beliebigen Webserver (NGINX, Apache, etc.) ausgeliefert werden.
+
+4. **Tests ausführen:**
+   Die Anwendung verfügt über eine umfassende Test-Suite (Vitest & React Testing Library), die UI-Komponenten und Workflows absichert.
+   ```bash
+   npm run test
+   ```
+   *(Tipp: Um die Tests während der Entwicklung bei jeder Dateiänderung automatisch neu auszuführen, können Sie den Befehl `npx vitest` nutzen).*
 
 ## 🤝 Mitwirken (Contributing)
 

@@ -5,11 +5,14 @@ import { Select } from '../../Select';
 import { Info, ShieldCheck, Download, Loader2, CheckCircle, Lock } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { FormSchemaType } from '../../schema';
+import { ToastContainer } from '../Toast';
+import { useToast } from '../../hooks/useToast';
 
 export function Step10Abschluss() {
   const { t } = useTranslation();
   const { watch, getValues } = useFormContext<FormSchemaType>();
   const { downloadBackup, isDownloading } = useAppFormContext();
+  const { toasts, addToast, dismissToast } = useToast();
 
   const [pdfPreviewUrl, setPdfPreviewUrl] = useState<string | null>(null);
   const [pdfTemplate, setPdfTemplate] = useState('rot');
@@ -79,11 +82,14 @@ export function Step10Abschluss() {
     if (success) {
       setDownloadSuccess(true);
       setTimeout(() => setDownloadSuccess(false), 3000);
+    } else {
+      addToast(t('sidebar.backup.error', { defaultValue: 'Fehler bei der Erstellung der ZIP-Datei.' }));
     }
   };
 
   return (
     <div className="animate-in fade-in zoom-in-95 duration-500 flex-1 flex flex-col min-h-150">
+      <ToastContainer toasts={toasts} onDismiss={dismissToast} />
       <div className="mb-8 flex flex-col md:flex-row md:justify-between md:items-end gap-6">
         <div>
           <h2 className="text-3xl font-serif text-slate-900 dark:text-slate-100 mb-3">{t('wizardSteps.step10.title')}</h2>
