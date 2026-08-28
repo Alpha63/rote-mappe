@@ -302,9 +302,7 @@ export class PdfBuilder {
     }
   }
 
-  drawTable(headers: string[], rows: string[][]) {
-    this.currentY -= 15; // Add extra spacing before the table
-    this.checkPageBreak(25);
+  drawTable(headers: string[], rows: string[][], options?: { noWrapColumns?: number[] }) {
     const startX = 50;
     const tableMaxWidth = this.PAGE_WIDTH - 100;
     const colCount = headers.length;
@@ -315,8 +313,9 @@ export class PdfBuilder {
     const getWidths = (text: string, isBold: boolean) => {
       const f = isBold ? this.fontBold : this.fontRegular;
       if (!text) return { min: 0, max: 0 };
-      const words = text.split(/\s+/);
-      const min = Math.max(...words.map(w => f.widthOfTextAtSize(w, 10)));
+      // Split at spaces and after hyphens/slashes for proper min-width calculation
+      const parts = text.split(/\s+|(?<=[-\/])/).filter(p => p.length > 0);
+      const min = Math.max(...parts.map(w => f.widthOfTextAtSize(w, 10)));
       const max = f.widthOfTextAtSize(text, 10);
       return { min, max };
     };
@@ -335,6 +334,11 @@ export class PdfBuilder {
       if (headers[i] === 'Benutzername' || headers[i] === 'E-Mail') minWidths[i] = Math.max(minWidths[i], this.fontRegular.widthOfTextAtSize('herr.bauerfranz@googlemail.com', 10) + 10);
       if (headers[i] === 'Passwort/PIN') minWidths[i] = Math.max(minWidths[i], this.fontRegular.widthOfTextAtSize('123456789', 10) + 10);
       if (headers[i] === 'Link') minWidths[i] = Math.max(minWidths[i], this.fontRegular.widthOfTextAtSize('www.musterdomain.de', 10) + 10);
+
+      // No-wrap columns: ensure column is wide enough to display content without wrapping
+      if (options?.noWrapColumns?.includes(i)) {
+        minWidths[i] = Math.max(minWidths[i], maxWidths[i]);
+      }
     }
 
     const colWidths = new Array(colCount).fill(0);
@@ -361,21 +365,41 @@ export class PdfBuilder {
     }
 
     const tableWidth = tableMaxWidth;
-    
-    this.currentPage.drawRectangle({
-      x: startX,
-      y: this.currentY - 5,
-      width: tableWidth,
-      height: 20,
-      color: this.config.colors.tableHeaderBg,
-    });
 
-    let currentX = startX;
-    headers.forEach((h, i) => {
-      this.currentPage.drawText(h, { x: currentX + 5, y: this.currentY, size: 10, font: this.fontBold, color: this.config.colors.tableHeaderText });
-      currentX += colWidths[i];
+    // Pre-calculate header wrapping for height computation
+    const headerLines = headers.map((h, i) => {
+      const maxWidth = colWidths[i] - 10;
+      return splitTextToLines(h, maxWidth > 0 ? maxWidth : 10, this.fontBold, 10);
     });
-    this.currentY -= 15;
+    const maxHeaderLineCount = Math.max(1, ...headerLines.map(lines => lines.length));
+    const headerRowHeight = (maxHeaderLineCount - 1) * 12 + 20;
+
+    // Helper: draw the table header at the current position
+    const drawHeader = () => {
+      this.currentPage.drawRectangle({
+        x: startX,
+        y: this.currentY - (maxHeaderLineCount - 1) * 12 - 5,
+        width: tableWidth,
+        height: headerRowHeight,
+        color: this.config.colors.tableHeaderBg,
+      });
+
+      let hx = startX;
+      headerLines.forEach((lines, i) => {
+        lines.forEach((line, lineIndex) => {
+          this.currentPage.drawText(line, { x: hx + 5, y: this.currentY - (lineIndex * 12), size: 10, font: this.fontBold, color: this.config.colors.tableHeaderText });
+        });
+        hx += colWidths[i];
+      });
+      this.currentY -= (maxHeaderLineCount - 1) * 12 + 15;
+    };
+
+    // Check page break before spacing + header
+    this.checkPageBreak(15 + headerRowHeight + 5);
+    this.currentY -= 15; // Spacing before the table
+
+    // Draw the initial header
+    drawHeader();
 
     rows.forEach((row, rowIndex) => {
       const cellLines = row.map((cell, i) => {
@@ -386,7 +410,12 @@ export class PdfBuilder {
       const maxLines = Math.max(1, ...cellLines.map(lines => lines.length));
       const rowHeight = maxLines * 12 + 3;
 
-      this.checkPageBreak(rowHeight + 5);
+      // If the row doesn't fit, start a new page and re-draw the header
+      if (this.currentY - rowHeight < 60) {
+        this.currentPage = this.pdfDoc.addPage([this.PAGE_WIDTH, this.PAGE_HEIGHT]);
+        this.currentY = this.PAGE_HEIGHT - 80;
+        drawHeader();
+      }
       
       if (rowIndex % 2 === 1) {
         this.currentPage.drawRectangle({
@@ -398,7 +427,7 @@ export class PdfBuilder {
         });
       }
 
-      currentX = startX;
+      let currentX = startX;
       cellLines.forEach((lines, i) => {
         lines.forEach((line, lineIndex) => {
           this.currentPage.drawText(line, { 

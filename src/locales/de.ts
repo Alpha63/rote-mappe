@@ -179,7 +179,7 @@ export const de = {
           addRealEstate: "Immobilie hinzufügen",
           vehiclesTitle: "Fahrzeuge & Mobilität",
           vehiclesDesc: "Erfassung von Fahrzeugdaten, Leasingverträgen und Automobilclubs.",
-          vehicleType: "Fahrzeugart (z.B. Auto, Motorrad)",
+          vehicleType: "Fahrzeugart",
           licensePlate: "Kennzeichen",
           vehicleInsurance: "KFZ-Versicherung",
           financing: "Finanzierung / Leasing",

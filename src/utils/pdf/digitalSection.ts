@@ -15,6 +15,7 @@ export const addDigitalSection = (builder: PdfBuilder) => {
         if (rows.length > 0) {
           builder.drawTable(headers, rows.splice(0, rows.length));
         }
+        builder.checkPageBreak(40);
         builder.currentY -= 5; 
         builder.drawLineText(entry.title || '', true, 12, builder.config.colors.text);
         builder.currentY -= 5;

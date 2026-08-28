@@ -70,7 +70,7 @@ export const addFinanceSection = async (builder: PdfBuilder) => {
     builder.drawLineText(i18n.t('wizardSteps.step3.vehiclesTitle'), true, 12);
     const headers = [i18n.t('wizardSteps.step3.vehicleType'), i18n.t('wizardSteps.step3.licensePlate'), i18n.t('wizardSteps.step3.vehicleInsurance'), i18n.t('wizardSteps.step3.financing'), i18n.t('wizardSteps.step3.documentLocation')];
     const rows = builder.data.vehicles.filter(v => v.type || v.licensePlate).map(v => [v.type || '', v.licensePlate || '', v.insurance || '', v.financing || '', v.documentLocation || '']);
-    builder.drawTable(headers, rows);
+    builder.drawTable(headers, rows, { noWrapColumns: [1] });
   }
 
   if (builder.data.automotiveClubs) {

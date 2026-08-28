@@ -15,39 +15,57 @@ export const splitTextToLines = (text: string, maxWidth: number, font: PDFFont, 
   const paragraphs = text.split('\n');
   for (const paragraph of paragraphs) {
     let currentLine = '';
-    const words = paragraph.split(' ');
-    for (let w = 0; w < words.length; w++) {
-      const word = words[w];
-      let remainingWord = word;
-      
-      while (remainingWord.length > 0) {
-        const testLine = currentLine ? currentLine + ' ' + remainingWord : remainingWord;
+
+    // Split into wrappable segments at spaces, hyphens, and slashes
+    // Keeps the break character with the preceding segment:
+    // "KFZ-Versicherung" → ["KFZ-", "Versicherung"]
+    // "Fahrzeugbrief / Zweitschlüssel" → ["Fahrzeugbrief ", "/ ", "Zweitschlüssel"]
+    const segments: string[] = [];
+    let seg = '';
+    for (let i = 0; i < paragraph.length; i++) {
+      const ch = paragraph[i];
+      seg += ch;
+      if (ch === ' ' || ch === '-' || ch === '/') {
+        segments.push(seg);
+        seg = '';
+      }
+    }
+    if (seg) segments.push(seg);
+
+    for (const segment of segments) {
+      let remaining = segment;
+
+      while (remaining.length > 0) {
+        const testLine = currentLine + remaining;
         if (font.widthOfTextAtSize(testLine, size) <= maxWidth) {
-           currentLine = testLine;
-           remainingWord = '';
+          currentLine = testLine;
+          remaining = '';
         } else {
-           if (currentLine) {
-              lines.push(currentLine);
-              currentLine = '';
-           } else {
-              let brokenWord = '';
-              for (let i = 0; i < remainingWord.length; i++) {
-                 const charTest = brokenWord + remainingWord[i];
-                 if (font.widthOfTextAtSize(charTest, size) <= maxWidth) {
-                    brokenWord = charTest;
-                 } else {
-                    break;
-                 }
+          if (currentLine.trimEnd()) {
+            lines.push(currentLine.trimEnd());
+            currentLine = '';
+            remaining = remaining.trimStart();
+          } else {
+            // Single segment wider than maxWidth – break character by character
+            let brokenPart = '';
+            for (let i = 0; i < remaining.length; i++) {
+              const charTest = brokenPart + remaining[i];
+              if (font.widthOfTextAtSize(charTest, size) <= maxWidth) {
+                brokenPart = charTest;
+              } else {
+                break;
               }
-              if (!brokenWord) brokenWord = remainingWord[0];
-              lines.push(brokenWord);
-              remainingWord = remainingWord.substring(brokenWord.length);
-           }
+            }
+            if (!brokenPart) brokenPart = remaining[0];
+            lines.push(brokenPart);
+            remaining = remaining.substring(brokenPart.length);
+            currentLine = '';
+          }
         }
       }
     }
-    if (currentLine) {
-      lines.push(currentLine);
+    if (currentLine.trimEnd()) {
+      lines.push(currentLine.trimEnd());
     }
   }
   return lines;

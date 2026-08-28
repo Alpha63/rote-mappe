@@ -179,7 +179,7 @@ export const en = {
           addRealEstate: "Add Real Estate",
           vehiclesTitle: "Vehicles & Mobility",
           vehiclesDesc: "Record vehicle data, leasing contracts and automotive clubs.",
-          vehicleType: "Vehicle Type (e.g. Car, Motorcycle)",
+          vehicleType: "Vehicle Type",
           licensePlate: "License Plate",
           vehicleInsurance: "Vehicle Insurance",
           financing: "Financing / Leasing",
