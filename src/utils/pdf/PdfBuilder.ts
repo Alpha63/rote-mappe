@@ -314,7 +314,7 @@ export class PdfBuilder {
       const f = isBold ? this.fontBold : this.fontRegular;
       if (!text) return { min: 0, max: 0 };
       // Split at spaces and after hyphens/slashes for proper min-width calculation
-      const parts = text.split(/\s+|(?<=[-\/])/).filter(p => p.length > 0);
+      const parts = text.split(/\s+|(?<=[-/])/).filter(p => p.length > 0);
       const min = Math.max(...parts.map(w => f.widthOfTextAtSize(w, 10)));
       const max = f.widthOfTextAtSize(text, 10);
       return { min, max };

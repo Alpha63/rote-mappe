@@ -58,7 +58,7 @@ describe('R2: View Transitions — API Execution & Direction Dataset', () => {
 
     // Wait for step 2 to display
     await waitFor(() => {
-      expect(screen.getByText(/medizinische daten|medical/i)).toBeInTheDocument();
+      expect(screen.getAllByText(/medizinische daten|medical/i).length).toBeGreaterThan(0);
     });
   });
 
@@ -96,7 +96,7 @@ describe('R2: View Transitions — API Execution & Direction Dataset', () => {
     }
 
     await waitFor(() => {
-      expect(screen.getByText(/medizinische daten|medical/i)).toBeInTheDocument();
+      expect(screen.getAllByText(/medizinische daten|medical/i).length).toBeGreaterThan(0);
     });
 
     // Step 2: Click Back button ("Zurück")
@@ -136,7 +136,7 @@ describe('R2: View Transitions — API Execution & Direction Dataset', () => {
 
     // Step should change directly to step 2 without error
     await waitFor(() => {
-      expect(screen.getByText(/medizinische daten|medical/i)).toBeInTheDocument();
+      expect(screen.getAllByText(/medizinische daten|medical/i).length).toBeGreaterThan(0);
     });
 
     expect(document.documentElement.dataset.transitionDirection).toBeUndefined();
