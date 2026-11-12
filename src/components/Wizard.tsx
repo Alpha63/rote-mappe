@@ -15,6 +15,7 @@ const Step9EigeneKapitel = lazy(() => import('./steps/Step9EigeneKapitel').then(
 const Step10Abschluss = lazy(() => import('./steps/Step10Abschluss').then(m => ({ default: m.Step10Abschluss })));
 import { ThemeToggle } from './ThemeToggle';
 import { useDialogFocusTrap } from '../hooks/useDialogFocusTrap';
+import { fieldsForStep } from './wizardFields';
 
 export function Wizard() {
   return (
@@ -50,51 +51,9 @@ function WizardContent() {
     };
   }, [showWarningModal]);
 
-  const getFieldsForStep = (stepNumber: number): string[] => {
-    switch (stepNumber) {
-      case 1:
-        return [
-          'salutation', 'firstName', 'middleName', 'lastName',
-          'street', 'houseNumber', 'zipCode', 'city',
-          'maritalStatus', 'marriageDate', 'divorceDate',
-          'childrenCount', 'children',
-          'birthDate', 'birthPlace', 'birthCountry',
-          'taxId', 'socialSecurityNumber',
-          'employment', 'contacts', 'doNotNotifyContacts',
-          'documentTitle'
-        ];
-      case 2:
-        return ['medicalData', 'medicalNotes', 'organDonorDocument'];
-      case 3:
-        return ['bankAccounts', 'financeNotes', 'otherAssets', 'realEstates', 'vehicles', 'automotiveClubs'];
-      case 4:
-        return ['contracts', 'subscriptions', 'serviceProviders', 'meterNumbers', 'contractNotes'];
-      case 5:
-        return ['digitalIdentities', 'devicePINs', 'digitalLegacySocialMedia', 'digitalLegacyCloud'];
-      case 6:
-        return [
-          'idCard', 'passport', 'driversLicense', 'birthCertificate',
-          'marriageCertificate', 'divorceCertificate', 'certificates',
-          'otherDocuments', 'documentNotes'
-        ];
-      case 7:
-        return [
-          'testamentLocation', 'testamentDocument', 'patientenverfuegung',
-          'vorsorgevollmacht', 'betreuungsverfuegung', 'bestattungsverfuegung',
-          'customPowersOfAttorney', 'poaNotes'
-        ];
-      case 8:
-        return ['keys', 'pets', 'generalNotes'];
-      case 9:
-        return ['customChapters'];
-      default:
-        return [];
-    }
-  };
-
   const handleNextClick = async (targetStep: number) => {
     if (targetStep > step) {
-      const fieldsToValidate = getFieldsForStep(step);
+      const fieldsToValidate = fieldsForStep[step] ?? [];
       let isValid = true;
       if (fieldsToValidate.length > 0) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
