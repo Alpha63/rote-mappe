@@ -8,6 +8,10 @@ All notable changes to this project will be documented in this file.
 - **Wizard UX:** Die störenden animierten View Transitions beim Schrittwechsel
   wurden vollständig entfernt. Vor- und Zurück-Navigation wechseln die Schritte
   wieder direkt und ohne Übergang.
+- **Formularvalidierung:** Verschachtelte React-Hook-Form-Fehler werden jetzt
+  als stabile Feldpfade an die UI weitergegeben.
+- **Dialoge:** Warnungs- und Backup-Dialoge halten den Tastaturfokus innerhalb
+  des geöffneten Dialogs und stellen ihn beim Schließen wieder her.
 - **Backup und Stabilität:** ZIP-Roundtrip-Tests, Importgrenzen, Dialog-
   Accessibility, PDF-Worker-Timeouts und kompatible Dependency-Updates wurden
   ergänzt bzw. verifiziert.
