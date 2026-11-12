@@ -20,4 +20,10 @@ jobs:
       - run: npm run lint
       - run: npm test -- --run
       - run: npm run build
+      - run: docker compose up --build -d
+      - run: sleep 3 && HEADER_CHECK_URL=http://127.0.0.1:8080/ npm run check:headers
+      - if: always()
+        run: docker compose down
+      - run: npm run check:performance
+      - run: npm run check:links
       - run: npm audit --omit=optional --audit-level=high

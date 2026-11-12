@@ -1,7 +1,9 @@
 export const de = {
     translation: {
       common: {
-        select: "Wählen..."
+        select: "Wählen...",
+        cancel: "Abbrechen",
+        close: "Schließen"
       },
       sidebar: {
         title: "Notfallakte",
@@ -25,6 +27,17 @@ export const de = {
         footer: {
           localProcessing: "Alle Daten werden ausschließlich lokal auf Ihrem Gerät verarbeitet.",
           github: "Projekt auf GitHub ansehen"
+        },
+        saveState: {
+          saving: "Änderungen werden lokal gespeichert...",
+          saved: "Änderungen lokal gespeichert.",
+          error: "Lokales Speichern fehlgeschlagen.",
+          quota: "Der lokale Speicher ist voll.",
+          clear: "Die lokale Sitzung konnte nicht gelöscht werden."
+        },
+        reset: {
+          button: "Lokale Sitzung zurücksetzen",
+          confirm: "Möchtest du alle Eingaben dieser Sitzung unwiderruflich löschen?"
         }
       },
       welcome: {
@@ -39,7 +52,9 @@ export const de = {
         loadBackup: "Bestehendes Backup laden",
         installApp: "Als lokale App installieren",
         note: "Hinweis: Dies ist eine Vorlage zur Orientierung und ersetzt keine anwaltliche Beratung.",
-        backupError: "Fehler beim Lesen der Backup-Datei. Stellen Sie sicher, dass es sich um eine gültige Notfallakte-JSON handelt."
+        backupError: "Fehler beim Lesen der Backup-Datei. Stellen Sie sicher, dass es sich um eine gültige Notfallakte-JSON handelt.",
+        unsupportedBackup: "Diese Backup-Version wird von dieser App nicht unterstützt.",
+        storageError: "Das Backup ist gültig, konnte aber nicht lokal gespeichert werden."
       },
       step10: {
         previewError: "Die PDF-Vorschau konnte nicht erstellt werden."
@@ -51,6 +66,7 @@ export const de = {
         warningDesc: "Einige Felder auf dieser Seite enthalten fehlerhafte oder unvollständige Eingaben (z.B. ungültige IBAN oder falsches Format). Möchten Sie Ihre Eingaben überprüfen oder trotzdem fortfahren?",
         checkInputs: "Eingaben überprüfen",
         continueAnyway: "Trotzdem weiter",
+        errorSummaryTitle: "{{count}} Eingaben müssen geprüft werden",
         loading: "Schritt wird geladen..."
       },
       docUpload: {

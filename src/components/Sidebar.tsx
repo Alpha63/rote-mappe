@@ -14,8 +14,9 @@ interface SidebarProps {
 }
 
 export function Sidebar({ currentStep, setStep, isOpen, onClose }: SidebarProps) {
-  const { downloadBackup, isDownloading } = useFormContext();
+  const { downloadBackup, isDownloading, saveState, saveError, resetForm } = useFormContext();
   const [downloadSuccess, setDownloadSuccess] = useState(false);
+  const [downloadError, setDownloadError] = useState(false);
   const { t, i18n } = useTranslation();
 
   const [showBackupModal, setShowBackupModal] = useState(false);
@@ -28,6 +29,7 @@ export function Sidebar({ currentStep, setStep, isOpen, onClose }: SidebarProps)
   const handleBackupClick = () => {
     if (isDownloading) return;
     setDownloadSuccess(false);
+    setDownloadError(false);
     setPwd1('');
     setPwd2('');
     setError('');
@@ -67,8 +69,16 @@ export function Sidebar({ currentStep, setStep, isOpen, onClose }: SidebarProps)
     if (success) {
       setDownloadSuccess(true);
       setTimeout(() => setDownloadSuccess(false), 3000);
+    } else {
+      setDownloadError(true);
     }
     onClose();
+  };
+
+  const handleReset = async () => {
+    if (window.confirm(t('sidebar.reset.confirm'))) {
+      await resetForm();
+    }
   };
 
   const steps = [
@@ -119,6 +129,11 @@ export function Sidebar({ currentStep, setStep, isOpen, onClose }: SidebarProps)
             >
               <X size={24} />
             </button>
+            {downloadError && (
+              <p role="alert" className="text-center text-red-600 dark:text-red-400">
+                {t('sidebar.backup.error', { defaultValue: 'Fehler bei der Erstellung der ZIP-Datei.' })}
+              </p>
+            )}
           </div>
         </div>
         
@@ -174,6 +189,21 @@ export function Sidebar({ currentStep, setStep, isOpen, onClose }: SidebarProps)
         </div>
         
         <div className="mt-6 pt-4 border-t border-slate-300/50 dark:border-slate-700/50 text-xs text-slate-600 dark:text-slate-400 leading-relaxed flex flex-col gap-3">
+          <div
+            className={`text-center ${saveState === 'error' ? 'text-red-600 dark:text-red-400' : 'text-slate-500 dark:text-slate-400'}`}
+            role={saveState === 'error' ? 'alert' : 'status'}
+            aria-live="polite"
+          >
+            {saveState === 'saving' && t('sidebar.saveState.saving')}
+            {saveState === 'saved' && t('sidebar.saveState.saved')}
+            {saveState === 'error' && (
+              saveError === 'quota'
+                ? t('sidebar.saveState.quota')
+                : saveError === 'clear'
+                  ? t('sidebar.saveState.clear')
+                  : t('sidebar.saveState.error')
+            )}
+          </div>
           <button
             type="button"
             onClick={handleBackupClick}
@@ -187,6 +217,13 @@ export function Sidebar({ currentStep, setStep, isOpen, onClose }: SidebarProps)
             ) : (
               <><Download size={16} /> {t('sidebar.buttons.saveBackup')}</>
             )}
+          </button>
+          <button
+            type="button"
+            onClick={handleReset}
+            className="w-full px-4 py-2 text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-xl transition-colors font-medium text-sm cursor-pointer"
+          >
+            {t('sidebar.reset.button')}
           </button>
           
           <div className="flex items-center justify-center gap-2 mt-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-1.5 px-3 rounded-lg mx-auto w-fit">

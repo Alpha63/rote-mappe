@@ -2,6 +2,7 @@ import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 import { generatePDFAsync } from './pdfWorkerWrapper';
 import { FormData, ScannedDocument } from '../types';
+import { serializeBackup } from './backupFormat';
 
 const addFileToZip = (zip: JSZip, folderName: string, doc: ScannedDocument | undefined | null) => {
   if (doc && doc.documentAction === 'upload' && doc.fileData) {
@@ -61,7 +62,7 @@ export const generateZipBlob = async (data: FormData, templateName: string = 'de
   });
 
   // 3. JSON-Backup-Datei für den späteren Import hinzufügen
-  const backupJson = JSON.stringify(data, null, 2);
+  const backupJson = serializeBackup(data);
   
   if (password) {
     const { encryptBackup } = await import('./crypto');

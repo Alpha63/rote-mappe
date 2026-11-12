@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { formSchema, FormSchemaType } from './schema';
 import { initialFormData } from './types';
 import { migrateData } from './utils/migrateData';
+import { clearLocalFormState, loadLocalFormState, saveLocalFormState } from './utils/localStorage';
 
 interface FormContextType {
   formData: FormSchemaType & { middleName: string };
@@ -13,6 +14,9 @@ interface FormContextType {
   setErrors: React.Dispatch<React.SetStateAction<Record<string, string>>>;
   downloadBackup: (template?: string, includePlaceholders?: boolean, includeWarnings?: boolean, password?: string) => Promise<boolean>;
   isDownloading: boolean;
+  saveState: 'idle' | 'saving' | 'saved' | 'error';
+  saveError: 'quota' | 'unavailable' | 'clear' | null;
+  resetForm: () => Promise<void>;
   methods: UseFormReturn<FormSchemaType>;
 }
 
@@ -33,14 +37,23 @@ function collectFormErrors(value: unknown, path = '', result: Record<string, str
 }
 
 function getInitialValues(): FormSchemaType {
-  const saved = sessionStorage.getItem('notfallakte_data');
+  let saved: string | null = null;
+  try {
+    saved = sessionStorage.getItem('notfallakte_data');
+  } catch {
+    return initialFormData as unknown as FormSchemaType;
+  }
   if (saved) {
     try {
       const parsed = JSON.parse(saved);
       const result = formSchema.safeParse(migrateData(parsed));
       if (result.success) return result.data;
     } catch {
-      sessionStorage.removeItem('notfallakte_data');
+      try {
+        sessionStorage.removeItem('notfallakte_data');
+      } catch {
+        // Storage access can be blocked by browser privacy settings.
+      }
     }
   }
   return initialFormData as unknown as FormSchemaType;
@@ -57,19 +70,62 @@ export function FormProvider({ children }: { children: React.ReactNode }) {
 
   const rhfErrors = methods.formState.errors;
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [saveState, setSaveState] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
+  const [saveError, setSaveError] = useState<'quota' | 'unavailable' | 'clear' | null>(null);
+  const [storageReady, setStorageReady] = useState(false);
 
   useEffect(() => {
     setErrors(collectFormErrors(rhfErrors));
   }, [rhfErrors]);
 
+  useEffect(() => {
+    let active = true;
+    loadLocalFormState().then((saved) => {
+      if (!active) return;
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          const result = formSchema.safeParse(migrateData(parsed));
+          if (result.success) methods.reset(result.data);
+        } catch {
+          // A malformed IndexedDB entry is ignored; the session fallback remains usable.
+        }
+      }
+      setStorageReady(true);
+    });
+    return () => {
+      active = false;
+    };
+  }, [methods]);
+
   const [isDownloading, setIsDownloading] = useState(false);
 
   useEffect(() => {
+    if (!storageReady) return;
+    setSaveState('saving');
     const handler = setTimeout(() => {
-      sessionStorage.setItem('notfallakte_data', JSON.stringify(formData));
+      const serialized = JSON.stringify(formData);
+      try {
+        sessionStorage.setItem('notfallakte_data', serialized);
+      } catch (error) {
+        setSaveState('error');
+        setSaveError(error instanceof DOMException && error.name === 'QuotaExceededError'
+          ? 'quota'
+          : 'unavailable');
+        return;
+      }
+      saveLocalFormState(serialized)
+        .then(() => {
+          setSaveError(null);
+          setSaveState('saved');
+        })
+        .catch(() => {
+          setSaveState('error');
+          setSaveError('unavailable');
+        });
     }, 500);
     return () => clearTimeout(handler);
-  }, [formData]);
+  }, [formData, storageReady]);
 
   const updateField = <K extends Path<FormSchemaType>>(field: K, value: PathValue<FormSchemaType, K>) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -102,9 +158,22 @@ export function FormProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const resetForm = async () => {
+    methods.reset(initialFormData as FormSchemaType);
+    try {
+      sessionStorage.removeItem('notfallakte_data');
+      await clearLocalFormState();
+      setSaveError(null);
+      setSaveState('idle');
+    } catch {
+      setSaveState('error');
+      setSaveError('clear');
+    }
+  };
+
   return (
     <RHFProvider {...methods}>
-      <FormContext.Provider value={{ 
+      <FormContext.Provider value={{
         formData, 
         setFormData: setFormDataWrapper, 
         updateField, 
@@ -112,6 +181,9 @@ export function FormProvider({ children }: { children: React.ReactNode }) {
         setErrors, 
         downloadBackup, 
         isDownloading,
+        saveState,
+        saveError,
+        resetForm,
         methods 
       }}>
         {children}

@@ -60,7 +60,7 @@ Um die Anwendung schnell und unverbindlich zu testen, liegt dem Projekt die Date
 - **♿ Barrierefreiheit (a11y):** Die Anwendung ist vollständig semantisch aufgebaut, unterstützt Screenreader (via WAI-ARIA), dynamische HTML-Spracherkennung und strebt nach WCAG-Konformität.
 - **🌍 Mehrsprachigkeit (i18n):** Die Anwendung ist vollständig auf Deutsch und Englisch verfügbar.
 - **📱 PWA & Offline-Fähigkeit:** Die App lässt sich direkt als Desktop- oder Mobile-App installieren und funktioniert ohne aktive Internetverbindung.
-- **✨ Moderne & flüssige UX:** Nutzung der nativen View Transitions API für nahtlose Seitenwechsel im Wizard sowie unaufdringliche Toast-Notifications statt störender Browser-Alerts.
+- **✨ Moderne & flüssige UX:** Direkte, zuverlässige Schritt-Navigation im Wizard sowie unaufdringliche Toast-Notifications statt störender Browser-Alerts.
 - **🌗 Dark Mode:** Elegantes, augenschonendes Design, das sich an Ihre Systemeinstellungen anpasst oder manuell umgeschaltet werden kann.
 - **✏️ Rich-Text & Markdown:** Formatieren Sie Ihre Notizen und eigenen Kapitel ganz einfach mit dem integrierten Editor. Die Formatierungen (Fett, Kursiv) und Hyperlinks werden originalgetreu und klickbar in das PDF übernommen.
 - **📝 Intelligente & asynchrone PDF-Generierung:** Automatische Erstellung eines Inhaltsverzeichnisses, tabellarischer Übersichten und Einbettung hochgeladener Scans direkt in das PDF. Dies geschieht blockierungsfrei im Hintergrund (via Web Worker), sodass die App stets flüssig bleibt.
@@ -75,6 +75,10 @@ Der Schutz Ihrer hochsensiblen Daten steht bei diesem Projekt an oberster Stelle
 - **Kein Backend, Keine Datenbank:** Die Anwendung besitzt keine Server-Komponente, die Daten speichert. Sie läuft komplett als statische Webanwendung in Ihrem Browser.
 - **DSGVO-konform by Design:** Da keine personenbezogenen Daten den Client verlassen, ist die Anwendung inhärent datenschutzkonform.
 - **Keine Tracking-Skripte:** Es werden keine externen Analyse-Tools, Tracker oder externe Schriftarten geladen.
+- **Regelmäßige Aktualisierung:** Ein exportiertes Backup und der PDF-Ausdruck
+  sollten regelmäßig aktualisiert und an einem sicheren, bekannten Ort
+  hinterlegt werden. Die App ersetzt keine medizinische, rechtliche oder
+  notarielle Beratung.
 
 ## 🔗 Verwendete Links & Vorlagen
 
@@ -89,7 +93,7 @@ Folgende Quellen & Links werden in der App empfohlen:
   - *Link:* [Interaktive Patientenverfügung Online](https://www.verbraucherzentrale.de/patientenverfuegung-online)
   - *Warum?* Die Verbraucherzentrale stellt online eine interaktive Vorlage zur **Patientenverfügung** bereit. Diese erstellt durch gezielte Fragen eine auf die persönliche Situation zugeschnittene, medizinisch und rechtlich präzise Verfügung, die Ärzten im Ernstfall klare Handlungsanweisungen gibt.
 - **Friedhofsverband Sauerland:**
-  - *Link:* [Muster Bestattungsverfügung](https://www.friedhofsverband-sauerland.de/info-center/)
+  - *Link:* [Muster Bestattungsverfügung](https://www.friedhofsverband-sauerland.de/info-center.html)
   - *Warum?* Bietet eine hilfreiche, kostenlose und bewährte Vorlage für die **Bestattungsverfügung** an, mit der letzte Wünsche für den Todesfall klar geregelt werden können.
 
 *Hinweis: Alle verlinkten Vorlagen sind Angebote von Dritten. Die Rote Mappe ist unabhängig und verlinkt diese Ressourcen lediglich als kostenlose Hilfestellung für den Nutzer, ohne eine Gewähr für deren rechtliche Bindung zu übernehmen.*
@@ -123,7 +127,7 @@ Die Anwendung ist für den Betrieb mit Docker optimiert.
 
 2. **Container starten:**
    ```bash
-   docker-compose up -d
+   docker compose up -d
    ```
 
 3. **Anwendung öffnen:**  
@@ -142,7 +146,8 @@ Wenn Sie aktiv am Code arbeiten möchten oder die App ohne Docker lokal starten 
    ```bash
    npm run dev
    ```
-   Die App ist unter `http://localhost:5173` erreichbar.
+   Die App ist unter `http://localhost:5173` erreichbar. Der Produktions-
+   container läuft standardmäßig unter `http://localhost:8080`.
 
 3. **Produktions-Build erstellen:**
    ```bash
@@ -156,6 +161,20 @@ Wenn Sie aktiv am Code arbeiten möchten oder die App ohne Docker lokal starten 
    npm run test
    ```
    *(Tipp: Um die Tests während der Entwicklung bei jeder Dateiänderung automatisch neu auszuführen, können Sie den Befehl `npx vitest` nutzen).*
+
+### Backup, Speicherung und Datenschutz
+
+Die Anwendung speichert den aktuellen Bearbeitungsstand ausschließlich
+vorübergehend im `sessionStorage` des Browsers. Beim Schließen des Tabs wird
+dieser Sitzungsstand normalerweise entfernt; über **Lokale Sitzung
+zurücksetzen** können die Daten jederzeit bewusst gelöscht werden. Große
+Dateien und PDF-Exporte können je nach Browser-Speichergrenze fehlschlagen.
+
+Backups enthalten eine versionierte JSON-Struktur. Verschlüsselte Backups
+verwenden AES-GCM mit einem aus dem Passwort abgeleiteten Schlüssel. Das
+Passwort wird nicht gespeichert und kann bei Verlust nicht wiederhergestellt
+werden. Ein exportiertes Backup und der PDF-Ausdruck sollten regelmäßig
+aktualisiert und an einem sicheren, bekannten Ort hinterlegt werden.
 
 ## 🤝 Mitwirken (Contributing)
 

@@ -1,4 +1,5 @@
-import { useState, useEffect, Suspense, lazy } from 'react';
+import { useState, useEffect, Suspense, lazy, useRef } from 'react';
+import { Path } from 'react-hook-form';
 import { Sidebar } from './Sidebar';
 import { ArrowRight, ArrowLeft, AlertTriangle, Menu, ShieldCheck, Loader2 } from 'lucide-react';
 import { FormProvider, useFormContext } from '../FormContext';
@@ -16,6 +17,7 @@ const Step10Abschluss = lazy(() => import('./steps/Step10Abschluss').then(m => (
 import { ThemeToggle } from './ThemeToggle';
 import { useDialogFocusTrap } from '../hooks/useDialogFocusTrap';
 import { fieldsForStep } from './wizardFields';
+import { FormSchemaType } from '../schema';
 
 function WizardLoading() {
   const { t } = useTranslation();
@@ -44,15 +46,27 @@ export function Wizard() {
 function WizardContent() {
   const { t } = useTranslation();
   const [step, setStep] = useState(1);
-  const { methods } = useFormContext();
+  const { methods, errors } = useFormContext();
   const [showWarningModal, setShowWarningModal] = useState(false);
   const [nextStepTarget, setNextStepTarget] = useState(1);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const warningDialogRef = useDialogFocusTrap(showWarningModal);
+  const errorSummaryRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [step]);
+
+  const stepErrors = Object.entries(errors).filter(([path]) => {
+    const fields = fieldsForStep[step] ?? [];
+    return fields.some(field => path === field || path.startsWith(`${field}.`));
+  });
+
+  useEffect(() => {
+    if (stepErrors.length > 0) {
+      errorSummaryRef.current?.focus();
+    }
+  }, [step, stepErrors.length]);
 
   useEffect(() => {
     if (!showWarningModal) return;
@@ -145,6 +159,32 @@ function WizardContent() {
             <div className="bg-white dark:bg-slate-800 rounded-3xl p-5 md:p-8 shadow-sm border border-slate-200 dark:border-slate-700 min-h-[calc(100vh-8rem)] flex flex-col">
 
               <div className="flex-1">
+                {stepErrors.length > 0 && (
+                  <div
+                    ref={errorSummaryRef}
+                    tabIndex={-1}
+                    role="alert"
+                    aria-labelledby="wizard-error-summary-title"
+                    className="mb-6 rounded-xl border border-red-200 bg-red-50 p-4 text-red-900 dark:border-red-900/60 dark:bg-red-950/30 dark:text-red-100"
+                  >
+                    <h2 id="wizard-error-summary-title" className="font-semibold">
+                      {t('wizard.errorSummaryTitle', { count: stepErrors.length })}
+                    </h2>
+                    <ul className="mt-2 list-disc pl-5 text-sm">
+                      {stepErrors.map(([path, message]) => (
+                        <li key={path}>
+                          <button
+                            type="button"
+                            className="underline underline-offset-2 cursor-pointer"
+                            onClick={() => methods.setFocus(path as Path<FormSchemaType>)}
+                          >
+                            {message}
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
                 <Suspense fallback={<WizardLoading />}>
                   {renderStep()}
                 </Suspense>

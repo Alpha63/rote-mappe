@@ -1,7 +1,9 @@
 export const en = {
     translation: {
       common: {
-        select: "Select..."
+        select: "Select...",
+        cancel: "Cancel",
+        close: "Close"
       },
       sidebar: {
         title: "Emergency Dossier",
@@ -25,6 +27,17 @@ export const en = {
         footer: {
           localProcessing: "All data is processed exclusively locally on your device.",
           github: "View project on GitHub"
+        },
+        saveState: {
+          saving: "Saving changes locally...",
+          saved: "Changes saved locally.",
+          error: "Local saving failed.",
+          quota: "Local storage is full.",
+          clear: "The local session could not be deleted."
+        },
+        reset: {
+          button: "Reset local session",
+          confirm: "Do you want to permanently delete all inputs from this session?"
         }
       },
       welcome: {
@@ -39,7 +52,9 @@ export const en = {
         loadBackup: "Load existing backup",
         installApp: "Install as local app",
         note: "Note: This is a template for orientation and does not replace legal advice.",
-        backupError: "Error reading the backup file. Please ensure it is a valid Emergency Dossier JSON."
+        backupError: "Error reading the backup file. Please ensure it is a valid Emergency Dossier JSON.",
+        unsupportedBackup: "This backup version is not supported by this app.",
+        storageError: "The backup is valid but could not be saved locally."
       },
       step10: {
         previewError: "The PDF preview could not be generated."
@@ -51,6 +66,7 @@ export const en = {
         warningDesc: "Some fields on this page contain incorrect or incomplete inputs (e.g. invalid IBAN or wrong format). Would you like to review your inputs or continue anyway?",
         checkInputs: "Review inputs",
         continueAnyway: "Continue anyway",
+        errorSummaryTitle: "{{count}} inputs need review",
         loading: "Loading step..."
       },
       docUpload: {

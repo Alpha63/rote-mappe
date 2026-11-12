@@ -81,7 +81,7 @@ export function Step7Vollmachten() {
             <div className="text-sm">
               <strong className="font-semibold block mb-1 text-indigo-800 dark:text-indigo-300">{t('wizardSteps.step7.willHintTitle')}</strong>
               {t('wizardSteps.step7.willHintDesc')}<br/>
-              {t('wizardSteps.step7.willHintLinkDesc')} <a href="https://www.muster-generator.de/testament" target="_blank" rel="noopener noreferrer" className="text-indigo-600 dark:text-indigo-400 underline hover:text-indigo-800 dark:hover:text-indigo-200">www.muster-generator.de/testament</a>
+              {t('wizardSteps.step7.willHintLinkDesc')} <a href="https://shop.verbraucherzentrale.de/formulare-testament" target="_blank" rel="noopener noreferrer" className="text-indigo-600 dark:text-indigo-400 underline hover:text-indigo-800 dark:hover:text-indigo-200">shop.verbraucherzentrale.de/formulare-testament</a>
             </div>
           </div>
           <Input
@@ -106,7 +106,7 @@ export function Step7Vollmachten() {
             <div className="text-sm">
               <strong className="font-semibold block mb-1 text-indigo-800 dark:text-indigo-300">{t('wizardSteps.step7.poaDownloadHintTitle')}</strong>
               {t('wizardSteps.step7.poaDownloadHintDesc')}<br/>
-              <a href="https://www.bmjv.de/DE/service/formulare/form_vorsorgevollmacht/form_vorsorgevollmacht_artikel.html?nn=17628" target="_blank" rel="noopener noreferrer" className="text-indigo-600 dark:text-indigo-400 underline hover:text-indigo-800 dark:hover:text-indigo-200 break-all">https://www.bmjv.de/DE/service/formulare/form_vorsorgevollmacht/form_vorsorgevollmacht_artikel.html?nn=17628</a>
+              <a href="https://www.bmj.de/DE/service/formulare/form_vorsorgevollmacht/form_vorsorgevollmacht_node.html" target="_blank" rel="noopener noreferrer" className="text-indigo-600 dark:text-indigo-400 underline hover:text-indigo-800 dark:hover:text-indigo-200 break-all">https://www.bmj.de/DE/service/formulare/form_vorsorgevollmacht/</a>
             </div>
           </div>
           <div className="bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-200 dark:border-indigo-900/50 rounded-xl p-4 mb-4 flex items-start gap-3 text-indigo-900 dark:text-indigo-200">

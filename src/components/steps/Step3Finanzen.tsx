@@ -51,7 +51,7 @@ export function Step3Finanzen() {
           <div className="text-sm text-red-700 dark:text-red-400">
             <strong className="font-semibold block mb-1">{t('wizardSteps.step3.poaHintTitle')}</strong>
             {t('wizardSteps.step3.poaHintDesc')}<br/>
-            <a href="https://www.bmjv.de/DE/service/formulare/form_vorsorgevollmacht/form_vorsorgevollmacht_artikel.html?nn=17628" target="_blank" rel="noopener noreferrer" className="underline hover:text-red-900 dark:hover:text-red-100 break-all">https://www.bmjv.de/DE/service/formulare/form_vorsorgevollmacht/form_vorsorgevollmacht_artikel.html?nn=17628</a>
+            <a href="https://www.bmj.de/DE/service/formulare/form_vorsorgevollmacht/form_vorsorgevollmacht_node.html" target="_blank" rel="noopener noreferrer" className="underline hover:text-red-900 dark:hover:text-red-100 break-all">https://www.bmj.de/DE/service/formulare/form_vorsorgevollmacht/</a>
           </div>
         </div>
       </div>

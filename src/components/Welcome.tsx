@@ -8,6 +8,7 @@ import { ToastContainer } from './Toast';
 import { useToast } from '../hooks/useToast';
 import { formSchema } from '../schema';
 import { migrateData } from '../utils/migrateData';
+import { BackupFormatError } from '../utils/backupFormat';
 import { useDialogFocusTrap } from '../hooks/useDialogFocusTrap';
 
 interface BeforeInstallPromptEvent extends Event {
@@ -153,10 +154,18 @@ export function Welcome({ onStart }: WelcomeProps) {
         if (!result.success) {
           throw new Error('Das Backup enthält keine gültigen Formulardaten.');
         }
-        sessionStorage.setItem('notfallakte_data', JSON.stringify(result.data));
+        try {
+          sessionStorage.setItem('notfallakte_data', JSON.stringify(result.data));
+        } catch {
+          addToast(t('welcome.storageError', { defaultValue: 'Das Backup ist gültig, konnte aber nicht lokal gespeichert werden.' }));
+          return;
+        }
         onStart();
-      } catch {
-        addToast(t('welcome.backupError', { defaultValue: 'Fehler beim Laden des Backups. Bitte prüfe das Passwort.' }));
+      } catch (error) {
+        const message = error instanceof BackupFormatError && error.code === 'unsupported'
+          ? t('welcome.unsupportedBackup', { defaultValue: 'Diese Backup-Version wird von dieser App nicht unterstützt.' })
+          : t('welcome.backupError', { defaultValue: 'Fehler beim Laden des Backups. Bitte prüfe das Passwort.' });
+        addToast(message);
       }
     };
     reader.readAsText(file);
@@ -337,7 +346,7 @@ export function Welcome({ onStart }: WelcomeProps) {
                     autoFocus
                     onKeyDown={(e) => e.key === 'Enter' && handlePasswordConfirm()}
                   />
-                  {error && <p className="text-red-500 text-sm text-left mt-2">{error}</p>}
+                  {error && <p id="welcome-password-error" role="alert" className="text-red-500 text-sm text-left mt-2">{error}</p>}
                 </div>
                 
                 <div className="flex flex-col w-full gap-2 mt-2">

@@ -8,6 +8,8 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "check:performance": "node scripts/check-performance.mjs",
+    "check:headers": "node scripts/check-headers.mjs",
+    "check:links": "node scripts/check-links.mjs",
     "preview": "vite preview",
     "test": "vitest run"
   },

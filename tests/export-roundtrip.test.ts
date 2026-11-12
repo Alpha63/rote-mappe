@@ -30,7 +30,8 @@ describe('ZIP backup export', () => {
     const zip = await JSZip.loadAsync(blob);
     const json = JSON.parse(await zip.file('Notfallakte_Backup.json')!.async('text'));
 
-    expect(json.firstName).toBe('Erika');
+    expect(json.formatVersion).toBe(1);
+    expect(json.data.firstName).toBe('Erika');
     expect(await zip.file('Notfallakte_Vollstaendig.pdf')!.async('text')).toBe('%PDF-test');
     expect(zip.file('Uploads/Persoenliche_Dokumente/Personalausweis.png')).not.toBeNull();
   });
@@ -41,8 +42,9 @@ describe('ZIP backup export', () => {
     const encrypted = await zip.file('Notfallakte_Backup.enc')!.async('text');
 
     const restored = JSON.parse(await decryptBackup(encrypted, 'roundtrip-password'));
-    expect(restored.firstName).toBe('Erika');
-    expect(restored.lastName).toBe('Musterfrau');
+    expect(restored.formatVersion).toBe(1);
+    expect(restored.data.firstName).toBe('Erika');
+    expect(restored.data.lastName).toBe('Musterfrau');
     expect(zip.file('Notfallakte_Backup.json')).toBeNull();
   });
 });
