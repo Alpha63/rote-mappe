@@ -447,6 +447,17 @@ export class PdfBuilder {
 
   async addDocumentPage(doc: ScannedDocument | undefined | null) {
     if (!doc?.name || doc.documentAction === 'skip') return;
+    const localizedNames: Record<string, string> = {
+      idcard: i18n.t('pdf.documentsSection.idCard'),
+      passport: i18n.t('pdf.documentsSection.passport'),
+      driverslicense: i18n.t('pdf.documentsSection.driversLicense'),
+      organdonor: i18n.t('wizardSteps.step2.organDonorCopy'),
+      patverf: i18n.t('wizardSteps.step7.docPatientenverfuegung'),
+      vorsorge: i18n.t('wizardSteps.step7.docVorsorgevollmacht'),
+      betreuung: i18n.t('wizardSteps.step7.docBetreuungsverfuegung'),
+      bestattung: i18n.t('wizardSteps.step7.docBestattungsverfuegung')
+    };
+    const documentName = localizedNames[doc.id] || doc.name;
 
     if (doc.documentAction === 'upload' && doc.fileData) {
       try {
@@ -458,7 +469,7 @@ export class PdfBuilder {
           
           this.currentPage = this.pdfDoc.addPage([this.PAGE_WIDTH, this.PAGE_HEIGHT]);
           this.currentY = this.PAGE_HEIGHT - 80;
-          this.drawMultilineHeading(`${i18n.t('pdf.helpers.attachmentPdf')}${doc.name}`, 18);
+          this.drawMultilineHeading(`${i18n.t('pdf.helpers.attachmentPdf')}${documentName}`, 18);
           
           embeddedPages.forEach(p => {
              this.pdfDoc.addPage(p);
@@ -474,7 +485,7 @@ export class PdfBuilder {
           if (img) {
             this.currentPage = this.pdfDoc.addPage([this.PAGE_WIDTH, this.PAGE_HEIGHT]);
             this.currentY = this.PAGE_HEIGHT - 80;
-            this.drawMultilineHeading(`${i18n.t('pdf.helpers.attachment')}${doc.name}`, 18);
+            this.drawMultilineHeading(`${i18n.t('pdf.helpers.attachment')}${documentName}`, 18);
             this.currentY -= 20;
             
             const maxImgWidth = this.PAGE_WIDTH - 100;
@@ -507,9 +518,9 @@ export class PdfBuilder {
       this.currentPage = this.pdfDoc.addPage([this.PAGE_WIDTH, this.PAGE_HEIGHT]);
       this.currentY = this.PAGE_HEIGHT - 80;
       
-      this.drawMultilineHeading(doc.name, 18);
+      this.drawMultilineHeading(documentName, 18);
       this.currentY -= 10;
-      this.drawMultilineText(i18n.t('pdf.helpers.placeholderText', { name: doc.name }));
+      this.drawMultilineText(i18n.t('pdf.helpers.placeholderText', { name: documentName }));
     }
   }
 

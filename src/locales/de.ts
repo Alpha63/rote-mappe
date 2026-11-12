@@ -37,7 +37,9 @@ export const de = {
         },
         reset: {
           button: "Lokale Sitzung zurücksetzen",
-          confirm: "Möchtest du alle Eingaben dieser Sitzung unwiderruflich löschen?"
+          title: "Lokale Sitzung zurücksetzen?",
+          confirm: "Möchten Sie alle Eingaben dieser Sitzung unwiderruflich löschen?",
+          confirmButton: "Sitzung zurücksetzen"
         }
       },
       welcome: {
@@ -367,11 +369,14 @@ export const de = {
           coverTitle: "VERTRÄGE & VERBINDLICHKEITEN",
           coverDesc: "Übersicht über Versicherungen, Miete,\nKredite und sonstige laufende Verträge.",
           contracts: "Laufende Verträge:",
-          headers: ["Vertragsart", "Anbieter / Gesellschaft", "Vertrags- / Policennummer"]
+          headers: ["Vertragsart", "Anbieter / Gesellschaft", "Vertrags- / Policennummer"],
+          notesTitle: "Verträge & Verbindlichkeiten"
         },
         coverPage: {
           title: "NOTFALLAKTE",
           subtitle: "Wichtige Dokumente und Informationen",
+          confidentialTitle: "Vertrauliche Dokumente & Informationen",
+          confidentialDescription: "Bitte sicher aufbewahren und im Notfall den berechtigten\nPersonen übergeben.",
           createdOn: "Erstellt am:",
           of: "von",
           page: "Seite",
@@ -399,7 +404,8 @@ export const de = {
           marriageCert: "Heiratsurkunde",
           divorceCert: "Scheidungsurkunde",
           certPrefix: "Zeugnis: ",
-          withoutTitle: "Ohne Titel"
+          withoutTitle: "Ohne Titel",
+          notesTitle: "Persönliche Dokumente"
         },
         financeSection: {
           coverTitle: "FINANZEN & VERMÖGENSWERTE",
@@ -423,7 +429,8 @@ export const de = {
           coverTitle: "ALLGEMEINE HINWEISE & SCHLÜSSEL",
           coverDesc: "Schlüsselverzeichnis und sonstige wichtige Informationen.",
           keys: "Schlüsselverzeichnis:",
-          headers: ["Schlüsselname", "Einsatzzweck", "Ablageort"]
+          headers: ["Schlüsselname", "Einsatzzweck", "Ablageort"],
+          replacementKeys: "Schlüsselverzeichnis & Ersatzschlüssel:"
         },
         medicalSection: {
           coverTitle: "MEDIZINISCHE DATEN",
@@ -454,6 +461,27 @@ export const de = {
         tocPage: {
           title: "INHALTSVERZEICHNIS",
           attachmentPrefix: "Anhang: "
+        },
+        emergencyChecklist: {
+          firstDayTitle: "Sofortmaßnahmen (Erste 24 Stunden)",
+          laterDaysTitle: "In den folgenden Tagen",
+          tasks: [
+            "Arzt benachrichtigen (bei Haussterbefall) zur Ausstellung des Totenscheins.",
+            "Engste Angehörige informieren.",
+            "Wichtige Dokumente suchen (Personalausweis, Rote Mappe, Testament, Verfügungen).",
+            "Bestattungsunternehmen kontaktieren und beauftragen.",
+            "Arbeitgeber informieren (falls zutreffend).",
+            "Haustiere versorgen (siehe Kapitel \"Schlüssel & Hinweise\").",
+            "Wohnung sichern (Strom/Wasser abstellen, Fenster schließen, ggf. Heizung regulieren)."
+          ],
+          laterTasks: [
+            "Sterbeurkunde beim Standesamt beantragen (übernimmt oft der Bestatter).",
+            "Krankenkasse und Lebens-/Unfallversicherungen informieren.",
+            "Girokonten prüfen (siehe Kapitel \"Finanzen\").",
+            "Abonnements, Mitgliedschaften und Dienstleister kündigen (siehe Kapitel \"Verträge\").",
+            "Digitale Identitäten (Social Media, Cloud) sichern oder löschen (siehe \"Digitale Identität\").",
+            "Nachlassgericht informieren (bei Vorhandensein eines Testaments)."
+          ]
         }
       }
     }

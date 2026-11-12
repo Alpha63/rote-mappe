@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Check, X, ShieldCheck, Download, Loader2, Globe } from 'lucide-react';
+import { Check, X, ShieldCheck, Download, Loader2, Globe, AlertTriangle } from 'lucide-react';
 import { useFormContext } from '../FormContext';
 import { useTranslation } from 'react-i18next';
 import { ThemeToggle } from './ThemeToggle';
@@ -20,11 +20,13 @@ export function Sidebar({ currentStep, setStep, isOpen, onClose }: SidebarProps)
   const { t, i18n } = useTranslation();
 
   const [showBackupModal, setShowBackupModal] = useState(false);
+  const [showResetModal, setShowResetModal] = useState(false);
   const [pwd1, setPwd1] = useState('');
   const [pwd2, setPwd2] = useState('');
   const [error, setError] = useState('');
   const [noPassword, setNoPassword] = useState(false);
   const backupDialogRef = useDialogFocusTrap(showBackupModal);
+  const resetDialogRef = useDialogFocusTrap(showResetModal);
 
   const handleBackupClick = () => {
     if (isDownloading) return;
@@ -38,17 +40,19 @@ export function Sidebar({ currentStep, setStep, isOpen, onClose }: SidebarProps)
   };
 
   useEffect(() => {
-    if (!showBackupModal) return;
+    if (!showBackupModal && !showResetModal) return;
     const previouslyFocused = document.activeElement as HTMLElement | null;
     const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setShowBackupModal(false);
+      if (event.key !== 'Escape') return;
+      setShowBackupModal(false);
+      setShowResetModal(false);
     };
     window.addEventListener('keydown', handleEscape);
     return () => {
       window.removeEventListener('keydown', handleEscape);
       previouslyFocused?.focus();
     };
-  }, [showBackupModal]);
+  }, [showBackupModal, showResetModal]);
 
   const handleBackupConfirm = async () => {
     let finalPwd = undefined;
@@ -75,10 +79,14 @@ export function Sidebar({ currentStep, setStep, isOpen, onClose }: SidebarProps)
     onClose();
   };
 
-  const handleReset = async () => {
-    if (window.confirm(t('sidebar.reset.confirm'))) {
-      await resetForm();
-    }
+  const handleReset = () => {
+    setShowResetModal(true);
+  };
+
+  const handleResetConfirm = async () => {
+    setShowResetModal(false);
+    await resetForm();
+    onClose();
   };
 
   const steps = [
@@ -330,6 +338,32 @@ export function Sidebar({ currentStep, setStep, isOpen, onClose }: SidebarProps)
                       {t('common.cancel', { defaultValue: 'Abbrechen' })}
                     </button>
                   </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showResetModal && (
+        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in" role="presentation">
+          <div ref={resetDialogRef} className="bg-white dark:bg-slate-800 rounded-3xl p-8 max-w-md w-full shadow-2xl border border-red-100 dark:border-red-900/50 animate-in zoom-in-95" role="dialog" aria-modal="true" aria-labelledby="sidebar-reset-title" tabIndex={-1}>
+            <div className="flex flex-col items-center text-center">
+              <div className="w-16 h-16 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded-full flex items-center justify-center mb-6">
+                <AlertTriangle size={32} />
+              </div>
+              <h3 id="sidebar-reset-title" className="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-3">
+                {t('sidebar.reset.title')}
+              </h3>
+              <p className="text-slate-600 dark:text-slate-400 mb-8 leading-relaxed">
+                {t('sidebar.reset.confirm')}
+              </p>
+              <div className="flex flex-col w-full gap-3">
+                <button type="button" onClick={handleResetConfirm} className="w-full py-3.5 bg-red-600 text-white font-medium rounded-xl hover:bg-red-700 transition-colors cursor-pointer">
+                  {t('sidebar.reset.confirmButton')}
+                </button>
+                <button type="button" onClick={() => setShowResetModal(false)} className="w-full py-2 text-sm text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors cursor-pointer">
+                  {t('common.cancel')}
+                </button>
               </div>
             </div>
           </div>

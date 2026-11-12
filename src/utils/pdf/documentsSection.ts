@@ -51,7 +51,7 @@ export const addDocumentsSection = async (builder: PdfBuilder) => {
   if (builder.data.certificates && builder.data.certificates.length > 0) {
     for (const cert of builder.data.certificates) {
       if (cert.document) {
-        cert.document.name = `Zeugnis: ${cert.degree || i18n.t('pdf.documentsSection.withoutTitle')}`;
+        cert.document.name = `${i18n.t('pdf.documentsSection.certPrefix')}${cert.degree || i18n.t('pdf.documentsSection.withoutTitle')}`;
         await builder.addDocumentPage(cert.document);
       }
     }
@@ -65,6 +65,6 @@ export const addDocumentsSection = async (builder: PdfBuilder) => {
   }
 
   if (builder.data.documentNotes) {
-    builder.addNotesPage(builder.data.documentNotes, 'Persönliche Dokumente');
+    builder.addNotesPage(builder.data.documentNotes, i18n.t('pdf.documentsSection.notesTitle'));
   }
 };

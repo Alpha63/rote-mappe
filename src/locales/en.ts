@@ -37,7 +37,9 @@ export const en = {
         },
         reset: {
           button: "Reset local session",
-          confirm: "Do you want to permanently delete all inputs from this session?"
+          title: "Reset local session?",
+          confirm: "Do you want to permanently delete all inputs from this session?",
+          confirmButton: "Reset session"
         }
       },
       welcome: {
@@ -367,11 +369,14 @@ export const en = {
           coverTitle: "CONTRACTS & LIABILITIES",
           coverDesc: "Overview of insurances, rent,\nloans and other ongoing contracts.",
           contracts: "Ongoing Contracts:",
-          headers: ["Type of Contract", "Provider / Company", "Contract / Policy Number"]
+          headers: ["Type of Contract", "Provider / Company", "Contract / Policy Number"],
+          notesTitle: "Contracts & Liabilities"
         },
         coverPage: {
           title: "EMERGENCY DOSSIER",
           subtitle: "Important Documents and Information",
+          confidentialTitle: "Confidential Documents & Information",
+          confidentialDescription: "Keep in a safe place and hand over to the authorized\npersons in an emergency.",
           createdOn: "Created on:",
           of: "by",
           page: "Page",
@@ -399,7 +404,8 @@ export const en = {
           marriageCert: "Marriage Certificate",
           divorceCert: "Divorce Certificate",
           certPrefix: "Certificate: ",
-          withoutTitle: "Without Title"
+          withoutTitle: "Without Title",
+          notesTitle: "Personal Documents"
         },
         financeSection: {
           coverTitle: "FINANCES & ASSETS",
@@ -423,7 +429,8 @@ export const en = {
           coverTitle: "GENERAL NOTES & KEYS",
           coverDesc: "Key directory and other important information.",
           keys: "Key Directory:",
-          headers: ["Key Name", "Purpose", "Storage Location"]
+          headers: ["Key Name", "Purpose", "Storage Location"],
+          replacementKeys: "Key Directory & Spare Keys:"
         },
         medicalSection: {
           coverTitle: "MEDICAL DATA",
@@ -454,6 +461,27 @@ export const en = {
         tocPage: {
           title: "TABLE OF CONTENTS",
           attachmentPrefix: "Attachment: "
+        },
+        emergencyChecklist: {
+          firstDayTitle: "Immediate Actions (First 24 Hours)",
+          laterDaysTitle: "In the Following Days",
+          tasks: [
+            "Notify a doctor (in the event of a death at home) to issue the death certificate.",
+            "Inform closest relatives.",
+            "Find important documents (identity card, emergency dossier, will, directives).",
+            "Contact and appoint a funeral home.",
+            "Inform the employer (if applicable).",
+            "Care for pets (see the \"Keys & Notes\" chapter).",
+            "Secure the home (turn off utilities, close windows, adjust heating if needed)."
+          ],
+          laterTasks: [
+            "Apply for the death certificate at the registry office (often handled by the funeral home).",
+            "Inform the health insurer and life/accident insurers.",
+            "Check current accounts (see the \"Finances\" chapter).",
+            "Cancel subscriptions, memberships and service providers (see the \"Contracts\" chapter).",
+            "Secure or delete digital identities (social media, cloud) (see \"Digital Identity\").",
+            "Inform the probate court (if a will exists)."
+          ]
         }
       }
     }
