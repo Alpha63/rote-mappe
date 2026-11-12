@@ -22,6 +22,9 @@ interface WelcomeProps {
   onStart: () => void;
 }
 
+const MAX_BACKUP_SIZE = 25 * 1024 * 1024;
+const MAX_ZIP_ENTRIES = 100;
+
 export function Welcome({ onStart }: WelcomeProps) {
   const { t, i18n } = useTranslation();
   const { toasts, addToast, dismissToast } = useToast();
@@ -68,11 +71,19 @@ export function Welcome({ onStart }: WelcomeProps) {
   const handleImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    if (file.size > MAX_BACKUP_SIZE) {
+      addToast(t('welcome.backupError', { defaultValue: 'Die Backup-Datei ist zu groß.' }));
+      e.target.value = '';
+      return;
+    }
 
     if (file.name.endsWith('.zip')) {
       try {
         const zip = new JSZip();
         const loadedZip = await zip.loadAsync(file);
+        if (Object.keys(loadedZip.files).length > MAX_ZIP_ENTRIES) {
+          throw new Error('Das ZIP-Archiv enthält zu viele Dateien.');
+        }
         const encFile = loadedZip.file('Notfallakte_Backup.enc');
         const jsonFile = loadedZip.file('Notfallakte_Backup.json');
 
@@ -116,6 +127,10 @@ export function Welcome({ onStart }: WelcomeProps) {
   };
 
   const processFile = async (file: File, password?: string) => {
+    if (file.size > MAX_BACKUP_SIZE) {
+      addToast(t('welcome.backupError', { defaultValue: 'Die Backup-Datei ist zu groß.' }));
+      return;
+    }
     const reader = new FileReader();
     reader.onerror = () => {
       addToast(t('welcome.backupError', { defaultValue: 'Fehler beim Lesen des Backups.' }));
