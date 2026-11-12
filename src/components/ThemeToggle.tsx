@@ -25,9 +25,10 @@ export function ThemeToggle() {
 
   return (
     <button
+      type="button"
+      aria-label={isDark ? 'Helles Design aktivieren' : 'Dunkles Design aktivieren'}
       onClick={() => setIsDark(!isDark)}
       className="p-2 flex items-center justify-center rounded-full bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 shadow-md border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors cursor-pointer"
-      aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
       title={isDark ? "Light Mode" : "Dark Mode"}
     >
       {isDark ? <Sun size={20} /> : <Moon size={20} />}

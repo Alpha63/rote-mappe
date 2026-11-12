@@ -162,12 +162,14 @@ export function Welcome({ onStart }: WelcomeProps) {
             <div className="flex items-center gap-2 bg-white/50 dark:bg-slate-800/50 border border-slate-200/60 dark:border-slate-700/60 py-1.5 px-3 rounded-lg w-fit mx-auto">
               <Globe size={14} className="text-indigo-400 dark:text-indigo-300" />
               <button
+                type="button"
                 onClick={() => i18n.changeLanguage('de')}
                 className={`text-xs font-medium px-2 py-1 rounded transition-colors cursor-pointer ${i18n.language === 'de' || !i18n.language || i18n.language.startsWith('de') ? 'bg-indigo-600 text-white shadow-sm' : 'text-indigo-700 dark:text-indigo-300 hover:bg-white/60 dark:hover:bg-slate-700/60'}`}
               >
                 DE
               </button>
               <button
+                type="button"
                 onClick={() => i18n.changeLanguage('en')}
                 className={`text-xs font-medium px-2 py-1 rounded transition-colors cursor-pointer ${i18n.language === 'en' || i18n.language.startsWith('en') ? 'bg-indigo-600 text-white shadow-sm' : 'text-indigo-700 dark:text-indigo-300 hover:bg-white/60 dark:hover:bg-slate-700/60'}`}
               >
@@ -221,6 +223,7 @@ export function Welcome({ onStart }: WelcomeProps) {
           </div>
 
           <button
+            type="button"
             onClick={onStart}
             className="group w-full bg-indigo-600 text-white py-4 px-6 rounded-2xl font-medium text-lg shadow-lg shadow-indigo-600/20 hover:bg-indigo-700 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
           >
@@ -243,6 +246,7 @@ export function Welcome({ onStart }: WelcomeProps) {
 
           {deferredPrompt && (
             <button
+              type="button"
               onClick={handleInstallClick}
               className="mt-4 w-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 py-4 px-6 rounded-2xl font-medium text-lg border-2 border-transparent hover:border-slate-300 dark:hover:border-slate-600 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
             >
@@ -295,10 +299,10 @@ export function Welcome({ onStart }: WelcomeProps) {
                 </div>
                 
                 <div className="flex flex-col w-full gap-2 mt-2">
-                  <button onClick={() => handlePasswordConfirm()} className="w-full py-3.5 bg-indigo-600 text-white font-medium rounded-xl hover:bg-indigo-700 shadow-md shadow-indigo-600/20 transition-all cursor-pointer">
+                  <button type="button" onClick={() => handlePasswordConfirm()} className="w-full py-3.5 bg-indigo-600 text-white font-medium rounded-xl hover:bg-indigo-700 shadow-md shadow-indigo-600/20 transition-all cursor-pointer">
                     {t('welcome.decryptBtn', { defaultValue: 'Entschlüsseln' })}
                   </button>
-                  <button onClick={() => { setShowPasswordModal(false); setPendingFile(null); }} className="w-full py-2 text-sm text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors cursor-pointer">
+                  <button type="button" onClick={() => { setShowPasswordModal(false); setPendingFile(null); }} className="w-full py-2 text-sm text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors cursor-pointer">
                     {t('common.cancel', { defaultValue: 'Abbrechen' })}
                   </button>
                 </div>

@@ -97,6 +97,8 @@ export function Sidebar({ currentStep, setStep, isOpen, onClose }: SidebarProps)
               <ThemeToggle />
             </div>
             <button
+              type="button"
+              aria-label={t('common.close', 'Schließen')}
               onClick={onClose}
               className="lg:hidden text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 cursor-pointer"
             >
@@ -121,6 +123,7 @@ export function Sidebar({ currentStep, setStep, isOpen, onClose }: SidebarProps)
                 )}
                 
                 <button
+                  type="button"
                   onClick={() => {
                     setStep(step.id);
                     onClose();
@@ -156,7 +159,8 @@ export function Sidebar({ currentStep, setStep, isOpen, onClose }: SidebarProps)
         </div>
         
         <div className="mt-6 pt-4 border-t border-slate-300/50 dark:border-slate-700/50 text-xs text-slate-600 dark:text-slate-400 leading-relaxed flex flex-col gap-3">
-          <button 
+          <button
+            type="button"
             onClick={handleBackupClick}
             disabled={isDownloading || downloadSuccess}
             className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 hover:border-indigo-600 dark:hover:border-indigo-500 text-slate-700 dark:text-slate-300 hover:text-indigo-700 dark:hover:text-indigo-400 rounded-xl transition-colors shadow-sm font-medium text-sm cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
@@ -173,12 +177,14 @@ export function Sidebar({ currentStep, setStep, isOpen, onClose }: SidebarProps)
           <div className="flex items-center justify-center gap-2 mt-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-1.5 px-3 rounded-lg mx-auto w-fit">
             <Globe size={14} className="text-slate-400 dark:text-slate-500" />
             <button
+              type="button"
               onClick={() => i18n.changeLanguage('de')}
               className={`text-xs font-medium px-2 py-1 rounded transition-colors cursor-pointer ${i18n.language === 'de' || !i18n.language || i18n.language.startsWith('de') ? 'bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300' : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700'}`}
             >
               DE
             </button>
             <button
+              type="button"
               onClick={() => i18n.changeLanguage('en')}
               className={`text-xs font-medium px-2 py-1 rounded transition-colors cursor-pointer ${i18n.language === 'en' || i18n.language.startsWith('en') ? 'bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300' : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700'}`}
             >
@@ -261,10 +267,10 @@ export function Sidebar({ currentStep, setStep, isOpen, onClose }: SidebarProps)
                   {error && !noPassword && <p className="text-red-500 text-sm text-left">{error}</p>}
                   
                   <div className="flex flex-col w-full gap-2 mt-2">
-                    <button onClick={() => handleBackupConfirm()} className="w-full py-3.5 bg-indigo-600 text-white font-medium rounded-xl hover:bg-indigo-700 shadow-md shadow-indigo-600/20 transition-all cursor-pointer">
+                    <button type="button" onClick={() => handleBackupConfirm()} className="w-full py-3.5 bg-indigo-600 text-white font-medium rounded-xl hover:bg-indigo-700 shadow-md shadow-indigo-600/20 transition-all cursor-pointer">
                       {t('sidebar.backup.startDownload', { defaultValue: 'Download starten' })}
                     </button>
-                    <button onClick={() => setShowBackupModal(false)} className="w-full py-2 text-sm text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors cursor-pointer">
+                    <button type="button" onClick={() => setShowBackupModal(false)} className="w-full py-2 text-sm text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors cursor-pointer">
                       {t('common.cancel', { defaultValue: 'Abbrechen' })}
                     </button>
                   </div>

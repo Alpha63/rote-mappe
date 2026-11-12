@@ -113,7 +113,7 @@ export function Step10Abschluss() {
             </label>
           </div>
         </div>
-        <button onClick={handleDownloadClick} disabled={isDownloading || downloadSuccess} className={`w-full md:w-auto text-white px-8 py-3 rounded-xl font-semibold transition-all shadow-lg flex items-center justify-center gap-3 ${isDownloading ? 'bg-indigo-400 cursor-not-allowed' : downloadSuccess ? 'bg-emerald-500 hover:bg-emerald-600 cursor-default' : 'bg-indigo-600 hover:bg-indigo-700'}`}>
+        <button type="button" onClick={handleDownloadClick} disabled={isDownloading || downloadSuccess} className={`w-full md:w-auto text-white px-8 py-3 rounded-xl font-semibold transition-all shadow-lg flex items-center justify-center gap-3 ${isDownloading ? 'bg-indigo-400 cursor-not-allowed' : downloadSuccess ? 'bg-emerald-500 hover:bg-emerald-600 cursor-default' : 'bg-indigo-600 hover:bg-indigo-700'}`}>
           {isDownloading ? (
             <><Loader2 size={20} className="animate-spin" /> {t('wizardSteps.step10.downloading')}</>
           ) : downloadSuccess ? (
@@ -204,10 +204,10 @@ export function Step10Abschluss() {
                   {error && !noPassword && <p className="text-red-500 text-sm text-left">{error}</p>}
                   
                   <div className="flex flex-col w-full gap-2 mt-2">
-                    <button onClick={() => handleBackupConfirm()} className="w-full py-3.5 bg-indigo-600 text-white font-medium rounded-xl hover:bg-indigo-700 shadow-md shadow-indigo-600/20 transition-all cursor-pointer">
+                    <button type="button" onClick={() => handleBackupConfirm()} className="w-full py-3.5 bg-indigo-600 text-white font-medium rounded-xl hover:bg-indigo-700 shadow-md shadow-indigo-600/20 transition-all cursor-pointer">
                       {t('sidebar.backup.startDownload', { defaultValue: 'Download starten' })}
                     </button>
-                    <button onClick={() => setShowBackupModal(false)} className="w-full py-2 text-sm text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors cursor-pointer">
+                    <button type="button" onClick={() => setShowBackupModal(false)} className="w-full py-2 text-sm text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors cursor-pointer">
                       {t('common.cancel', { defaultValue: 'Abbrechen' })}
                     </button>
                   </div>

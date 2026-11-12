@@ -153,6 +153,8 @@ function WizardContent() {
           <div className="flex items-center gap-3">
             <ThemeToggle />
             <button
+              type="button"
+              aria-label={t('wizard.openMenu', 'Menü öffnen')}
               onClick={() => setIsSidebarOpen(true)}
               className="p-2 -mr-2 text-indigo-600 dark:text-indigo-400 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors cursor-pointer"
             >
@@ -221,10 +223,10 @@ function WizardContent() {
                 {t('wizard.warningDesc')}
               </p>
               <div className="flex flex-col w-full gap-3">
-                <button onClick={() => setShowWarningModal(false)} className="w-full py-3.5 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 font-medium rounded-xl hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors cursor-pointer">
+                <button type="button" onClick={() => setShowWarningModal(false)} className="w-full py-3.5 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 font-medium rounded-xl hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors cursor-pointer">
                   {t('wizard.checkInputs')}
                 </button>
-                <button onClick={() => { setShowWarningModal(false); setStep(nextStepTarget); }} className="w-full py-3.5 text-slate-500 dark:text-slate-400 font-medium hover:text-slate-700 dark:hover:text-slate-200 transition-colors cursor-pointer">
+                <button type="button" onClick={() => { setShowWarningModal(false); setStep(nextStepTarget); }} className="w-full py-3.5 text-slate-500 dark:text-slate-400 font-medium hover:text-slate-700 dark:hover:text-slate-200 transition-colors cursor-pointer">
                   {t('wizard.continueAnyway')}
                 </button>
               </div>
