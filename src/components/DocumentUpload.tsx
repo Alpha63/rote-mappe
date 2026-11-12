@@ -15,6 +15,12 @@ export function DocumentUpload({ document, onChange, onRemove, isCustom }: Docum
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    const allowedTypes = new Set(['image/png', 'image/jpeg', 'application/pdf']);
+    const maxFileSize = 10 * 1024 * 1024;
+    if (!allowedTypes.has(file.type) || file.size > maxFileSize) {
+      e.target.value = '';
+      return;
+    }
 
     const reader = new FileReader();
     reader.onload = (event) => {
@@ -24,7 +30,11 @@ export function DocumentUpload({ document, onChange, onRemove, isCustom }: Docum
         fileType: file.type
       });
     };
+    reader.onerror = () => {
+      e.target.value = '';
+    };
     reader.readAsDataURL(file);
+    e.target.value = '';
   };
 
   return (
