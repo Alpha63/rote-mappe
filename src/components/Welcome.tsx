@@ -6,6 +6,8 @@ import { version } from '../../package.json';
 import JSZip from 'jszip';
 import { ToastContainer } from './Toast';
 import { useToast } from '../hooks/useToast';
+import { formSchema } from '../schema';
+import { migrateData } from '../utils/migrateData';
 
 interface BeforeInstallPromptEvent extends Event {
   readonly platforms: string[];
@@ -80,8 +82,7 @@ export function Welcome({ onStart }: WelcomeProps) {
         } else {
           addToast(t('welcome.backupError', { defaultValue: 'Kein Backup in der ZIP-Datei gefunden.' }));
         }
-      } catch (err) {
-        console.error(err);
+      } catch {
         addToast(t('welcome.backupError', { defaultValue: 'Fehler beim Lesen der ZIP-Datei.' }));
       }
       e.target.value = '';
@@ -104,6 +105,9 @@ export function Welcome({ onStart }: WelcomeProps) {
 
   const processFile = async (file: File, password?: string) => {
     const reader = new FileReader();
+    reader.onerror = () => {
+      addToast(t('welcome.backupError', { defaultValue: 'Fehler beim Lesen des Backups.' }));
+    };
     reader.onload = async (event) => {
       try {
         let rawData = event.target?.result as string;
@@ -111,11 +115,14 @@ export function Welcome({ onStart }: WelcomeProps) {
           const { decryptBackup } = await import('../utils/crypto');
           rawData = await decryptBackup(rawData, password);
         }
-        const data = JSON.parse(rawData);
-        sessionStorage.setItem('notfallakte_data', JSON.stringify(data));
+        const parsedData = JSON.parse(rawData);
+        const result = formSchema.safeParse(migrateData(parsedData));
+        if (!result.success) {
+          throw new Error('Das Backup enthält keine gültigen Formulardaten.');
+        }
+        sessionStorage.setItem('notfallakte_data', JSON.stringify(result.data));
         onStart();
-      } catch (err) {
-        console.error(err);
+      } catch {
         addToast(t('welcome.backupError', { defaultValue: 'Fehler beim Laden des Backups. Bitte prüfe das Passwort.' }));
       }
     };

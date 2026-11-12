@@ -23,9 +23,10 @@ function getInitialValues(): FormSchemaType {
   if (saved) {
     try {
       const parsed = JSON.parse(saved);
-      return migrateData(parsed) as unknown as FormSchemaType;
+      const result = formSchema.safeParse(migrateData(parsed));
+      if (result.success) return result.data;
     } catch {
-      // ignore
+      sessionStorage.removeItem('notfallakte_data');
     }
   }
   return initialFormData as unknown as FormSchemaType;
