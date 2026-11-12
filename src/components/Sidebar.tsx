@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Check, X, ShieldCheck, Download, Loader2, Globe } from 'lucide-react';
 import { useFormContext } from '../FormContext';
 import { useTranslation } from 'react-i18next';
@@ -32,6 +32,19 @@ export function Sidebar({ currentStep, setStep, isOpen, onClose }: SidebarProps)
     setNoPassword(false);
     setShowBackupModal(true);
   };
+
+  useEffect(() => {
+    if (!showBackupModal) return;
+    const previouslyFocused = document.activeElement as HTMLElement | null;
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setShowBackupModal(false);
+    };
+    window.addEventListener('keydown', handleEscape);
+    return () => {
+      window.removeEventListener('keydown', handleEscape);
+      previouslyFocused?.focus();
+    };
+  }, [showBackupModal]);
 
   const handleBackupConfirm = async () => {
     let finalPwd = undefined;
@@ -209,13 +222,13 @@ export function Sidebar({ currentStep, setStep, isOpen, onClose }: SidebarProps)
       </div>
       
       {showBackupModal && (
-        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in">
-          <div className="bg-white dark:bg-slate-800 rounded-3xl p-8 max-w-md w-full shadow-2xl border border-indigo-100 dark:border-indigo-900/50 animate-in zoom-in-95">
+        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in" role="presentation">
+          <div className="bg-white dark:bg-slate-800 rounded-3xl p-8 max-w-md w-full shadow-2xl border border-indigo-100 dark:border-indigo-900/50 animate-in zoom-in-95" role="dialog" aria-modal="true" aria-labelledby="sidebar-backup-title">
             <div className="flex flex-col items-center text-center">
               <div className="w-16 h-16 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-full flex items-center justify-center mb-6">
                 <Lock size={32} />
               </div>
-              <h3 className="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-3">{t('sidebar.backup.modalTitle', { defaultValue: 'Backup Sicherheit' })}</h3>
+              <h3 id="sidebar-backup-title" className="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-3">{t('sidebar.backup.modalTitle', { defaultValue: 'Backup Sicherheit' })}</h3>
               <p className="text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">
                 {t('sidebar.backup.requireEncryption', { defaultValue: 'Bitte vergib ein Passwort, um dein Backup (die JSON-Datei) zu verschlüsseln. Dies wird dringend empfohlen.' })}
               </p>
