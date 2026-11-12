@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { FormSchemaType } from '../../schema';
 import { ToastContainer } from '../Toast';
 import { useToast } from '../../hooks/useToast';
+import { useDialogFocusTrap } from '../../hooks/useDialogFocusTrap';
 
 export function Step10Abschluss() {
   const { t } = useTranslation();
@@ -58,6 +59,7 @@ export function Step10Abschluss() {
   const [pwd2, setPwd2] = useState('');
   const [error, setError] = useState('');
   const [noPassword, setNoPassword] = useState(false);
+  const backupDialogRef = useDialogFocusTrap(showBackupModal);
 
   const handleDownloadClick = () => {
     setDownloadSuccess(false);
@@ -159,7 +161,7 @@ export function Step10Abschluss() {
 
       {showBackupModal && (
         <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in" role="presentation">
-          <div className="bg-white dark:bg-slate-800 rounded-3xl p-8 max-w-md w-full shadow-2xl border border-indigo-100 dark:border-indigo-900/50 animate-in zoom-in-95" role="dialog" aria-modal="true" aria-labelledby="completion-backup-title">
+          <div ref={backupDialogRef} className="bg-white dark:bg-slate-800 rounded-3xl p-8 max-w-md w-full shadow-2xl border border-indigo-100 dark:border-indigo-900/50 animate-in zoom-in-95" role="dialog" aria-modal="true" aria-labelledby="completion-backup-title" tabIndex={-1}>
             <div className="flex flex-col items-center text-center">
               <div className="w-16 h-16 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-full flex items-center justify-center mb-6">
                 <Lock size={32} />

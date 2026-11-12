@@ -8,6 +8,7 @@ import { ToastContainer } from './Toast';
 import { useToast } from '../hooks/useToast';
 import { formSchema } from '../schema';
 import { migrateData } from '../utils/migrateData';
+import { useDialogFocusTrap } from '../hooks/useDialogFocusTrap';
 
 interface BeforeInstallPromptEvent extends Event {
   readonly platforms: string[];
@@ -33,6 +34,7 @@ export function Welcome({ onStart }: WelcomeProps) {
   const [pendingFile, setPendingFile] = useState<File | null>(null);
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const passwordDialogRef = useDialogFocusTrap(showPasswordModal);
 
   useEffect(() => {
     const handleBeforeInstallPrompt = (e: Event) => {
@@ -312,7 +314,7 @@ export function Welcome({ onStart }: WelcomeProps) {
 
       {showPasswordModal && (
         <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in" role="presentation">
-          <div className="bg-white dark:bg-slate-800 rounded-3xl p-8 max-w-md w-full shadow-2xl border border-indigo-100 dark:border-indigo-900/50 animate-in zoom-in-95" role="dialog" aria-modal="true" aria-labelledby="welcome-decrypt-title">
+          <div ref={passwordDialogRef} className="bg-white dark:bg-slate-800 rounded-3xl p-8 max-w-md w-full shadow-2xl border border-indigo-100 dark:border-indigo-900/50 animate-in zoom-in-95" role="dialog" aria-modal="true" aria-labelledby="welcome-decrypt-title" tabIndex={-1}>
             <div className="flex flex-col items-center text-center">
               <div className="w-16 h-16 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-full flex items-center justify-center mb-6">
                 <KeyRound size={32} />

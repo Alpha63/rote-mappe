@@ -14,6 +14,7 @@ const Step8Hinweise = lazy(() => import('./steps/Step8Hinweise').then(m => ({ de
 const Step9EigeneKapitel = lazy(() => import('./steps/Step9EigeneKapitel').then(m => ({ default: m.Step9EigeneKapitel })));
 const Step10Abschluss = lazy(() => import('./steps/Step10Abschluss').then(m => ({ default: m.Step10Abschluss })));
 import { ThemeToggle } from './ThemeToggle';
+import { useDialogFocusTrap } from '../hooks/useDialogFocusTrap';
 
 export function Wizard() {
   return (
@@ -30,6 +31,7 @@ function WizardContent() {
   const [showWarningModal, setShowWarningModal] = useState(false);
   const [nextStepTarget, setNextStepTarget] = useState(1);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const warningDialogRef = useDialogFocusTrap(showWarningModal);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -206,7 +208,7 @@ function WizardContent() {
 
       {showWarningModal && (
         <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in" role="presentation">
-          <div className="bg-white dark:bg-slate-800 rounded-3xl p-8 max-w-md w-full shadow-2xl border border-red-100 dark:border-red-900/50 animate-in zoom-in-95" role="dialog" aria-modal="true" aria-labelledby="wizard-warning-title">
+          <div ref={warningDialogRef} className="bg-white dark:bg-slate-800 rounded-3xl p-8 max-w-md w-full shadow-2xl border border-red-100 dark:border-red-900/50 animate-in zoom-in-95" role="dialog" aria-modal="true" aria-labelledby="wizard-warning-title" tabIndex={-1}>
             <div className="flex flex-col items-center text-center">
               <div className="w-16 h-16 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded-full flex items-center justify-center mb-6">
                 <AlertTriangle size={32} />
