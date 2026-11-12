@@ -95,8 +95,7 @@ export function FormProvider({ children }: { children: React.ReactNode }) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       await generateAndDownloadZip(formData as any, template, includePlaceholders, includeWarnings, password);
       return true;
-    } catch (error) {
-      console.error('Error generating Export:', error);
+    } catch {
       return false;
     } finally {
       setIsDownloading(false);

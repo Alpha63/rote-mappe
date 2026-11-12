@@ -31,10 +31,10 @@ export function Step10Abschluss() {
         if (prevUrl) URL.revokeObjectURL(prevUrl);
         return url;
       });
-    } catch (error) {
-      console.error('Error generating PDF preview:', error);
+    } catch {
+      addToast(t('step10.previewError', { defaultValue: 'Die PDF-Vorschau konnte nicht erstellt werden.' }), 'error');
     }
-  }, [getValues, pdfTemplate, includePlaceholders, includeWarnings]);
+  }, [addToast, getValues, includePlaceholders, includeWarnings, pdfTemplate, t]);
 
   // Generate preview on mount and when PDF settings change
   useEffect(() => {

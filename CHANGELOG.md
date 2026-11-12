@@ -12,6 +12,9 @@ All notable changes to this project will be documented in this file.
   als stabile Feldpfade an die UI weitergegeben.
 - **Dialoge:** Warnungs- und Backup-Dialoge halten den Tastaturfokus innerhalb
   des geöffneten Dialogs und stellen ihn beim Schließen wieder her.
+- **PDF und Performance:** Vollständige PDF-Daten werden in allen Vorlagen und
+  Sprachen getestet; ein Performance-Budget prüft den initialen JavaScript-
+  Chunk. Reduced-motion-Nutzer erhalten verkürzte Animationen.
 - **Backup und Stabilität:** ZIP-Roundtrip-Tests, Importgrenzen, Dialog-
   Accessibility, PDF-Worker-Timeouts und kompatible Dependency-Updates wurden
   ergänzt bzw. verifiziert.

@@ -41,6 +41,9 @@ export const de = {
         note: "Hinweis: Dies ist eine Vorlage zur Orientierung und ersetzt keine anwaltliche Beratung.",
         backupError: "Fehler beim Lesen der Backup-Datei. Stellen Sie sicher, dass es sich um eine gültige Notfallakte-JSON handelt."
       },
+      step10: {
+        previewError: "Die PDF-Vorschau konnte nicht erstellt werden."
+      },
       wizard: {
         back: "Zurück",
         next: "Weiter",

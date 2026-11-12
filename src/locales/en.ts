@@ -41,6 +41,9 @@ export const en = {
         note: "Note: This is a template for orientation and does not replace legal advice.",
         backupError: "Error reading the backup file. Please ensure it is a valid Emergency Dossier JSON."
       },
+      step10: {
+        previewError: "The PDF preview could not be generated."
+      },
       wizard: {
         back: "Back",
         next: "Next",
