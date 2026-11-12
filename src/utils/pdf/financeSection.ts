@@ -123,8 +123,8 @@ export const addFinanceSection = async (builder: PdfBuilder) => {
           }
         }
       }
-    } catch (err) {
-      console.error('Fehler beim Laden der BMJV-Vorlage:', err);
+    } catch {
+      // The reference document is optional; the generated dossier remains usable.
     }
   }
 

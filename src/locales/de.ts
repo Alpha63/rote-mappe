@@ -1,7 +1,9 @@
 export const de = {
     translation: {
       common: {
-        select: "Wählen..."
+        select: "Wählen...",
+        cancel: "Abbrechen",
+        close: "Schließen"
       },
       sidebar: {
         title: "Notfallakte",
@@ -25,6 +27,19 @@ export const de = {
         footer: {
           localProcessing: "Alle Daten werden ausschließlich lokal auf Ihrem Gerät verarbeitet.",
           github: "Projekt auf GitHub ansehen"
+        },
+        saveState: {
+          saving: "Änderungen werden lokal gespeichert...",
+          saved: "Änderungen lokal gespeichert.",
+          error: "Lokales Speichern fehlgeschlagen.",
+          quota: "Der lokale Speicher ist voll.",
+          clear: "Die lokale Sitzung konnte nicht gelöscht werden."
+        },
+        reset: {
+          button: "Lokale Sitzung zurücksetzen",
+          title: "Lokale Sitzung zurücksetzen?",
+          confirm: "Möchten Sie alle Eingaben dieser Sitzung unwiderruflich löschen?",
+          confirmButton: "Sitzung zurücksetzen"
         }
       },
       welcome: {
@@ -39,7 +54,12 @@ export const de = {
         loadBackup: "Bestehendes Backup laden",
         installApp: "Als lokale App installieren",
         note: "Hinweis: Dies ist eine Vorlage zur Orientierung und ersetzt keine anwaltliche Beratung.",
-        backupError: "Fehler beim Lesen der Backup-Datei. Stellen Sie sicher, dass es sich um eine gültige Notfallakte-JSON handelt."
+        backupError: "Fehler beim Lesen der Backup-Datei. Stellen Sie sicher, dass es sich um eine gültige Notfallakte-JSON handelt.",
+        unsupportedBackup: "Diese Backup-Version wird von dieser App nicht unterstützt.",
+        storageError: "Das Backup ist gültig, konnte aber nicht lokal gespeichert werden."
+      },
+      step10: {
+        previewError: "Die PDF-Vorschau konnte nicht erstellt werden."
       },
       wizard: {
         back: "Zurück",
@@ -47,7 +67,9 @@ export const de = {
         warningTitle: "Hinweis zu Ihren Eingaben",
         warningDesc: "Einige Felder auf dieser Seite enthalten fehlerhafte oder unvollständige Eingaben (z.B. ungültige IBAN oder falsches Format). Möchten Sie Ihre Eingaben überprüfen oder trotzdem fortfahren?",
         checkInputs: "Eingaben überprüfen",
-        continueAnyway: "Trotzdem weiter"
+        continueAnyway: "Trotzdem weiter",
+        errorSummaryTitle: "{{count}} Eingaben müssen geprüft werden",
+        loading: "Schritt wird geladen..."
       },
       docUpload: {
         remove: "Dokument entfernen",
@@ -347,11 +369,14 @@ export const de = {
           coverTitle: "VERTRÄGE & VERBINDLICHKEITEN",
           coverDesc: "Übersicht über Versicherungen, Miete,\nKredite und sonstige laufende Verträge.",
           contracts: "Laufende Verträge:",
-          headers: ["Vertragsart", "Anbieter / Gesellschaft", "Vertrags- / Policennummer"]
+          headers: ["Vertragsart", "Anbieter / Gesellschaft", "Vertrags- / Policennummer"],
+          notesTitle: "Verträge & Verbindlichkeiten"
         },
         coverPage: {
           title: "NOTFALLAKTE",
           subtitle: "Wichtige Dokumente und Informationen",
+          confidentialTitle: "Vertrauliche Dokumente & Informationen",
+          confidentialDescription: "Bitte sicher aufbewahren und im Notfall den berechtigten\nPersonen übergeben.",
           createdOn: "Erstellt am:",
           of: "von",
           page: "Seite",
@@ -379,7 +404,8 @@ export const de = {
           marriageCert: "Heiratsurkunde",
           divorceCert: "Scheidungsurkunde",
           certPrefix: "Zeugnis: ",
-          withoutTitle: "Ohne Titel"
+          withoutTitle: "Ohne Titel",
+          notesTitle: "Persönliche Dokumente"
         },
         financeSection: {
           coverTitle: "FINANZEN & VERMÖGENSWERTE",
@@ -403,7 +429,8 @@ export const de = {
           coverTitle: "ALLGEMEINE HINWEISE & SCHLÜSSEL",
           coverDesc: "Schlüsselverzeichnis und sonstige wichtige Informationen.",
           keys: "Schlüsselverzeichnis:",
-          headers: ["Schlüsselname", "Einsatzzweck", "Ablageort"]
+          headers: ["Schlüsselname", "Einsatzzweck", "Ablageort"],
+          replacementKeys: "Schlüsselverzeichnis & Ersatzschlüssel:"
         },
         medicalSection: {
           coverTitle: "MEDIZINISCHE DATEN",
@@ -434,6 +461,27 @@ export const de = {
         tocPage: {
           title: "INHALTSVERZEICHNIS",
           attachmentPrefix: "Anhang: "
+        },
+        emergencyChecklist: {
+          firstDayTitle: "Sofortmaßnahmen (Erste 24 Stunden)",
+          laterDaysTitle: "In den folgenden Tagen",
+          tasks: [
+            "Arzt benachrichtigen (bei Haussterbefall) zur Ausstellung des Totenscheins.",
+            "Engste Angehörige informieren.",
+            "Wichtige Dokumente suchen (Personalausweis, Rote Mappe, Testament, Verfügungen).",
+            "Bestattungsunternehmen kontaktieren und beauftragen.",
+            "Arbeitgeber informieren (falls zutreffend).",
+            "Haustiere versorgen (siehe Kapitel \"Schlüssel & Hinweise\").",
+            "Wohnung sichern (Strom/Wasser abstellen, Fenster schließen, ggf. Heizung regulieren)."
+          ],
+          laterTasks: [
+            "Sterbeurkunde beim Standesamt beantragen (übernimmt oft der Bestatter).",
+            "Krankenkasse und Lebens-/Unfallversicherungen informieren.",
+            "Girokonten prüfen (siehe Kapitel \"Finanzen\").",
+            "Abonnements, Mitgliedschaften und Dienstleister kündigen (siehe Kapitel \"Verträge\").",
+            "Digitale Identitäten (Social Media, Cloud) sichern oder löschen (siehe \"Digitale Identität\").",
+            "Nachlassgericht informieren (bei Vorhandensein eines Testaments)."
+          ]
         }
       }
     }

@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { DocumentUpload } from '../src/components/DocumentUpload';
@@ -81,11 +81,7 @@ describe('DocumentUpload component accessibility & semantics', () => {
   });
 });
 
-describe('Wizard View Transitions & Form wrapper', () => {
-  beforeEach(() => {
-    delete document.documentElement.dataset.transitionDirection;
-  });
-
+describe('Wizard navigation & form wrapper', () => {
   it('wraps the wizard step container in a noValidate form with wizard-step-container class', () => {
     render(<Wizard />);
     const form = document.querySelector('form.wizard-step-container');
@@ -93,7 +89,7 @@ describe('Wizard View Transitions & Form wrapper', () => {
     expect(form?.hasAttribute('novalidate')).toBe(true);
   });
 
-  it('sets dataset.transitionDirection and invokes document.startViewTransition on step navigation', async () => {
+  it('navigates directly to the next step without a transition API', async () => {
     const user = userEvent.setup();
     render(<Wizard />);
 
@@ -111,20 +107,14 @@ describe('Wizard View Transitions & Form wrapper', () => {
       await user.click(nextBtn);
     }
 
-    expect(document.startViewTransition).toHaveBeenCalled();
+    expect(document.startViewTransition).toBeUndefined();
   });
 });
 
-describe('CSS View Transitions Verification', () => {
-  it('contains wizard-step-container and keyframes in src/index.css', () => {
+describe('Wizard stylesheet verification', () => {
+  it('does not contain the removed view transition styles', () => {
     const cssContent = fs.readFileSync(path.resolve(__dirname, '../src/index.css'), 'utf-8');
-    expect(cssContent).toContain('.wizard-step-container');
-    expect(cssContent).toContain('view-transition-name: wizard-step;');
-    expect(cssContent).toContain('wizard-slide-to-left');
-    expect(cssContent).toContain('wizard-slide-from-right');
-    expect(cssContent).toContain('wizard-slide-to-right');
-    expect(cssContent).toContain('wizard-slide-from-left');
-    expect(cssContent).toContain('data-transition-direction');
-    expect(cssContent).toContain('prefers-reduced-motion: reduce');
+    expect(cssContent).not.toContain('view-transition');
+    expect(cssContent).not.toContain('wizard-slide');
   });
 });

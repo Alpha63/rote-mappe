@@ -39,7 +39,7 @@ export const addContractsSection = (builder: PdfBuilder) => {
     }
     
     if (builder.data.contractNotes) {
-      builder.addNotesPage(builder.data.contractNotes, 'Verträge & Verbindlichkeiten');
+      builder.addNotesPage(builder.data.contractNotes, i18n.t('pdf.contractsSection.notesTitle'));
     }
   }
 };

@@ -4,6 +4,9 @@
 const ITERATIONS = 100000;
 const SALT_LENGTH = 16;
 const IV_LENGTH = 12;
+const AUTH_TAG_LENGTH = 16;
+
+const invalidBackupError = () => new Error('Ungültiges oder beschädigtes verschlüsseltes Backup.');
 
 const getPasswordKey = async (password: string) => {
   const enc = new TextEncoder();
@@ -32,6 +35,10 @@ const deriveKey = async (passwordKey: CryptoKey, salt: Uint8Array, keyUsage: ['e
 };
 
 export const encryptBackup = async (data: string, password: string): Promise<string> => {
+  if (!password) {
+    throw new Error('Ein Passwort ist erforderlich.');
+  }
+
   const salt = crypto.getRandomValues(new Uint8Array(SALT_LENGTH));
   const iv = crypto.getRandomValues(new Uint8Array(IV_LENGTH));
   const passwordKey = await getPasswordKey(password);
@@ -63,7 +70,25 @@ export const encryptBackup = async (data: string, password: string): Promise<str
 };
 
 export const decryptBackup = async (encryptedBase64: string, password: string): Promise<string> => {
-  const binaryString = atob(encryptedBase64);
+  if (!password) {
+    throw new Error('Ein Passwort ist erforderlich.');
+  }
+
+  if (!encryptedBase64 || !/^[A-Za-z0-9+/]*={0,2}$/.test(encryptedBase64) || encryptedBase64.length % 4 !== 0) {
+    throw invalidBackupError();
+  }
+
+  let binaryString: string;
+  try {
+    binaryString = atob(encryptedBase64);
+  } catch {
+    throw invalidBackupError();
+  }
+
+  if (binaryString.length < SALT_LENGTH + IV_LENGTH + AUTH_TAG_LENGTH) {
+    throw invalidBackupError();
+  }
+
   const buff = new Uint8Array(binaryString.length);
   for (let i = 0; i < binaryString.length; i++) {
     buff[i] = binaryString.charCodeAt(i);
@@ -76,14 +101,19 @@ export const decryptBackup = async (encryptedBase64: string, password: string): 
   const passwordKey = await getPasswordKey(password);
   const aesKey = await deriveKey(passwordKey, salt, ['decrypt']);
 
-  const decryptedContent = await crypto.subtle.decrypt(
-    {
-      name: 'AES-GCM',
-      iv,
-    },
-    aesKey,
-    data
-  );
+  let decryptedContent: ArrayBuffer;
+  try {
+    decryptedContent = await crypto.subtle.decrypt(
+      {
+        name: 'AES-GCM',
+        iv,
+      },
+      aesKey,
+      data
+    );
+  } catch {
+    throw new Error('Das Backup konnte nicht entschlüsselt werden. Bitte prüfe das Passwort oder die Datei.');
+  }
 
   const dec = new TextDecoder();
   return dec.decode(decryptedContent);

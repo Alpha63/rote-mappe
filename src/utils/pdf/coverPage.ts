@@ -6,7 +6,11 @@ import { splitTextToLines } from './helpers';
 export const addCoverPage = (builder: PdfBuilder) => {
   const coverPage = builder.pdfDoc.addPage([builder.PAGE_WIDTH, builder.PAGE_HEIGHT]);
   const fullName = `${builder.data.salutation ? builder.data.salutation + ' ' : ''}${builder.data.firstName} ${builder.data.middleName ? builder.data.middleName + ' ' : ''}${builder.data.lastName}`.trim();
-  const documentTitle = builder.data.documentTitle || i18n.t('pdf.coverPage.title');
+  const defaultTitles: Record<string, string> = {
+    NOTFALLAKTE: i18n.t('pdf.coverPage.title'),
+    'EMERGENCY DOSSIER': i18n.t('pdf.coverPage.title')
+  };
+  const documentTitle = defaultTitles[builder.data.documentTitle || ''] || builder.data.documentTitle || i18n.t('pdf.coverPage.title');
 
   if (builder.templateName === 'modern') {
     // Elegant frame (Double border)
@@ -104,7 +108,7 @@ export const addCoverPage = (builder: PdfBuilder) => {
       color: builder.config.colors.accent,
     });
 
-    coverPage.drawText('Vertrauliche Dokumente & Informationen', {
+    coverPage.drawText(i18n.t('pdf.coverPage.confidentialTitle'), {
       x: 50,
       y: builder.PAGE_HEIGHT - 350,
       size: 16,
@@ -112,7 +116,7 @@ export const addCoverPage = (builder: PdfBuilder) => {
       color: builder.config.colors.text,
     });
   
-    coverPage.drawText('Bitte sicher aufbewahren und im Notfall den berechtigten\nPersonen übergeben.', {
+    coverPage.drawText(i18n.t('pdf.coverPage.confidentialDescription'), {
       x: 50,
       y: builder.PAGE_HEIGHT - 380,
       size: 12,

@@ -1,9 +1,10 @@
-import { useState } from 'react';
-import { Check, X, ShieldCheck, Download, Loader2, Globe } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Check, X, ShieldCheck, Download, Loader2, Globe, AlertTriangle } from 'lucide-react';
 import { useFormContext } from '../FormContext';
 import { useTranslation } from 'react-i18next';
 import { ThemeToggle } from './ThemeToggle';
 import { Lock } from 'lucide-react';
+import { useDialogFocusTrap } from '../hooks/useDialogFocusTrap';
 
 interface SidebarProps {
   currentStep: number;
@@ -13,25 +14,45 @@ interface SidebarProps {
 }
 
 export function Sidebar({ currentStep, setStep, isOpen, onClose }: SidebarProps) {
-  const { downloadBackup, isDownloading } = useFormContext();
+  const { downloadBackup, isDownloading, saveState, saveError, resetForm } = useFormContext();
   const [downloadSuccess, setDownloadSuccess] = useState(false);
+  const [downloadError, setDownloadError] = useState(false);
   const { t, i18n } = useTranslation();
 
   const [showBackupModal, setShowBackupModal] = useState(false);
+  const [showResetModal, setShowResetModal] = useState(false);
   const [pwd1, setPwd1] = useState('');
   const [pwd2, setPwd2] = useState('');
   const [error, setError] = useState('');
   const [noPassword, setNoPassword] = useState(false);
+  const backupDialogRef = useDialogFocusTrap(showBackupModal);
+  const resetDialogRef = useDialogFocusTrap(showResetModal);
 
   const handleBackupClick = () => {
     if (isDownloading) return;
     setDownloadSuccess(false);
+    setDownloadError(false);
     setPwd1('');
     setPwd2('');
     setError('');
     setNoPassword(false);
     setShowBackupModal(true);
   };
+
+  useEffect(() => {
+    if (!showBackupModal && !showResetModal) return;
+    const previouslyFocused = document.activeElement as HTMLElement | null;
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape') return;
+      setShowBackupModal(false);
+      setShowResetModal(false);
+    };
+    window.addEventListener('keydown', handleEscape);
+    return () => {
+      window.removeEventListener('keydown', handleEscape);
+      previouslyFocused?.focus();
+    };
+  }, [showBackupModal, showResetModal]);
 
   const handleBackupConfirm = async () => {
     let finalPwd = undefined;
@@ -52,7 +73,19 @@ export function Sidebar({ currentStep, setStep, isOpen, onClose }: SidebarProps)
     if (success) {
       setDownloadSuccess(true);
       setTimeout(() => setDownloadSuccess(false), 3000);
+    } else {
+      setDownloadError(true);
     }
+    onClose();
+  };
+
+  const handleReset = () => {
+    setShowResetModal(true);
+  };
+
+  const handleResetConfirm = async () => {
+    setShowResetModal(false);
+    await resetForm();
     onClose();
   };
 
@@ -97,11 +130,18 @@ export function Sidebar({ currentStep, setStep, isOpen, onClose }: SidebarProps)
               <ThemeToggle />
             </div>
             <button
+              type="button"
+              aria-label={t('common.close', 'Schließen')}
               onClick={onClose}
               className="lg:hidden text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 cursor-pointer"
             >
               <X size={24} />
             </button>
+            {downloadError && (
+              <p role="alert" className="text-center text-red-600 dark:text-red-400">
+                {t('sidebar.backup.error', { defaultValue: 'Fehler bei der Erstellung der ZIP-Datei.' })}
+              </p>
+            )}
           </div>
         </div>
         
@@ -121,6 +161,7 @@ export function Sidebar({ currentStep, setStep, isOpen, onClose }: SidebarProps)
                 )}
                 
                 <button
+                  type="button"
                   onClick={() => {
                     setStep(step.id);
                     onClose();
@@ -156,7 +197,23 @@ export function Sidebar({ currentStep, setStep, isOpen, onClose }: SidebarProps)
         </div>
         
         <div className="mt-6 pt-4 border-t border-slate-300/50 dark:border-slate-700/50 text-xs text-slate-600 dark:text-slate-400 leading-relaxed flex flex-col gap-3">
-          <button 
+          <div
+            className={`text-center ${saveState === 'error' ? 'text-red-600 dark:text-red-400' : 'text-slate-500 dark:text-slate-400'}`}
+            role={saveState === 'error' ? 'alert' : 'status'}
+            aria-live="polite"
+          >
+            {saveState === 'saving' && t('sidebar.saveState.saving')}
+            {saveState === 'saved' && t('sidebar.saveState.saved')}
+            {saveState === 'error' && (
+              saveError === 'quota'
+                ? t('sidebar.saveState.quota')
+                : saveError === 'clear'
+                  ? t('sidebar.saveState.clear')
+                  : t('sidebar.saveState.error')
+            )}
+          </div>
+          <button
+            type="button"
             onClick={handleBackupClick}
             disabled={isDownloading || downloadSuccess}
             className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 hover:border-indigo-600 dark:hover:border-indigo-500 text-slate-700 dark:text-slate-300 hover:text-indigo-700 dark:hover:text-indigo-400 rounded-xl transition-colors shadow-sm font-medium text-sm cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
@@ -169,16 +226,25 @@ export function Sidebar({ currentStep, setStep, isOpen, onClose }: SidebarProps)
               <><Download size={16} /> {t('sidebar.buttons.saveBackup')}</>
             )}
           </button>
+          <button
+            type="button"
+            onClick={handleReset}
+            className="w-full px-4 py-2 text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-xl transition-colors font-medium text-sm cursor-pointer"
+          >
+            {t('sidebar.reset.button')}
+          </button>
           
           <div className="flex items-center justify-center gap-2 mt-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-1.5 px-3 rounded-lg mx-auto w-fit">
             <Globe size={14} className="text-slate-400 dark:text-slate-500" />
             <button
+              type="button"
               onClick={() => i18n.changeLanguage('de')}
               className={`text-xs font-medium px-2 py-1 rounded transition-colors cursor-pointer ${i18n.language === 'de' || !i18n.language || i18n.language.startsWith('de') ? 'bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300' : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700'}`}
             >
               DE
             </button>
             <button
+              type="button"
               onClick={() => i18n.changeLanguage('en')}
               className={`text-xs font-medium px-2 py-1 rounded transition-colors cursor-pointer ${i18n.language === 'en' || i18n.language.startsWith('en') ? 'bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300' : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700'}`}
             >
@@ -203,13 +269,13 @@ export function Sidebar({ currentStep, setStep, isOpen, onClose }: SidebarProps)
       </div>
       
       {showBackupModal && (
-        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in">
-          <div className="bg-white dark:bg-slate-800 rounded-3xl p-8 max-w-md w-full shadow-2xl border border-indigo-100 dark:border-indigo-900/50 animate-in zoom-in-95">
+        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in" role="presentation">
+          <div ref={backupDialogRef} className="bg-white dark:bg-slate-800 rounded-3xl p-8 max-w-md w-full shadow-2xl border border-indigo-100 dark:border-indigo-900/50 animate-in zoom-in-95" role="dialog" aria-modal="true" aria-labelledby="sidebar-backup-title" tabIndex={-1}>
             <div className="flex flex-col items-center text-center">
               <div className="w-16 h-16 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-full flex items-center justify-center mb-6">
                 <Lock size={32} />
               </div>
-              <h3 className="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-3">{t('sidebar.backup.modalTitle', { defaultValue: 'Backup Sicherheit' })}</h3>
+              <h3 id="sidebar-backup-title" className="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-3">{t('sidebar.backup.modalTitle', { defaultValue: 'Backup Sicherheit' })}</h3>
               <p className="text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">
                 {t('sidebar.backup.requireEncryption', { defaultValue: 'Bitte vergib ein Passwort, um dein Backup (die JSON-Datei) zu verschlüsseln. Dies wird dringend empfohlen.' })}
               </p>
@@ -237,8 +303,10 @@ export function Sidebar({ currentStep, setStep, isOpen, onClose }: SidebarProps)
                   {!noPassword && (
                     <div className="flex flex-col gap-4 animate-in slide-in-from-top-2 duration-300">
                       <div>
+                        <label htmlFor="sidebar-backup-password" className="sr-only">{t('sidebar.backup.enterPasswordLabel', { defaultValue: 'Passwort' })}</label>
                         <input
                           type="password"
+                          id="sidebar-backup-password"
                           placeholder={t('sidebar.backup.enterPasswordLabel', { defaultValue: 'Passwort' })}
                           value={pwd1}
                           onChange={(e) => setPwd1(e.target.value)}
@@ -247,8 +315,10 @@ export function Sidebar({ currentStep, setStep, isOpen, onClose }: SidebarProps)
                         />
                       </div>
                       <div>
+                        <label htmlFor="sidebar-backup-password-confirm" className="sr-only">{t('sidebar.backup.confirmPasswordLabel', { defaultValue: 'Passwort wiederholen' })}</label>
                         <input
                           type="password"
+                          id="sidebar-backup-password-confirm"
                           placeholder={t('sidebar.backup.confirmPasswordLabel', { defaultValue: 'Passwort wiederholen' })}
                           value={pwd2}
                           onChange={(e) => setPwd2(e.target.value)}
@@ -261,13 +331,39 @@ export function Sidebar({ currentStep, setStep, isOpen, onClose }: SidebarProps)
                   {error && !noPassword && <p className="text-red-500 text-sm text-left">{error}</p>}
                   
                   <div className="flex flex-col w-full gap-2 mt-2">
-                    <button onClick={() => handleBackupConfirm()} className="w-full py-3.5 bg-indigo-600 text-white font-medium rounded-xl hover:bg-indigo-700 shadow-md shadow-indigo-600/20 transition-all cursor-pointer">
+                    <button type="button" onClick={() => handleBackupConfirm()} className="w-full py-3.5 bg-indigo-600 text-white font-medium rounded-xl hover:bg-indigo-700 shadow-md shadow-indigo-600/20 transition-all cursor-pointer">
                       {t('sidebar.backup.startDownload', { defaultValue: 'Download starten' })}
                     </button>
-                    <button onClick={() => setShowBackupModal(false)} className="w-full py-2 text-sm text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors cursor-pointer">
+                    <button type="button" onClick={() => setShowBackupModal(false)} className="w-full py-2 text-sm text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors cursor-pointer">
                       {t('common.cancel', { defaultValue: 'Abbrechen' })}
                     </button>
                   </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showResetModal && (
+        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in" role="presentation">
+          <div ref={resetDialogRef} className="bg-white dark:bg-slate-800 rounded-3xl p-8 max-w-md w-full shadow-2xl border border-red-100 dark:border-red-900/50 animate-in zoom-in-95" role="dialog" aria-modal="true" aria-labelledby="sidebar-reset-title" tabIndex={-1}>
+            <div className="flex flex-col items-center text-center">
+              <div className="w-16 h-16 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded-full flex items-center justify-center mb-6">
+                <AlertTriangle size={32} />
+              </div>
+              <h3 id="sidebar-reset-title" className="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-3">
+                {t('sidebar.reset.title')}
+              </h3>
+              <p className="text-slate-600 dark:text-slate-400 mb-8 leading-relaxed">
+                {t('sidebar.reset.confirm')}
+              </p>
+              <div className="flex flex-col w-full gap-3">
+                <button type="button" onClick={handleResetConfirm} className="w-full py-3.5 bg-red-600 text-white font-medium rounded-xl hover:bg-red-700 transition-colors cursor-pointer">
+                  {t('sidebar.reset.confirmButton')}
+                </button>
+                <button type="button" onClick={() => setShowResetModal(false)} className="w-full py-2 text-sm text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors cursor-pointer">
+                  {t('common.cancel')}
+                </button>
               </div>
             </div>
           </div>

@@ -3,12 +3,12 @@ import { PdfBuilder } from './PdfBuilder';
 
 export const addKeysSection = (builder: PdfBuilder) => {
   builder.addChapterCover(
-    'SCHLÜSSEL & HINWEISE',
-    'Schlüsselverzeichnis, Haustiere und weitere persönliche\nAnweisungen für die Angehörigen.'
+    i18n.t('pdf.keysSection.coverTitle'),
+    i18n.t('pdf.keysSection.coverDesc')
   );
 
   if (builder.data.keys && builder.data.keys.length > 0 && builder.data.keys.some(k => k.name || k.purpose)) {
-    builder.drawLineText('Schlüsselverzeichnis & Ersatzschlüssel:', true, 12);
+    builder.drawLineText(i18n.t('pdf.keysSection.replacementKeys'), true, 12);
     const headers = (i18n.t('pdf.keysSection.headers', { returnObjects: true }) as string[]);
     const rows = builder.data.keys.filter(k => k.name || k.purpose).map(k => [k.name || '', k.purpose || '', k.location || '']);
     builder.drawTable(headers, rows);
@@ -31,6 +31,6 @@ export const addKeysSection = (builder: PdfBuilder) => {
   }
 
   if (builder.data.generalNotes) {
-    builder.addNotesPage(builder.data.generalNotes, 'Allgemeine Hinweise & Schlüssel');
+    builder.addNotesPage(builder.data.generalNotes, i18n.t('pdf.keysSection.coverTitle'));
   }
 };

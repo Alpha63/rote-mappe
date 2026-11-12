@@ -2,106 +2,128 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+## [2.2.0] - 2026-11-12
+
+### Changed
+- **Wizard UX:** The disruptive animated view transitions during step changes
+  have been completely removed. Forward and backward navigation now changes
+  steps directly without a transition.
+- **Form validation:** Nested React Hook Form errors are now passed to the UI
+  as stable field paths.
+- **Dialogs:** Warning and backup dialogs keep keyboard focus inside the open
+  dialog and restore it when the dialog closes.
+- **PDF and performance:** Complete PDF data is tested across all templates and
+  languages. A performance budget checks the initial JavaScript chunk.
+  Reduced-motion users receive shorter animations.
+- **Form coverage:** A central field inventory test ensures that every
+  persisted schema field is assigned to a wizard step for validation.
+- **Backup and stability:** ZIP round-trip tests, import limits, dialog
+  accessibility checks, PDF worker timeouts and compatible dependency updates
+  have been added or verified.
+
+### Fixed
+- **Dependency update:** The npm `edgesOut` error under npm 9 is avoided by
+  using the current npm resolver for compatible lockfile updates.
+
 ## [2.1.0] - 2026-08-25
 
 ### Added
-- **Testing:** Umfassende Test-Infrastruktur mit Vitest und React Testing Library eingeführt. 6 Test-Suiten mit 53 Tests sichern nun Barrierefreiheit, View Transitions, Stabilität und den kompletten E2E-Workflow ab.
-- **View Transitions:** Native View Transitions API im Wizard integriert. Ein Wechsel der Schritte löst nun eine flüssige Slide-Animation (vor/zurück) aus, die sich via `prefers-reduced-motion` bei Bewegungsempfindlichkeit abschaltet.
-- **UX (Toasts):** Neues, responsives Toast-Notification-System für Erfolgs- und Fehlermeldungen (z.B. bei Backup-Fehlern) hinzugefügt, um blockierende Browser-Alerts zu ersetzen.
+- **Testing:** Comprehensive test infrastructure with Vitest and React Testing Library was introduced. Six test suites with 53 tests now cover accessibility, view transitions, stability and the complete E2E workflow.
+- **UX (Toasts):** A new responsive toast notification system for success and error messages (for example, backup errors) was added to replace blocking browser alerts.
 
 ### Changed
-- **Architektur (Steps 8–10):** Die Wizard-Schritte 8 (Hinweise), 9 (Eigene Kapitel) und 10 (Abschluss) wurden auf `react-hook-form` mit `useFormContext` und `useFieldArray` migriert. Damit nutzen nun alle 10 Schritte einheitlich `react-hook-form` und `zod` für Formular-State und Validierung.
-- **Architektur (Step 8 & 9):** Die Legacy-Hilfsfunktion `useArrayField` wurde durch das native `useFieldArray` von `react-hook-form` ersetzt.
-- **Architektur (Step 10):** Formular-Daten werden nun über `useFormContext` bezogen. Der App-spezifische `FormContext` steuert nur noch den Download.
-- **Barrierefreiheit (Formulare):** Sämtliche Eingabefelder (`Input`, `Select`, `Textarea`, `DocumentUpload`) wurden vollständig semantisch und zugänglich aufgebaut (z.B. eindeutige `id`/`htmlFor` über `useId()`, `aria-describedby`, `<fieldset>`/`<legend>` für Radio-Groups, Wrapper-`<form>`).
-- **Barrierefreiheit (Sprache):** Das `<html lang="de">`-Attribut wird nun dynamisch bei einem Sprachwechsel mit `i18next` aktualisiert, um WCAG 3.1.1 (Sprache der Seite) zu erfüllen.
-- **Lokale Assets:** Alle externen CDN- und Font-Aufrufe wurden entfernt. Die App nutzt zu 100% lokale Assets, einen System-Font-Stack sowie PDF-14 Standardfonts für maximale Privatsphäre und Offline-Fähigkeit.
-- **Code-Bereinigung:** Toter Code (`App.css`, `split_i18n.py`, Vite-Boilerplate-Logos) und unbenutzte Abhängigkeiten aus der `package.json` wurden entfernt. Die `vite.config.ts` nutzt nun native ECMAScript Import Attributes (`with { type: 'json' }`).
+- **Architecture (Steps 8–10):** Wizard steps 8 (Notes), 9 (Custom Chapters) and 10 (Finish) were migrated to `react-hook-form` with `useFormContext` and `useFieldArray`. All 10 steps now consistently use `react-hook-form` and `zod` for form state and validation.
+- **Architecture (Steps 8 & 9):** The legacy `useArrayField` helper was replaced with the native `useFieldArray` from `react-hook-form`.
+- **Architecture (Step 10):** Form data is now accessed through `useFormContext`. The app-specific `FormContext` only controls downloads.
+- **Accessibility (Forms):** All input fields (`Input`, `Select`, `Textarea`, `DocumentUpload`) were made fully semantic and accessible, including unique `id`/`htmlFor` attributes via `useId()`, `aria-describedby`, `<fieldset>`/`<legend>` for radio groups and a wrapper `<form>`.
+- **Accessibility (Language):** The `<html lang="de">` attribute is now updated dynamically on language changes with `i18next` to satisfy WCAG 3.1.1 (Language of Page).
+- **Local assets:** All external CDN and font requests were removed. The app now uses 100% local assets, a system font stack and PDF-14 standard fonts for maximum privacy and offline capability.
+- **Code cleanup:** Dead code (`App.css`, `split_i18n.py`, Vite boilerplate logos) and unused dependencies from `package.json` were removed. `vite.config.ts` now uses native ECMAScript import attributes (`with { type: 'json' }`).
 
 ### Fixed
-- **PDF-Vorschau (Step 10):** Ein kritischer Performance-Bug wurde behoben, bei dem die PDF-Vorschau in einer Endlosschleife ständig neu generiert wurde.
-- **UX:** Störende und UI-blockierende native `alert()`-Aufrufe beim Import und PDF-Export wurden entfernt und durch integrierte Toast-Meldungen ersetzt.
+- **PDF preview (Step 10):** A critical performance bug that caused the PDF preview to be regenerated continuously in an infinite loop was fixed.
+- **UX:** Disruptive and UI-blocking native `alert()` calls during import and PDF export were removed and replaced with integrated toast messages.
 
 ## [2.0.0] - 2026-08-01
 
 ### Added
-- **Sicherheit (Backup):** Optionale AES-256 Verschlüsselung für Backup-Dateien. Backups können nun mit einem Passwort direkt im Browser ver- und entschlüsselt werden.
-- **Basisdaten:** Neue Sektion "Arbeit / Beschäftigung" zur Erfassung von Arbeitgeberdetails und betrieblichen Notfallkontakten (Schritt 1).
-- **Basisdaten:** Neue Liste zur Erfassung von "Nicht zu benachrichtigenden Personen" im Notfall (Schritt 1).
-- **Medizinische Daten:** Neue Sektion zur Erfassung der "Behandelnden Ärzte" wie Hausarzt, Zahnarzt oder Fachärzte (Schritt 2).
-- **PDF-Export:** Die exportierte PDF-Datei enthält nun auch die neu erfassten Daten zu Arbeit/Beschäftigung, nicht zu benachrichtigenden Personen und behandelnden Ärzten.
-- **Lokalisierung:** Vollständige deutsche und englische Übersetzungen für alle neuen Formularfelder und PDF-Bereiche.
+- **Security (Backup):** Optional AES-256 encryption for backup files. Backups can now be encrypted and decrypted directly in the browser with a password.
+- **Basic data:** A new **Employment** section for employer details and workplace emergency contacts was added (Step 1).
+- **Basic data:** A new list for people who should **not be notified** in an emergency was added (Step 1).
+- **Medical data:** A new section for **attending physicians**, such as general practitioners, dentists or specialists, was added (Step 2).
+- **PDF export:** Exported PDFs now also include employment data, people not to notify and attending physicians.
+- **Localization:** Complete German and English translations were added for all new form fields and PDF sections.
 
 ### Fixed
-- **Backup & Export:** Es wurden fehlende Formularfelder zur `.json`-Backupdatei hinzugefügt (z.B. neuere Dokumenten-Uploads wie die Bestattungsverfügung sowie bisher nicht inkludierte optionale Notizfelder), sodass beim Export nun alle eingegebenen Daten gesichert werden.
+- **Backup & export:** Missing form fields were added to the `.json` backup file, including newer document uploads such as the funeral directive and previously omitted optional note fields. All entered data is now preserved during export.
 
 ### Changed
-- **Performance:** Die 10 Wizard-Schritte werden nun dynamisch über `React.lazy()` nachgeladen (Code Splitting), was die initiale Ladezeit der App erheblich reduziert.
-- **State Management:** Schreibvorgänge des Formular-Zustands in den `sessionStorage` wurden zur Performance-Optimierung gedebounced (Verzögerung von 500ms).
-- **Architektur:** Die veraltete Legacy-Migrationslogik im `FormContext.tsx` wurde in eine saubere Helferfunktion (`utils/migrateData.ts`) ausgelagert.
-- **i18n:** Die Übersetzungen für Deutsch und Englisch wurden aus der Hauptdatei in separate Dateien im `src/locales/` Ordner ausgelagert, um den Code übersichtlicher zu halten.
-- **Konfiguration:** Entfernung des irreführenden `packageManager`-Felds in der `package.json`.
-- **Dependencies:** Aktualisierung diverser npm-Abhängigkeiten (Minor/Patch-Updates für z.B. Vite, React, Tailwind, ESLint).
+- **Performance:** The 10 wizard steps are now loaded dynamically with `React.lazy()` (code splitting), significantly reducing the app's initial load time.
+- **State management:** Form state writes to `sessionStorage` are now debounced by 500 ms to improve performance.
+- **Architecture:** Legacy migration logic in `FormContext.tsx` was moved to a clean helper function (`utils/migrateData.ts`).
+- **i18n:** German and English translations were moved from the main file into separate files in the `src/locales/` directory to improve code organization.
+- **Configuration:** The misleading `packageManager` field was removed from `package.json`.
+- **Dependencies:** Various npm dependencies were updated with minor and patch releases, including Vite, React, Tailwind and ESLint.
 
 ## [1.3.1] - 2026-05-10
 
 ### Changed
-- **Refactoring:** Wizard-Komponenten in `WizardSteps.tsx` wurden final aufgeräumt und nutzen nun konsequent die ausgelagerten Dateien aus dem `steps`-Ordner.
-- **Security & Privacy:** Vollständige Code-Analyse (Privacy Check) durchgeführt und fehlende Abhängigkeiten für den Build-Prozess (`npm install`) behoben. Es ist verifiziert, dass die App zu 100 % lokal arbeitet und keinerlei externe API- oder Tracking-Aufrufe tätigt.
+- **Refactoring:** Wizard components in `WizardSteps.tsx` were cleaned up and now consistently use the extracted files from the `steps` directory.
+- **Security & privacy:** A complete privacy code analysis was performed and missing build dependencies (`npm install`) were fixed. The app was verified to operate 100% locally without external API or tracking requests.
 
 ### Fixed
-- **UI:** Überlappende Tailwind Dark Mode Klassen korrigiert (#15 von [@LucaNerlich]).
+- **UI:** Overlapping Tailwind dark-mode classes were corrected (#15 by [@LucaNerlich]).
 
 ## [1.3.0] - 2026-04-28
 
 ### Added
-- **CI:** Einfache GitHub Action für die Continuous Integration hinzugefügt (#10 von [@LucaNerlich]).
+- **CI:** A basic GitHub Action for continuous integration was added (#10 by [@LucaNerlich]).
 
 ### Changed
-- **PWA:** `vite-pwa` wurde durch einen Stub-Service-Worker ersetzt, um Chrome-Warnungen zu beheben (#13 von [@LucaNerlich]).
-- **Docker:** Die Umgebungsvariable `PORT` wurde in der Compose-Datei in `HOST_PORT` umbenannt (#12 von [@LucaNerlich]).
-- **Refactoring:** Die Wizard-Schritte wurden zur besseren Wartbarkeit strukturell aufgeteilt (#9 von [@LucaNerlich]).
-- **Cleanup:** Ungenutzte Hilfsskripte (Helper Scripts) wurden entfernt (#7 von [@LucaNerlich]).
-- **Lokalisierung:** Korrekturen und Verbesserungen an den Übersetzungs-Strings (#6 von [@LucaNerlich]).
+- **PWA:** `vite-pwa` was replaced with a stub service worker to resolve Chrome warnings (#13 by [@LucaNerlich]).
+- **Docker:** The environment variable `PORT` in the Compose file was renamed to `HOST_PORT` (#12 by [@LucaNerlich]).
+- **Refactoring:** Wizard steps were split into separate files for better maintainability (#9 by [@LucaNerlich]).
+- **Cleanup:** Unused helper scripts were removed (#7 by [@LucaNerlich]).
+- **Localization:** Translation strings were corrected and improved (#6 by [@LucaNerlich]).
 
 ### Fixed
-- **UI (Wizard):** Eine doppelte CSS-Klasse (`className`) auf dem mobilen Menü-Button wurde entfernt (#14 von [@LucaNerlich]).
-- **UI:** Fehlender Mauszeiger (`cursor: pointer`) bei den Welcome-Buttons wurde hinzugefügt.
+- **UI (Wizard):** A duplicate CSS class (`className`) on the mobile menu button was removed (#14 by [@LucaNerlich]).
+- **UI:** The missing pointer cursor (`cursor: pointer`) was added to the Welcome buttons.
 
 ## [1.2.0] - 2026-04-22
 
 ### Changed
-- **Automatisierte Versionierung:** Die Versionsnummer der App wird nun beim Build-Prozess direkt und automatisch aus der `package.json` ausgelesen und über die Vite-Konfiguration (`import.meta.env`) im Frontend bereitgestellt. Dadurch muss die Version bei einem neuen Release nicht mehr manuell im Code nachgezogen werden. Danke für diesen hilfreichen Beitrag an [@LucaNerlich]!
-- **Port-Konfiguration:** Der Standard-Port von Vite kann nun über die Umgebungsvariable `PORT` flexibel überschrieben werden und lauscht standardmäßig auf allen Netzwerk-Schnittstellen (`host: true`). Danke für diesen hilfreichen Beitrag an [@LucaNerlich]!
-- **Docker & Sicherheit:** Optimierung des Docker-Setups durch Hinzufügen einer `.dockerignore` und Dockerfile-Caching. Um die Ausführung als Root-Benutzer zu vermeiden, wurde auf das Image `nginxinc/nginx-unprivileged:stable-alpine` gewechselt. Zudem wurde ein Docker Healthcheck implementiert (Merge Request #2). Danke für diesen hilfreichen Beitrag an [@LucaNerlich]!
-
+- **Automated versioning:** The app version is now read automatically from `package.json` during the build and exposed in the frontend through Vite configuration (`import.meta.env`). A new release no longer requires manually updating the version in the code. Thanks to [@LucaNerlich] for this helpful contribution!
+- **Port configuration:** The default Vite port can now be overridden through the `PORT` environment variable and listens on all network interfaces by default (`host: true`). Thanks to [@LucaNerlich] for this helpful contribution!
+- **Docker & security:** The Docker setup was improved by adding a `.dockerignore` and Dockerfile caching. To avoid running as root, the image was changed to `nginxinc/nginx-unprivileged:stable-alpine`. A Docker health check was also implemented (Merge Request #2). Thanks to [@LucaNerlich] for this helpful contribution!
 
 ## [1.1.0] - 2026-04-20
 
 ### Added
-- **Hilfreiche Links & Vorlagen:** Neue Informationsboxen im Bereich "Vollmachten & Verfügungen" mit direkten Links zu offiziellen Vorlagen (BMJV, Verbraucherzentrale, Friedhofsverband Sauerland). Danke für den Tipp an klotzbrocken.
-- **App-Version:** Die aktuelle Versionsnummer (v1.1.0) wird nun dezent am Ende der Startseite angezeigt und verlinkt direkt zum GitHub-Repository. Ebenfalls in der package.json
-- **Dummy-Daten:** Die Datei `Muster_Notfallakte_Dummy_Daten.json` wurde um die neuen Standard-Dokumente und -Verfügungen (Geburtsurkunde, Patientenverfügung etc.) erweitert, um die Platzhalter-Funktion direkt demonstrieren zu können.
-
+- **Helpful links & templates:** New information boxes were added to **Powers of Attorney & Directives** with direct links to official templates (BMJV, Verbraucherzentrale and Friedhofsverband Sauerland). Thanks to klotzbrocken for the suggestion.
+- **App version:** The current app version (v1.1.0) is now shown discreetly at the bottom of the start page and links directly to the GitHub repository. It is also included in `package.json`.
+- **Sample data:** `Muster_Notfallakte_Dummy_Daten.json` was expanded with new standard documents and directives, such as a birth certificate and living will, to demonstrate the placeholder feature.
 
 ### Fixed
-- **PDF-Export (Verfügungen):** Platzhalter-Seiten (leere Seiten) für Standard-Verfügungen werden nun korrekt im PDF erstellt, wenn "Später als Kopie einheften" ausgewählt wurde.
-- **PDF-Export (Dokumente):** Platzhalter für Standard-Ausweise (z.B. Führerschein, Personalausweis) werden in der generierten PDF nun korrekt dargestellt.
-- **Docker:** Die npm Version wurde von 22 auf 24 korrigiert.
-- **Build Prozess:** Durch den import einer ungenutzen verweiß, ging der npm run build Prozesss nicht ordentlich druch.
+- **PDF export (Directives):** Placeholder pages for standard directives are now created correctly in the PDF when **Attach later as a copy** is selected.
+- **PDF export (Documents):** Placeholders for standard IDs, such as driver's licenses and identity cards, are now displayed correctly in generated PDFs.
+- **Docker:** The npm version was corrected from 22 to 24.
+- **Build process:** The build process was fixed after an unused import caused `npm run build` to fail.
 
 ## [1.0.0] - 2026-04-18
 
 ### Added
-- **Initial Release:** Grundgerüst der Notfallakte-Anwendung.
-- **Wizard-Navigation:** Schritt-für-Schritt-Formular zur Erfassung von Basisdaten, Kontakten, medizinischen Informationen, digitalem Nachlass und Finanzen.
-- **Lokale Verarbeitung (Privacy First):** Alle Daten werden ausschließlich im Browser verarbeitet, es findet keine Server-Kommunikation statt.
-- **Backup & Restore:** Möglichkeit, die eingegebenen Daten als `.json`-Datei zu exportieren und später wieder zu importieren.
-- **PDF-Generierung:** Direkter Export der erfassten Notfallakte als strukturierte und formatierte PDF-Datei.
-- **PWA-Unterstützung:** Die App kann als Progressive Web App (PWA) lokal installiert und offline genutzt werden.
-- **Installations-Button:** Ein nativer "Als lokale App installieren"-Button auf der Startseite (wird angezeigt, wenn der Browser dies unterstützt).
-- **Internationalisierung (i18n):** Vollständige Mehrsprachigkeit (Deutsch & Englisch) mit automatischer Spracherkennung implementiert.
-- **Performance:** Die rechenintensive PDF-Generierung wurde in einen Web Worker ausgelagert, sodass die Benutzeroberfläche während des Exports flüssig bleibt.
-- **Dark Mode:** Vollständige Unterstützung für einen dunklen Modus mit Toggle-Button auf der Welcome-Page, der Sidebar und im mobilen Header.
-- **Markdown-Editor:** Integration von `@uiw/react-md-editor` in Textbereiche für einfache Formatierungen (Fett, Kursiv, Hyperlinks).
-- **PDF-Formatierung:** Der PDF-Generator liest nun Markdown-Tags aus den Textfeldern und rendert fett- und kursivgedruckten Text sowie echte, klickbare Hyperlinks.
+- **Initial release:** Initial structure of the emergency dossier application.
+- **Wizard navigation:** Step-by-step form for collecting basic data, contacts, medical information, digital assets and finances.
+- **Local processing (privacy first):** All data is processed exclusively in the browser; no server communication takes place.
+- **Backup & restore:** Entered data can be exported as a `.json` file and imported later.
+- **PDF generation:** Direct export of the completed emergency dossier as a structured and formatted PDF.
+- **PWA support:** The app can be installed locally as a Progressive Web App and used offline.
+- **Install button:** A native **Install as local app** button is shown on the start page when supported by the browser.
+- **Internationalization (i18n):** Complete German and English support with automatic language detection was implemented.
+- **Performance:** Resource-intensive PDF generation was moved to a Web Worker so the user interface remains responsive during export.
+- **Dark mode:** Full dark-mode support with a toggle on the Welcome page, sidebar and mobile header.
+- **Markdown editor:** `@uiw/react-md-editor` was integrated into text areas for simple formatting such as bold, italic and hyperlinks.
+- **PDF formatting:** The PDF generator now reads Markdown tags from text fields and renders bold and italic text as well as real, clickable hyperlinks.

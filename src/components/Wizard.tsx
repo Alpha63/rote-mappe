@@ -1,6 +1,7 @@
-import { useState, useEffect, Suspense, lazy } from 'react';
+import { useState, useEffect, Suspense, lazy, useRef } from 'react';
+import { Path } from 'react-hook-form';
 import { Sidebar } from './Sidebar';
-import { ArrowRight, ArrowLeft, AlertTriangle, Menu, ShieldCheck } from 'lucide-react';
+import { ArrowRight, ArrowLeft, AlertTriangle, Menu, ShieldCheck, Loader2 } from 'lucide-react';
 import { FormProvider, useFormContext } from '../FormContext';
 import { useTranslation } from 'react-i18next';
 const Step1Basisdaten = lazy(() => import('./steps/Step1Basisdaten').then(m => ({ default: m.Step1Basisdaten })));
@@ -14,6 +15,25 @@ const Step8Hinweise = lazy(() => import('./steps/Step8Hinweise').then(m => ({ de
 const Step9EigeneKapitel = lazy(() => import('./steps/Step9EigeneKapitel').then(m => ({ default: m.Step9EigeneKapitel })));
 const Step10Abschluss = lazy(() => import('./steps/Step10Abschluss').then(m => ({ default: m.Step10Abschluss })));
 import { ThemeToggle } from './ThemeToggle';
+import { useDialogFocusTrap } from '../hooks/useDialogFocusTrap';
+import { fieldsForStep } from './wizardFields';
+import { FormSchemaType } from '../schema';
+
+function WizardLoading() {
+  const { t } = useTranslation();
+
+  return (
+    <div
+      className="flex h-full min-h-32 items-center justify-center gap-3 p-12 text-slate-500 dark:text-slate-400"
+      role="status"
+      aria-live="polite"
+      aria-busy="true"
+    >
+      <Loader2 size={24} className="animate-spin" aria-hidden="true" />
+      <span>{t('wizard.loading')}</span>
+    </div>
+  );
+}
 
 export function Wizard() {
   return (
@@ -26,60 +46,44 @@ export function Wizard() {
 function WizardContent() {
   const { t } = useTranslation();
   const [step, setStep] = useState(1);
-  const { methods } = useFormContext();
+  const { methods, errors } = useFormContext();
   const [showWarningModal, setShowWarningModal] = useState(false);
   const [nextStepTarget, setNextStepTarget] = useState(1);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const warningDialogRef = useDialogFocusTrap(showWarningModal);
+  const errorSummaryRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [step]);
 
-  const getFieldsForStep = (stepNumber: number): string[] => {
-    switch (stepNumber) {
-      case 1:
-        return [
-          'salutation', 'firstName', 'middleName', 'lastName',
-          'street', 'houseNumber', 'zipCode', 'city',
-          'maritalStatus', 'marriageDate', 'divorceDate',
-          'childrenCount', 'children',
-          'birthDate', 'birthPlace', 'birthCountry',
-          'taxId', 'socialSecurityNumber',
-          'employment', 'contacts', 'doNotNotifyContacts',
-          'documentTitle'
-        ];
-      case 2:
-        return ['medicalData', 'medicalNotes', 'organDonorDocument'];
-      case 3:
-        return ['bankAccounts', 'financeNotes', 'otherAssets', 'realEstates', 'vehicles', 'automotiveClubs'];
-      case 4:
-        return ['contracts', 'subscriptions', 'serviceProviders', 'meterNumbers', 'contractNotes'];
-      case 5:
-        return ['digitalIdentities', 'devicePINs', 'digitalLegacySocialMedia', 'digitalLegacyCloud'];
-      case 6:
-        return [
-          'idCard', 'passport', 'driversLicense', 'birthCertificate',
-          'marriageCertificate', 'divorceCertificate', 'certificates',
-          'otherDocuments', 'documentNotes'
-        ];
-      case 7:
-        return [
-          'testamentLocation', 'testamentDocument', 'patientenverfuegung',
-          'vorsorgevollmacht', 'betreuungsverfuegung', 'bestattungsverfuegung',
-          'customPowersOfAttorney', 'poaNotes'
-        ];
-      case 8:
-        return ['keys', 'pets', 'generalNotes'];
-      case 9:
-        return ['customChapters'];
-      default:
-        return [];
+  const stepErrors = Object.entries(errors).filter(([path]) => {
+    const fields = fieldsForStep[step] ?? [];
+    return fields.some(field => path === field || path.startsWith(`${field}.`));
+  });
+
+  useEffect(() => {
+    if (stepErrors.length > 0) {
+      errorSummaryRef.current?.focus();
     }
-  };
+  }, [step, stepErrors.length]);
+
+  useEffect(() => {
+    if (!showWarningModal) return;
+    const previouslyFocused = document.activeElement as HTMLElement | null;
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setShowWarningModal(false);
+    };
+    window.addEventListener('keydown', handleEscape);
+    return () => {
+      window.removeEventListener('keydown', handleEscape);
+      previouslyFocused?.focus();
+    };
+  }, [showWarningModal]);
 
   const handleNextClick = async (targetStep: number) => {
     if (targetStep > step) {
-      const fieldsToValidate = getFieldsForStep(step);
+      const fieldsToValidate = fieldsForStep[step] ?? [];
       let isValid = true;
       if (fieldsToValidate.length > 0) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -91,28 +95,8 @@ function WizardContent() {
         return;
       }
     }
-    const direction = targetStep >= step ? 'forward' : 'backward';
-    if (document.startViewTransition && !window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches) {
-      document.documentElement.dataset.transitionDirection = direction;
-      try {
-        const t = document.startViewTransition(() => {
-          setStep(targetStep);
-          window.scrollTo(0, 0);
-        });
-        if (t && t.finished) {
-          t.finished.finally(() => {
-            delete document.documentElement.dataset.transitionDirection;
-          });
-        }
-      } catch {
-        setStep(targetStep);
-        window.scrollTo(0, 0);
-        delete document.documentElement.dataset.transitionDirection;
-      }
-    } else {
-      setStep(targetStep);
-      window.scrollTo(0, 0);
-    }
+    setStep(targetStep);
+    window.scrollTo(0, 0);
   };
 
   const renderStep = () => {
@@ -153,6 +137,8 @@ function WizardContent() {
           <div className="flex items-center gap-3">
             <ThemeToggle />
             <button
+              type="button"
+              aria-label={t('wizard.openMenu', 'Menü öffnen')}
               onClick={() => setIsSidebarOpen(true)}
               className="p-2 -mr-2 text-indigo-600 dark:text-indigo-400 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors cursor-pointer"
             >
@@ -173,7 +159,33 @@ function WizardContent() {
             <div className="bg-white dark:bg-slate-800 rounded-3xl p-5 md:p-8 shadow-sm border border-slate-200 dark:border-slate-700 min-h-[calc(100vh-8rem)] flex flex-col">
 
               <div className="flex-1">
-                <Suspense fallback={<div className="flex justify-center items-center h-full p-12 text-slate-500">{t('wizard.loading') || 'Lade Schritt...'}</div>}>
+                {stepErrors.length > 0 && (
+                  <div
+                    ref={errorSummaryRef}
+                    tabIndex={-1}
+                    role="alert"
+                    aria-labelledby="wizard-error-summary-title"
+                    className="mb-6 rounded-xl border border-red-200 bg-red-50 p-4 text-red-900 dark:border-red-900/60 dark:bg-red-950/30 dark:text-red-100"
+                  >
+                    <h2 id="wizard-error-summary-title" className="font-semibold">
+                      {t('wizard.errorSummaryTitle', { count: stepErrors.length })}
+                    </h2>
+                    <ul className="mt-2 list-disc pl-5 text-sm">
+                      {stepErrors.map(([path, message]) => (
+                        <li key={path}>
+                          <button
+                            type="button"
+                            className="underline underline-offset-2 cursor-pointer"
+                            onClick={() => methods.setFocus(path as Path<FormSchemaType>)}
+                          >
+                            {message}
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                <Suspense fallback={<WizardLoading />}>
                   {renderStep()}
                 </Suspense>
               </div>
@@ -210,21 +222,21 @@ function WizardContent() {
       </div>
 
       {showWarningModal && (
-        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in">
-          <div className="bg-white dark:bg-slate-800 rounded-3xl p-8 max-w-md w-full shadow-2xl border border-red-100 dark:border-red-900/50 animate-in zoom-in-95">
+        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in" role="presentation">
+          <div ref={warningDialogRef} className="bg-white dark:bg-slate-800 rounded-3xl p-8 max-w-md w-full shadow-2xl border border-red-100 dark:border-red-900/50 animate-in zoom-in-95" role="dialog" aria-modal="true" aria-labelledby="wizard-warning-title" tabIndex={-1}>
             <div className="flex flex-col items-center text-center">
               <div className="w-16 h-16 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded-full flex items-center justify-center mb-6">
                 <AlertTriangle size={32} />
               </div>
-              <h3 className="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-3">{t('wizard.warningTitle')}</h3>
+              <h3 id="wizard-warning-title" className="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-3">{t('wizard.warningTitle')}</h3>
               <p className="text-slate-600 dark:text-slate-400 mb-8 leading-relaxed">
                 {t('wizard.warningDesc')}
               </p>
               <div className="flex flex-col w-full gap-3">
-                <button onClick={() => setShowWarningModal(false)} className="w-full py-3.5 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 font-medium rounded-xl hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors cursor-pointer">
+                <button type="button" onClick={() => setShowWarningModal(false)} className="w-full py-3.5 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 font-medium rounded-xl hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors cursor-pointer">
                   {t('wizard.checkInputs')}
                 </button>
-                <button onClick={() => { setShowWarningModal(false); setStep(nextStepTarget); }} className="w-full py-3.5 text-slate-500 dark:text-slate-400 font-medium hover:text-slate-700 dark:hover:text-slate-200 transition-colors cursor-pointer">
+                <button type="button" onClick={() => { setShowWarningModal(false); setStep(nextStepTarget); }} className="w-full py-3.5 text-slate-500 dark:text-slate-400 font-medium hover:text-slate-700 dark:hover:text-slate-200 transition-colors cursor-pointer">
                   {t('wizard.continueAnyway')}
                 </button>
               </div>

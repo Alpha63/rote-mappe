@@ -17,7 +17,12 @@ export const addBaseSection = (builder: PdfBuilder) => {
   }
 
   builder.drawKeyValue(i18n.t('pdf.baseSection.address'), `${builder.data.street} ${builder.data.houseNumber}, ${builder.data.zipCode} ${builder.data.city}`);
-  builder.drawKeyValue(i18n.t('pdf.baseSection.maritalStatus'), builder.data.maritalStatus);
+  const maritalStatusLabels: Record<string, string> = {
+    ledig: i18n.t('wizardSteps.step1.statusSingle'),
+    verheiratet: i18n.t('wizardSteps.step1.statusMarried'),
+    geschieden: i18n.t('wizardSteps.step1.statusDivorced')
+  };
+  builder.drawKeyValue(i18n.t('pdf.baseSection.maritalStatus'), maritalStatusLabels[builder.data.maritalStatus] || builder.data.maritalStatus);
   if (builder.data.marriageDate) builder.drawKeyValue(i18n.t('pdf.baseSection.marriageDate'), formatDate(builder.data.marriageDate));
   if (builder.data.divorceDate) builder.drawKeyValue(i18n.t('pdf.baseSection.divorceDate'), formatDate(builder.data.divorceDate));
   if (builder.data.childrenCount) builder.drawKeyValue(i18n.t('pdf.baseSection.childrenCount'), builder.data.childrenCount);
@@ -50,7 +55,13 @@ export const addBaseSection = (builder: PdfBuilder) => {
 
   if (builder.data.employment?.status) {
     builder.drawLineText(i18n.t('pdf.baseSection.employmentTitle'), true, 12);
-    builder.drawKeyValue(i18n.t('pdf.baseSection.employmentStatus'), builder.data.employment.status);
+    const employmentStatusLabels: Record<string, string> = {
+      Angestellter: i18n.t('wizardSteps.step1.statusEmployee'),
+      Selbstständiger: i18n.t('wizardSteps.step1.statusSelfEmployed'),
+      Employee: i18n.t('wizardSteps.step1.statusEmployee'),
+      'Self-employed': i18n.t('wizardSteps.step1.statusSelfEmployed')
+    };
+    builder.drawKeyValue(i18n.t('pdf.baseSection.employmentStatus'), employmentStatusLabels[builder.data.employment.status] || builder.data.employment.status);
     if (builder.data.employment.companyName) builder.drawKeyValue(i18n.t('pdf.baseSection.employerName'), builder.data.employment.companyName);
     
     const addressParts = [];

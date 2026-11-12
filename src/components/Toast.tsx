@@ -41,6 +41,7 @@ function ToastItem({ toast, onDismiss }: ToastItemProps) {
       </span>
       <span className="flex-1 leading-snug">{toast.message}</span>
       <button
+        type="button"
         onClick={() => onDismiss(toast.id)}
         aria-label="Benachrichtigung schließen"
         className={`shrink-0 p-0.5 rounded-lg transition-colors cursor-pointer

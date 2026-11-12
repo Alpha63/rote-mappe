@@ -12,6 +12,7 @@ RUN npm run build
 # Stufe 2: Servieren mit NGINX (unprivileged, läuft als nicht-root)
 FROM nginxinc/nginx-unprivileged:stable-alpine
 COPY --link --from=builder /app/dist /usr/share/nginx/html
+COPY --link nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 8080
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
   CMD wget -qO- http://localhost:8080/ > /dev/null || exit 1

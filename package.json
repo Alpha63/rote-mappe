@@ -1,12 +1,15 @@
 {
   "name": "notfall-app",
   "private": true,
-  "version": "2.1.0",
+  "version": "2.2.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
+    "check:performance": "node scripts/check-performance.mjs",
+    "check:headers": "node scripts/check-headers.mjs",
+    "check:links": "node scripts/check-links.mjs",
     "preview": "vite preview",
     "test": "vitest run"
   },

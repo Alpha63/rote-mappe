@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { FormSchemaType } from '../../schema';
 import { ToastContainer } from '../Toast';
 import { useToast } from '../../hooks/useToast';
+import { useDialogFocusTrap } from '../../hooks/useDialogFocusTrap';
 
 export function Step10Abschluss() {
   const { t } = useTranslation();
@@ -30,10 +31,10 @@ export function Step10Abschluss() {
         if (prevUrl) URL.revokeObjectURL(prevUrl);
         return url;
       });
-    } catch (error) {
-      console.error('Error generating PDF preview:', error);
+    } catch {
+      addToast(t('step10.previewError', { defaultValue: 'Die PDF-Vorschau konnte nicht erstellt werden.' }), 'error');
     }
-  }, [getValues, pdfTemplate, includePlaceholders, includeWarnings]);
+  }, [addToast, getValues, includePlaceholders, includeWarnings, pdfTemplate, t]);
 
   // Generate preview on mount and when PDF settings change
   useEffect(() => {
@@ -58,6 +59,7 @@ export function Step10Abschluss() {
   const [pwd2, setPwd2] = useState('');
   const [error, setError] = useState('');
   const [noPassword, setNoPassword] = useState(false);
+  const backupDialogRef = useDialogFocusTrap(showBackupModal);
 
   const handleDownloadClick = () => {
     setDownloadSuccess(false);
@@ -67,6 +69,19 @@ export function Step10Abschluss() {
     setNoPassword(false);
     setShowBackupModal(true);
   };
+
+  useEffect(() => {
+    if (!showBackupModal) return;
+    const previouslyFocused = document.activeElement as HTMLElement | null;
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setShowBackupModal(false);
+    };
+    window.addEventListener('keydown', handleEscape);
+    return () => {
+      window.removeEventListener('keydown', handleEscape);
+      previouslyFocused?.focus();
+    };
+  }, [showBackupModal]);
 
   const handleBackupConfirm = async () => {
     let finalPwd = undefined;
@@ -113,7 +128,7 @@ export function Step10Abschluss() {
             </label>
           </div>
         </div>
-        <button onClick={handleDownloadClick} disabled={isDownloading || downloadSuccess} className={`w-full md:w-auto text-white px-8 py-3 rounded-xl font-semibold transition-all shadow-lg flex items-center justify-center gap-3 ${isDownloading ? 'bg-indigo-400 cursor-not-allowed' : downloadSuccess ? 'bg-emerald-500 hover:bg-emerald-600 cursor-default' : 'bg-indigo-600 hover:bg-indigo-700'}`}>
+        <button type="button" onClick={handleDownloadClick} disabled={isDownloading || downloadSuccess} className={`w-full md:w-auto text-white px-8 py-3 rounded-xl font-semibold transition-all shadow-lg flex items-center justify-center gap-3 ${isDownloading ? 'bg-indigo-400 cursor-not-allowed' : downloadSuccess ? 'bg-emerald-500 hover:bg-emerald-600 cursor-default' : 'bg-indigo-600 hover:bg-indigo-700'}`}>
           {isDownloading ? (
             <><Loader2 size={20} className="animate-spin" /> {t('wizardSteps.step10.downloading')}</>
           ) : downloadSuccess ? (
@@ -145,13 +160,13 @@ export function Step10Abschluss() {
       </div>
 
       {showBackupModal && (
-        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in">
-          <div className="bg-white dark:bg-slate-800 rounded-3xl p-8 max-w-md w-full shadow-2xl border border-indigo-100 dark:border-indigo-900/50 animate-in zoom-in-95">
+        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in" role="presentation">
+          <div ref={backupDialogRef} className="bg-white dark:bg-slate-800 rounded-3xl p-8 max-w-md w-full shadow-2xl border border-indigo-100 dark:border-indigo-900/50 animate-in zoom-in-95" role="dialog" aria-modal="true" aria-labelledby="completion-backup-title" tabIndex={-1}>
             <div className="flex flex-col items-center text-center">
               <div className="w-16 h-16 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-full flex items-center justify-center mb-6">
                 <Lock size={32} />
               </div>
-              <h3 className="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-3">{t('sidebar.backup.modalTitle', { defaultValue: 'Backup Sicherheit' })}</h3>
+              <h3 id="completion-backup-title" className="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-3">{t('sidebar.backup.modalTitle', { defaultValue: 'Backup Sicherheit' })}</h3>
               <p className="text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">
                 {t('sidebar.backup.requireEncryption', { defaultValue: 'Bitte vergib ein Passwort, um dein Backup (die JSON-Datei) zu verschlüsseln. Dies wird dringend empfohlen.' })}
               </p>
@@ -179,8 +194,10 @@ export function Step10Abschluss() {
                   {!noPassword && (
                     <div className="flex flex-col gap-4 animate-in slide-in-from-top-2 duration-300">
                       <div>
+                        <label htmlFor="completion-backup-password" className="sr-only">{t('sidebar.backup.enterPasswordLabel', { defaultValue: 'Passwort' })}</label>
                         <input
                           type="password"
+                          id="completion-backup-password"
                           placeholder={t('sidebar.backup.enterPasswordLabel', { defaultValue: 'Passwort' })}
                           value={pwd1}
                           onChange={(e) => setPwd1(e.target.value)}
@@ -189,8 +206,10 @@ export function Step10Abschluss() {
                         />
                       </div>
                       <div>
+                        <label htmlFor="completion-backup-password-confirm" className="sr-only">{t('sidebar.backup.confirmPasswordLabel', { defaultValue: 'Passwort wiederholen' })}</label>
                         <input
                           type="password"
+                          id="completion-backup-password-confirm"
                           placeholder={t('sidebar.backup.confirmPasswordLabel', { defaultValue: 'Passwort wiederholen' })}
                           value={pwd2}
                           onChange={(e) => setPwd2(e.target.value)}
@@ -204,10 +223,10 @@ export function Step10Abschluss() {
                   {error && !noPassword && <p className="text-red-500 text-sm text-left">{error}</p>}
                   
                   <div className="flex flex-col w-full gap-2 mt-2">
-                    <button onClick={() => handleBackupConfirm()} className="w-full py-3.5 bg-indigo-600 text-white font-medium rounded-xl hover:bg-indigo-700 shadow-md shadow-indigo-600/20 transition-all cursor-pointer">
+                    <button type="button" onClick={() => handleBackupConfirm()} className="w-full py-3.5 bg-indigo-600 text-white font-medium rounded-xl hover:bg-indigo-700 shadow-md shadow-indigo-600/20 transition-all cursor-pointer">
                       {t('sidebar.backup.startDownload', { defaultValue: 'Download starten' })}
                     </button>
-                    <button onClick={() => setShowBackupModal(false)} className="w-full py-2 text-sm text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors cursor-pointer">
+                    <button type="button" onClick={() => setShowBackupModal(false)} className="w-full py-2 text-sm text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors cursor-pointer">
                       {t('common.cancel', { defaultValue: 'Abbrechen' })}
                     </button>
                   </div>

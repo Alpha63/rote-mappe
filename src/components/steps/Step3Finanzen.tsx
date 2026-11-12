@@ -51,7 +51,7 @@ export function Step3Finanzen() {
           <div className="text-sm text-red-700 dark:text-red-400">
             <strong className="font-semibold block mb-1">{t('wizardSteps.step3.poaHintTitle')}</strong>
             {t('wizardSteps.step3.poaHintDesc')}<br/>
-            <a href="https://www.bmjv.de/DE/service/formulare/form_vorsorgevollmacht/form_vorsorgevollmacht_artikel.html?nn=17628" target="_blank" rel="noopener noreferrer" className="underline hover:text-red-900 dark:hover:text-red-100 break-all">https://www.bmjv.de/DE/service/formulare/form_vorsorgevollmacht/form_vorsorgevollmacht_artikel.html?nn=17628</a>
+            <a href="https://www.bmj.de/DE/service/formulare/form_vorsorgevollmacht/form_vorsorgevollmacht_node.html" target="_blank" rel="noopener noreferrer" className="underline hover:text-red-900 dark:hover:text-red-100 break-all">https://www.bmj.de/DE/service/formulare/form_vorsorgevollmacht/</a>
           </div>
         </div>
       </div>
@@ -215,6 +215,7 @@ export function Step3Finanzen() {
                   <div className="flex items-center gap-4 pt-4 pb-2 border-b border-slate-200 dark:border-slate-700">
                     <input
                       type="text"
+                      id={`asset-heading-${asset.id}`}
                       {...register(`otherAssets.${index}.type`)}
                       placeholder={t('wizardSteps.step3.newHeading')}
                       className="text-lg font-semibold text-slate-800 dark:text-slate-200 bg-transparent outline-none w-full placeholder-slate-400 dark:placeholder-slate-500"
