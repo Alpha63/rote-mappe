@@ -15,6 +15,9 @@ All notable changes to this project will be documented in this file.
 - **PDF und Performance:** Vollständige PDF-Daten werden in allen Vorlagen und
   Sprachen getestet; ein Performance-Budget prüft den initialen JavaScript-
   Chunk. Reduced-motion-Nutzer erhalten verkürzte Animationen.
+- **Formularabdeckung:** Ein zentraler Feldinventar-Test stellt sicher, dass
+  jedes persistierte Schemafeld einem Wizard-Schritt zur Validierung zugeordnet
+  ist.
 - **Backup und Stabilität:** ZIP-Roundtrip-Tests, Importgrenzen, Dialog-
   Accessibility, PDF-Worker-Timeouts und kompatible Dependency-Updates wurden
   ergänzt bzw. verifiziert.
