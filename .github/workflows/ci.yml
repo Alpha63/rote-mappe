@@ -18,4 +18,6 @@ jobs:
 
       - run: npm ci
       - run: npm run lint
+      - run: npm test -- --run
       - run: npm run build
+      - run: npm audit --omit=optional --audit-level=high
