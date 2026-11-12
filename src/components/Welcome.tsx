@@ -49,6 +49,7 @@ export function Welcome({ onStart }: WelcomeProps) {
 
   useEffect(() => {
     if (!showPasswordModal) return;
+    const previouslyFocused = document.activeElement as HTMLElement | null;
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         setShowPasswordModal(false);
@@ -56,7 +57,10 @@ export function Welcome({ onStart }: WelcomeProps) {
       }
     };
     window.addEventListener('keydown', handleEscape);
-    return () => window.removeEventListener('keydown', handleEscape);
+    return () => {
+      window.removeEventListener('keydown', handleEscape);
+      previouslyFocused?.focus();
+    };
   }, [showPasswordModal]);
 
   const handleInstallClick = async () => {

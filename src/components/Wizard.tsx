@@ -37,11 +37,15 @@ function WizardContent() {
 
   useEffect(() => {
     if (!showWarningModal) return;
+    const previouslyFocused = document.activeElement as HTMLElement | null;
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') setShowWarningModal(false);
     };
     window.addEventListener('keydown', handleEscape);
-    return () => window.removeEventListener('keydown', handleEscape);
+    return () => {
+      window.removeEventListener('keydown', handleEscape);
+      previouslyFocused?.focus();
+    };
   }, [showWarningModal]);
 
   const getFieldsForStep = (stepNumber: number): string[] => {
