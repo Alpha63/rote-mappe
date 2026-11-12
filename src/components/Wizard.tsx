@@ -35,6 +35,15 @@ function WizardContent() {
     window.scrollTo(0, 0);
   }, [step]);
 
+  useEffect(() => {
+    if (!showWarningModal) return;
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setShowWarningModal(false);
+    };
+    window.addEventListener('keydown', handleEscape);
+    return () => window.removeEventListener('keydown', handleEscape);
+  }, [showWarningModal]);
+
   const getFieldsForStep = (stepNumber: number): string[] => {
     switch (stepNumber) {
       case 1:
@@ -212,13 +221,13 @@ function WizardContent() {
       </div>
 
       {showWarningModal && (
-        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in">
-          <div className="bg-white dark:bg-slate-800 rounded-3xl p-8 max-w-md w-full shadow-2xl border border-red-100 dark:border-red-900/50 animate-in zoom-in-95">
+        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in" role="presentation">
+          <div className="bg-white dark:bg-slate-800 rounded-3xl p-8 max-w-md w-full shadow-2xl border border-red-100 dark:border-red-900/50 animate-in zoom-in-95" role="dialog" aria-modal="true" aria-labelledby="wizard-warning-title">
             <div className="flex flex-col items-center text-center">
               <div className="w-16 h-16 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded-full flex items-center justify-center mb-6">
                 <AlertTriangle size={32} />
               </div>
-              <h3 className="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-3">{t('wizard.warningTitle')}</h3>
+              <h3 id="wizard-warning-title" className="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-3">{t('wizard.warningTitle')}</h3>
               <p className="text-slate-600 dark:text-slate-400 mb-8 leading-relaxed">
                 {t('wizard.warningDesc')}
               </p>

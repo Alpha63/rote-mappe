@@ -44,6 +44,18 @@ export function Welcome({ onStart }: WelcomeProps) {
     };
   }, []);
 
+  useEffect(() => {
+    if (!showPasswordModal) return;
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setShowPasswordModal(false);
+        setPendingFile(null);
+      }
+    };
+    window.addEventListener('keydown', handleEscape);
+    return () => window.removeEventListener('keydown', handleEscape);
+  }, [showPasswordModal]);
+
   const handleInstallClick = async () => {
     if (!deferredPrompt) return;
     deferredPrompt.prompt();
@@ -280,13 +292,13 @@ export function Welcome({ onStart }: WelcomeProps) {
       </div>
 
       {showPasswordModal && (
-        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in">
-          <div className="bg-white dark:bg-slate-800 rounded-3xl p-8 max-w-md w-full shadow-2xl border border-indigo-100 dark:border-indigo-900/50 animate-in zoom-in-95">
+        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in" role="presentation">
+          <div className="bg-white dark:bg-slate-800 rounded-3xl p-8 max-w-md w-full shadow-2xl border border-indigo-100 dark:border-indigo-900/50 animate-in zoom-in-95" role="dialog" aria-modal="true" aria-labelledby="welcome-decrypt-title">
             <div className="flex flex-col items-center text-center">
               <div className="w-16 h-16 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-full flex items-center justify-center mb-6">
                 <KeyRound size={32} />
               </div>
-              <h3 className="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-3">{t('welcome.decryptTitle', { defaultValue: 'Backup entschlüsseln' })}</h3>
+              <h3 id="welcome-decrypt-title" className="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-3">{t('welcome.decryptTitle', { defaultValue: 'Backup entschlüsseln' })}</h3>
               <p className="text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">
                 {t('welcome.enterPasswordDesc', { defaultValue: 'Dieses Backup ist verschlüsselt. Bitte gib das Passwort ein, um die Daten zu laden.' })}
               </p>
