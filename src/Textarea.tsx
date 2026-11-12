@@ -1,5 +1,6 @@
-import { useId } from 'react';
-import MDEditor, { commands } from '@uiw/react-md-editor';
+import { lazy, Suspense, useId } from 'react';
+
+const MDEditor = lazy(() => import('@uiw/react-md-editor'));
 
 interface TextareaProps {
   id?: string;
@@ -29,24 +30,21 @@ export function Textarea({ id, label, description, value, onChange, className = 
         </p>
       )}
       <div className="mt-1">
-        <MDEditor
-          value={value || ''}
-          onChange={(val) => onChange && onChange({ target: { value: val || '' } })}
-          preview="edit"
-          hideToolbar={false}
-          textareaProps={{
-            id: textareaId,
-            placeholder,
-            'aria-describedby': descId
-          }}
-          height={200}
-          commands={[
-            commands.bold,
-            commands.italic,
-            commands.link
-          ]}
-          className="!rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 shadow-sm"
-        />
+        <Suspense fallback={<textarea id={textareaId} value={value || ''} onChange={(event) => onChange?.({ target: { value: event.target.value } })} placeholder={placeholder} aria-describedby={descId} className="w-full min-h-48 rounded-xl border border-slate-200 dark:border-slate-700 p-3" />}>
+          <MDEditor
+            value={value || ''}
+            onChange={(val) => onChange && onChange({ target: { value: val || '' } })}
+            preview="edit"
+            hideToolbar={false}
+            textareaProps={{
+              id: textareaId,
+              placeholder,
+              'aria-describedby': descId
+            }}
+            height={200}
+            className="!rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 shadow-sm"
+          />
+        </Suspense>
       </div>
     </div>
   );
