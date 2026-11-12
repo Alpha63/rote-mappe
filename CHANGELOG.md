@@ -2,11 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Changed
+- **Wizard UX:** Die störenden animierten View Transitions beim Schrittwechsel
+  wurden vollständig entfernt. Vor- und Zurück-Navigation wechseln die Schritte
+  wieder direkt und ohne Übergang.
+- **Backup und Stabilität:** ZIP-Roundtrip-Tests, Importgrenzen, Dialog-
+  Accessibility, PDF-Worker-Timeouts und kompatible Dependency-Updates wurden
+  ergänzt bzw. verifiziert.
+
+### Fixed
+- **Dependency-Update:** Der npm-`edgesOut`-Fehler unter npm 9 wird durch die
+  Verwendung des aktuellen npm-Resolvers für kompatible Lockfile-Updates
+  umgangen.
+
 ## [2.1.0] - 2026-08-25
 
 ### Added
 - **Testing:** Umfassende Test-Infrastruktur mit Vitest und React Testing Library eingeführt. 6 Test-Suiten mit 53 Tests sichern nun Barrierefreiheit, View Transitions, Stabilität und den kompletten E2E-Workflow ab.
-- **View Transitions:** Native View Transitions API im Wizard integriert. Ein Wechsel der Schritte löst nun eine flüssige Slide-Animation (vor/zurück) aus, die sich via `prefers-reduced-motion` bei Bewegungsempfindlichkeit abschaltet.
 - **UX (Toasts):** Neues, responsives Toast-Notification-System für Erfolgs- und Fehlermeldungen (z.B. bei Backup-Fehlern) hinzugefügt, um blockierende Browser-Alerts zu ersetzen.
 
 ### Changed

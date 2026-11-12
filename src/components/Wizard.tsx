@@ -104,28 +104,8 @@ function WizardContent() {
         return;
       }
     }
-    const direction = targetStep >= step ? 'forward' : 'backward';
-    if (document.startViewTransition && !window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches) {
-      document.documentElement.dataset.transitionDirection = direction;
-      try {
-        const t = document.startViewTransition(() => {
-          setStep(targetStep);
-          window.scrollTo(0, 0);
-        });
-        if (t && t.finished) {
-          t.finished.finally(() => {
-            delete document.documentElement.dataset.transitionDirection;
-          });
-        }
-      } catch {
-        setStep(targetStep);
-        window.scrollTo(0, 0);
-        delete document.documentElement.dataset.transitionDirection;
-      }
-    } else {
-      setStep(targetStep);
-      window.scrollTo(0, 0);
-    }
+    setStep(targetStep);
+    window.scrollTo(0, 0);
   };
 
   const renderStep = () => {

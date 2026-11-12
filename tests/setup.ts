@@ -42,7 +42,6 @@ afterEach(() => {
   window.sessionStorage.clear();
   window.localStorage.clear();
   vi.clearAllMocks();
-  delete document.documentElement.dataset.transitionDirection;
 });
 
 // Mock window.matchMedia
@@ -64,25 +63,6 @@ Object.defineProperty(window, 'matchMedia', {
 Object.defineProperty(window, 'scrollTo', {
   writable: true,
   value: vi.fn(),
-});
-
-// Mock document.startViewTransition
-Object.defineProperty(document, 'startViewTransition', {
-  writable: true,
-  configurable: true,
-  value: vi.fn().mockImplementation((cb?: unknown) => {
-    if (typeof cb === 'function') {
-      cb();
-    } else if (cb && typeof cb === 'object' && 'update' in cb && typeof (cb as { update: unknown }).update === 'function') {
-      (cb as { update: () => void }).update();
-    }
-    return {
-      finished: Promise.resolve(),
-      ready: Promise.resolve(),
-      updateCallbackDone: Promise.resolve(),
-      skipTransition: vi.fn(),
-    };
-  }),
 });
 
 // Ensure window.crypto has WebCrypto SubtleCrypto
