@@ -215,6 +215,7 @@ export function Step3Finanzen() {
                   <div className="flex items-center gap-4 pt-4 pb-2 border-b border-slate-200 dark:border-slate-700">
                     <input
                       type="text"
+                      id={`asset-heading-${asset.id}`}
                       {...register(`otherAssets.${index}.type`)}
                       placeholder={t('wizardSteps.step3.newHeading')}
                       className="text-lg font-semibold text-slate-800 dark:text-slate-200 bg-transparent outline-none w-full placeholder-slate-400 dark:placeholder-slate-500"

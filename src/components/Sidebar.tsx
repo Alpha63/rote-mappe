@@ -243,8 +243,10 @@ export function Sidebar({ currentStep, setStep, isOpen, onClose }: SidebarProps)
                   {!noPassword && (
                     <div className="flex flex-col gap-4 animate-in slide-in-from-top-2 duration-300">
                       <div>
+                        <label htmlFor="sidebar-backup-password" className="sr-only">{t('sidebar.backup.enterPasswordLabel', { defaultValue: 'Passwort' })}</label>
                         <input
                           type="password"
+                          id="sidebar-backup-password"
                           placeholder={t('sidebar.backup.enterPasswordLabel', { defaultValue: 'Passwort' })}
                           value={pwd1}
                           onChange={(e) => setPwd1(e.target.value)}
@@ -253,8 +255,10 @@ export function Sidebar({ currentStep, setStep, isOpen, onClose }: SidebarProps)
                         />
                       </div>
                       <div>
+                        <label htmlFor="sidebar-backup-password-confirm" className="sr-only">{t('sidebar.backup.confirmPasswordLabel', { defaultValue: 'Passwort wiederholen' })}</label>
                         <input
                           type="password"
+                          id="sidebar-backup-password-confirm"
                           placeholder={t('sidebar.backup.confirmPasswordLabel', { defaultValue: 'Passwort wiederholen' })}
                           value={pwd2}
                           onChange={(e) => setPwd2(e.target.value)}

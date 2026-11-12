@@ -324,8 +324,10 @@ export function Welcome({ onStart }: WelcomeProps) {
 
               <div className="flex flex-col w-full gap-4">
                 <div>
+                  <label htmlFor="welcome-backup-password" className="sr-only">{t('welcome.passwordLabel', { defaultValue: 'Passwort' })}</label>
                   <input
                     type="password"
+                    id="welcome-backup-password"
                     placeholder={t('welcome.passwordLabel', { defaultValue: 'Passwort' })}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}

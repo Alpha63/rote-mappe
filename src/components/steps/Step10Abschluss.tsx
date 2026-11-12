@@ -179,8 +179,10 @@ export function Step10Abschluss() {
                   {!noPassword && (
                     <div className="flex flex-col gap-4 animate-in slide-in-from-top-2 duration-300">
                       <div>
+                        <label htmlFor="completion-backup-password" className="sr-only">{t('sidebar.backup.enterPasswordLabel', { defaultValue: 'Passwort' })}</label>
                         <input
                           type="password"
+                          id="completion-backup-password"
                           placeholder={t('sidebar.backup.enterPasswordLabel', { defaultValue: 'Passwort' })}
                           value={pwd1}
                           onChange={(e) => setPwd1(e.target.value)}
@@ -189,8 +191,10 @@ export function Step10Abschluss() {
                         />
                       </div>
                       <div>
+                        <label htmlFor="completion-backup-password-confirm" className="sr-only">{t('sidebar.backup.confirmPasswordLabel', { defaultValue: 'Passwort wiederholen' })}</label>
                         <input
                           type="password"
+                          id="completion-backup-password-confirm"
                           placeholder={t('sidebar.backup.confirmPasswordLabel', { defaultValue: 'Passwort wiederholen' })}
                           value={pwd2}
                           onChange={(e) => setPwd2(e.target.value)}

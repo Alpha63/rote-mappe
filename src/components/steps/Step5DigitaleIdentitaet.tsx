@@ -33,6 +33,7 @@ export function Step5DigitaleIdentitaet() {
                   <div className="flex items-center gap-4 pt-4 pb-2 border-b border-slate-200 dark:border-slate-700">
                     <input
                       type="text"
+                      id={`digital-identity-heading-${entry.id}`}
                       {...register(`digitalIdentities.${index}.title`)}
                       placeholder={t('wizardSteps.step3.newHeading')}
                       className="text-lg font-semibold text-slate-800 dark:text-slate-200 bg-transparent outline-none w-full placeholder-slate-400 dark:placeholder-slate-500"
@@ -48,34 +49,38 @@ export function Step5DigitaleIdentitaet() {
                 ) : (
                   <div className="grid grid-cols-12 gap-2 bg-white dark:bg-slate-800 p-3 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm items-start">
                     <div className="col-span-3">
-                      <label className="block text-[10px] uppercase text-slate-500 dark:text-slate-400 font-semibold mb-1">{t('wizardSteps.step5.service')}</label>
+                      <label htmlFor={`digital-identity-service-${entry.id}`} className="block text-[10px] uppercase text-slate-500 dark:text-slate-400 font-semibold mb-1">{t('wizardSteps.step5.service')}</label>
                       <input
                         type="text"
+                        id={`digital-identity-service-${entry.id}`}
                         placeholder={t('wizardSteps.step5.servicePlaceholder')}
                         {...register(`digitalIdentities.${index}.title`)}
                         className="w-full text-sm bg-slate-50 dark:bg-slate-900 p-2 rounded border dark:border-slate-700 focus:border-indigo-600 dark:focus:border-indigo-500 outline-none text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500"
                       />
                     </div>
                     <div className="col-span-3">
-                      <label className="block text-[10px] uppercase text-slate-500 dark:text-slate-400 font-semibold mb-1">{t('wizardSteps.step5.username')}</label>
+                      <label htmlFor={`digital-identity-username-${entry.id}`} className="block text-[10px] uppercase text-slate-500 dark:text-slate-400 font-semibold mb-1">{t('wizardSteps.step5.username')}</label>
                       <input
                         type="text"
+                        id={`digital-identity-username-${entry.id}`}
                         {...register(`digitalIdentities.${index}.username`)}
                         className="w-full text-sm bg-slate-50 dark:bg-slate-900 p-2 rounded border dark:border-slate-700 focus:border-indigo-600 dark:focus:border-indigo-500 outline-none text-slate-900 dark:text-slate-100"
                       />
                     </div>
                     <div className="col-span-3">
-                      <label className="block text-[10px] uppercase text-slate-500 dark:text-slate-400 font-semibold mb-1">{t('wizardSteps.step5.password')}</label>
+                      <label htmlFor={`digital-identity-password-${entry.id}`} className="block text-[10px] uppercase text-slate-500 dark:text-slate-400 font-semibold mb-1">{t('wizardSteps.step5.password')}</label>
                       <input
                         type="text"
+                        id={`digital-identity-password-${entry.id}`}
                         {...register(`digitalIdentities.${index}.password`)}
                         className="w-full text-sm bg-slate-50 dark:bg-slate-900 p-2 rounded border dark:border-slate-700 focus:border-indigo-600 dark:focus:border-indigo-500 outline-none text-slate-900 dark:text-slate-100"
                       />
                     </div>
                     <div className="col-span-2">
-                      <label className="block text-[10px] uppercase text-slate-500 dark:text-slate-400 font-semibold mb-1">{t('wizardSteps.step5.link')}</label>
+                      <label htmlFor={`digital-identity-url-${entry.id}`} className="block text-[10px] uppercase text-slate-500 dark:text-slate-400 font-semibold mb-1">{t('wizardSteps.step5.link')}</label>
                       <input
                         type="text"
+                        id={`digital-identity-url-${entry.id}`}
                         {...register(`digitalIdentities.${index}.url`)}
                         className="w-full text-sm bg-slate-50 dark:bg-slate-900 p-2 rounded border dark:border-slate-700 focus:border-indigo-600 dark:focus:border-indigo-500 outline-none text-slate-900 dark:text-slate-100"
                       />
