@@ -18,6 +18,20 @@ interface FormContextType {
 
 const FormContext = createContext<FormContextType | undefined>(undefined);
 
+function collectFormErrors(value: unknown, path = '', result: Record<string, string> = {}) {
+  if (!value || typeof value !== 'object') return result;
+  const record = value as Record<string, unknown>;
+  if (typeof record.message === 'string' && path) {
+    result[path] = record.message;
+  }
+  Object.entries(record).forEach(([key, child]) => {
+    if (key !== 'message' && key !== 'ref' && key !== 'type') {
+      collectFormErrors(child, path ? `${path}.${key}` : key, result);
+    }
+  });
+  return result;
+}
+
 function getInitialValues(): FormSchemaType {
   const saved = sessionStorage.getItem('notfallakte_data');
   if (saved) {
@@ -45,14 +59,7 @@ export function FormProvider({ children }: { children: React.ReactNode }) {
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
-    const errMap: Record<string, string> = {};
-    Object.keys(rhfErrors).forEach(key => {
-      const fieldError = rhfErrors[key as keyof typeof rhfErrors];
-      if (fieldError?.message) {
-        errMap[key] = String(fieldError.message);
-      }
-    });
-    setErrors(errMap);
+    setErrors(collectFormErrors(rhfErrors));
   }, [rhfErrors]);
 
   const [isDownloading, setIsDownloading] = useState(false);
