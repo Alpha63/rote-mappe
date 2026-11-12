@@ -11,6 +11,9 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      devOptions: {
+        enabled: true
+      },
       includeAssets: ['icon.svg', 'Konto_und_Depotvollmacht.pdf'],
       manifest: {
         name: "Notfallakte",
