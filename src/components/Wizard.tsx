@@ -1,6 +1,6 @@
 import { useState, useEffect, Suspense, lazy } from 'react';
 import { Sidebar } from './Sidebar';
-import { ArrowRight, ArrowLeft, AlertTriangle, Menu, ShieldCheck } from 'lucide-react';
+import { ArrowRight, ArrowLeft, AlertTriangle, Menu, ShieldCheck, Loader2 } from 'lucide-react';
 import { FormProvider, useFormContext } from '../FormContext';
 import { useTranslation } from 'react-i18next';
 const Step1Basisdaten = lazy(() => import('./steps/Step1Basisdaten').then(m => ({ default: m.Step1Basisdaten })));
@@ -16,6 +16,22 @@ const Step10Abschluss = lazy(() => import('./steps/Step10Abschluss').then(m => (
 import { ThemeToggle } from './ThemeToggle';
 import { useDialogFocusTrap } from '../hooks/useDialogFocusTrap';
 import { fieldsForStep } from './wizardFields';
+
+function WizardLoading() {
+  const { t } = useTranslation();
+
+  return (
+    <div
+      className="flex h-full min-h-32 items-center justify-center gap-3 p-12 text-slate-500 dark:text-slate-400"
+      role="status"
+      aria-live="polite"
+      aria-busy="true"
+    >
+      <Loader2 size={24} className="animate-spin" aria-hidden="true" />
+      <span>{t('wizard.loading')}</span>
+    </div>
+  );
+}
 
 export function Wizard() {
   return (
@@ -129,7 +145,7 @@ function WizardContent() {
             <div className="bg-white dark:bg-slate-800 rounded-3xl p-5 md:p-8 shadow-sm border border-slate-200 dark:border-slate-700 min-h-[calc(100vh-8rem)] flex flex-col">
 
               <div className="flex-1">
-                <Suspense fallback={<div className="flex justify-center items-center h-full p-12 text-slate-500">{t('wizard.loading') || 'Lade Schritt...'}</div>}>
+                <Suspense fallback={<WizardLoading />}>
                   {renderStep()}
                 </Suspense>
               </div>

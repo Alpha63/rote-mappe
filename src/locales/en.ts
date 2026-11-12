@@ -50,7 +50,8 @@ export const en = {
         warningTitle: "Notice about your inputs",
         warningDesc: "Some fields on this page contain incorrect or incomplete inputs (e.g. invalid IBAN or wrong format). Would you like to review your inputs or continue anyway?",
         checkInputs: "Review inputs",
-        continueAnyway: "Continue anyway"
+        continueAnyway: "Continue anyway",
+        loading: "Loading step..."
       },
       docUpload: {
         remove: "Remove document",

@@ -50,7 +50,8 @@ export const de = {
         warningTitle: "Hinweis zu Ihren Eingaben",
         warningDesc: "Einige Felder auf dieser Seite enthalten fehlerhafte oder unvollständige Eingaben (z.B. ungültige IBAN oder falsches Format). Möchten Sie Ihre Eingaben überprüfen oder trotzdem fortfahren?",
         checkInputs: "Eingaben überprüfen",
-        continueAnyway: "Trotzdem weiter"
+        continueAnyway: "Trotzdem weiter",
+        loading: "Schritt wird geladen..."
       },
       docUpload: {
         remove: "Dokument entfernen",
